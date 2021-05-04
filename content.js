@@ -6,14 +6,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   tempElement.appendChild(
     window.getSelection().getRangeAt(0).cloneContents())
 
-  const images = []
-  const formData = new FormData();
-  formData.append('file', fileInput.files[0]);
+  const formData = new FormData()
   tempElement.querySelectorAll('img').forEach((item) => {
     fetch(item.getAttribute('src')).
       then(response => response.blob()).
-      then(images => {
-        images.push(images)
+      then(image => {
+        formData.append('file', image)
         // Then create a local URL for that image and print it
         // URL.createObjectURL(images)
       })
@@ -22,7 +20,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   fetch('http://127.0.0.1:6806/api/extension/copy', {
     method: 'POST',
     headers: {'Content-Type': 'multipart/form-data'},
-    body: {event.target.files[0]}
+    body: formData,
   }).then((response) => {
     return response.json()
   }).then((response) => {
