@@ -8,12 +8,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   const formData = new FormData()
   formData.append('dom', tempElement.innerHTML)
-  tempElement.querySelectorAll('img').forEach((item) => {
-    fetch(item.getAttribute('src')).
-      then(response => response.blob()).
-      then(image => {
-        formData.append('file[]', image)
-      })
+  tempElement.querySelectorAll('img').forEach(async (item) => {
+    const response = await fetch(item.getAttribute('src'))
+    const image = await response.blob()
+    formData.append('file[]', image)
   })
 
   fetch('http://127.0.0.1:6806/api/extension/copy', {
