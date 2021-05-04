@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (response.code < 0) {
       alert(response.msg)
     } else {
-      alert('copy success')
+      navigator.clipboard.writeText(response.data.md);
     }
     console.log(response)
   }).catch((e) => {
