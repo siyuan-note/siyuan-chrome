@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.func !== 'copy') {
     return
   }
@@ -8,12 +8,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   const formData = new FormData()
   formData.append('dom', tempElement.innerHTML)
-  tempElement.querySelectorAll('img').forEach(async (item) => {
-    const response = await fetch(item.getAttribute('src'))
-    const image = await response.blob()
-    formData.append('file[]', image)
-  })
 
+  const images = tempElement.querySelectorAll('img')
+  for (let i = 0; i < images.length; i++) {
+    const src = images[i].getAttribute('src')
+    const response = await fetch(src)
+    const image = await response.blob()
+    formData.append(escape(src), image)
+  }
   fetch('http://127.0.0.1:6806/api/extension/copy', {
     method: 'POST',
     body: formData,
