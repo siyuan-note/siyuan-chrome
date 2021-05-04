@@ -12,8 +12,7 @@
     {
       "run_at": "document_start",
       "matches": [
-        "http://*/*",
-        "https://*/*"
+        "<all_urls>"
       ],
       "js": [
         "web-clipper.js"
@@ -22,11 +21,11 @@
   ],
   "background": {
     "scripts": [
-
+      "background.js"
     ]
   },
   "permissions": [
-    "tabs",
+    "clipboardRead",
     "clipboardWrite"
   ],
   "name": "SiYuan",
