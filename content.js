@@ -17,7 +17,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       })
   })
 
-  fetch('TODO', {
+  fetch('http://127.0.0.1:6806/api/extension/copy', {
     method: 'POST',
     body: JSON.stringify({
       html: tempElement.innerHTML,
