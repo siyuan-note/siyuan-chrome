@@ -7,6 +7,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     window.getSelection().getRangeAt(0).cloneContents())
 
   const images = []
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
   tempElement.querySelectorAll('img').forEach((item) => {
     fetch(item.getAttribute('src')).
       then(response => response.blob()).
@@ -19,10 +21,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
   fetch('http://127.0.0.1:6806/api/extension/copy', {
     method: 'POST',
-    body: JSON.stringify({
-      html: tempElement.innerHTML,
-      images,
-    }),
+    headers: {'Content-Type': 'multipart/form-data'},
+    body: {event.target.files[0]}
   }).then((response) => {
     return response.json()
   }).then((response) => {
