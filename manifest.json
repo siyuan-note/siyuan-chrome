@@ -15,7 +15,7 @@
         "<all_urls>"
       ],
       "js": [
-        "web-clipper.js"
+        "content.js"
       ]
     }
   ],
@@ -25,6 +25,7 @@
     ]
   },
   "permissions": [
+    "contextMenus",
     "clipboardRead",
     "clipboardWrite"
   ],
