@@ -1,16 +1,9 @@
 chrome.contextMenus.create({
     title: "Copy to SiYuan",
     contexts: ["selection"],
-    onclick: copy2SiYuan,
+    onclick: siyuan,
 });
 
-function copy2SiYuan(info, tab) {
-    chrome.tabs.query({
-        "active": true,
-        "currentWindow": true
-    }, function (tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-            "func": "copy"
-        });
-    });
+function siyuan(info, tab) {
+    chrome.tabs.sendMessage(tab.id, {"func": "copy"});
 }
