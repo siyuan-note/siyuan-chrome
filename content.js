@@ -7,6 +7,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     window.getSelection().getRangeAt(0).cloneContents())
 
   const formData = new FormData()
+  formData.append('html', tempElement.innerHTML)
   tempElement.querySelectorAll('img').forEach((item) => {
     fetch(item.getAttribute('src')).
       then(response => response.blob()).
