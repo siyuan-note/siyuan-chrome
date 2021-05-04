@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+  "homepage_url": "https://github.com/siyuan-note/siyuan-chrome",
+  "browser_action": {
+    "default_title": "SiYuan",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "web-clipper.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+
+    ]
+  },
+  "permissions": [
+    "tabs",
+    "clipboardWrite"
+  ],
+  "name": "SiYuan",
+  "description": "Web page content processing for SiYuan.",
+  "version": "0.1.0"
+}
