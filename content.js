@@ -1,8 +1,38 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    switch (request.func) {
-        case "copy":
-            const selection = window.getSelection()
-            console.log(selection.getRangeAt(0).cloneContents())
-            break
+  if (request.func !== 'copy') {
+    return
+  }
+  const tempElement = document.createElement('div')
+  tempElement.appendChild(
+    window.getSelection().getRangeAt(0).cloneContents())
+
+  const images = []
+  tempElement.querySelectorAll('img').forEach((item) => {
+    fetch(item.getAttribute('src')).
+      then(response => response.blob()).
+      then(images => {
+        images.push(images)
+        // Then create a local URL for that image and print it
+        // URL.createObjectURL(images)
+      })
+  })
+
+  fetch('TODO', {
+    method: 'POST',
+    body: JSON.stringify({
+      html: tempElement.innerHTML,
+      images,
+    }),
+  }).then((response) => {
+    return response.json()
+  }).then((response) => {
+    if (response.code < 0) {
+      alert(response.msg)
+    } else {
+      alert('copy success')
     }
-});
+    console.log(response)
+  }).catch((e) => {
+    console.warn('fetch post error', e)
+  })
+})
