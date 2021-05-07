@@ -25,6 +25,9 @@
     ]
   },
   "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "*://*/*",
     "contextMenus",
     "clipboardRead",
     "clipboardWrite"
