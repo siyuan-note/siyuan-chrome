@@ -2,8 +2,7 @@
   "manifest_version": 2,
   "homepage_url": "https://github.com/siyuan-note/siyuan-chrome",
   "browser_action": {
-    "default_title": "SiYuan",
-    "default_popup": "popup.html"
+    "default_title": "SiYuan"
   },
   "icons": {
     "128": "icon.png"
