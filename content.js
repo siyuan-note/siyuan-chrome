@@ -3,20 +3,27 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     return
   }
 
-  const tempElement = document.createElement('div')
-  tempElement.appendChild(window.getSelection().getRangeAt(0).cloneContents())
-
-  const formData = new FormData()
-  formData.append('dom', tempElement.innerHTML)
-
-  const images = tempElement.querySelectorAll('img')
   let srcList = []
-  images.forEach(item => {
-    srcList.push(item.getAttribute('src'))
-  })
   if (request.srcUrl) {
     srcList.push(request.srcUrl)
   }
+
+  const selection = window.getSelection()
+  let dom = ""
+  if (selection && 0 < selection.rangeCount) {
+    const range = selection.getRangeAt(0)
+    const tempElement = document.createElement('div')
+    tempElement.appendChild(range.cloneContents())
+    dom = tempElement.innerHTML
+    const images = tempElement.querySelectorAll('img')
+    images.forEach(item => {
+      srcList.push(item.getAttribute('src'))
+    })
+  }
+
+  const formData = new FormData()
+  formData.append('dom', dom)
+
   srcList = [...new Set(srcList)];
   for (let i = 0; i < srcList.length; i++) {
     const src = srcList[i]
@@ -36,7 +43,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     } else {
       navigator.clipboard.writeText(response.data.md);
     }
-    console.log(response)
   }).catch((e) => {
     console.warn('fetch post error', e)
   })

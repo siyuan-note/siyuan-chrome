@@ -10,9 +10,20 @@ function siyuan(info, tab) {
 
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
-    const cors = {name: "access-control-allow-origin", value: "*"};
-    const responseHeaders = details.responseHeaders.concat(cors);
-    return {responseHeaders};
+    let existAllowOrigin = false
+    for (let i = 0; i < details.responseHeaders.length;i++) {
+      if ("access-control-allow-origin" === details.responseHeaders[i].name.toLowerCase()) {
+        existAllowOrigin = true;
+        break;
+      }
+    }
+
+    if (!existAllowOrigin) {
+      const cors = {name: "Access-Control-Allow-Origin", value: "*"};
+      const responseHeaders = details.responseHeaders.concat(cors);
+      return {responseHeaders};
+    }
+    return details.responseHeaders;
   },
   {
     urls: ["*://*/*"],
