@@ -14,7 +14,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   images.forEach(item => {
     srcList.push(item.getAttribute('src'))
   })
-  srcList.push(request.srcUrl)
+  if (request.srcUrl) {
+    srcList.push(request.srcUrl)
+  }
   srcList = [...new Set(srcList)];
   for (let i = 0; i < srcList.length; i++) {
     const src = srcList[i]
