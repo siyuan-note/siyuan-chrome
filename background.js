@@ -1,11 +1,11 @@
 chrome.contextMenus.create({
   title: "Copy to SiYuan",
-  contexts: ["selection"],
+  contexts: ["selection", "image"],
   onclick: siyuan,
 });
 
 function siyuan(info, tab) {
-  chrome.tabs.sendMessage(tab.id, {"func": "copy"});
+  chrome.tabs.sendMessage(tab.id, {"func": "copy", "srcUrl": info.srcUrl});
 }
 
 chrome.webRequest.onHeadersReceived.addListener(
