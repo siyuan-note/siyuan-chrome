@@ -16,3 +16,5 @@ A Chrome extension for SiYuan.
 
 1. Run SiYuan
 2. Select the content you want to clip, then click the "Copy to SiYuan" on the context menu
+
+Please note: Pulling pictures locally is a paid subscription feature.
