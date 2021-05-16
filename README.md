@@ -18,3 +18,8 @@ A Chrome extension for SiYuan.
 2. Select the content you want to clip, then click the "Copy to SiYuan" on the context menu
 
 Please note: Pulling pictures locally is a paid subscription feature.
+
+### 🔒 Privacy policy
+
+* All data is saved on a device under the full control of the user himself
+* No usage data will be collected
