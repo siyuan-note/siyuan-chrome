@@ -20,10 +20,9 @@ chrome.webRequest.onHeadersReceived.addListener(
 
     if (!existAllowOrigin) {
       const cors = {name: "Access-Control-Allow-Origin", value: "*"};
-      const responseHeaders = details.responseHeaders.concat(cors);
-      return {responseHeaders};
+      return  {responseHeaders: details.responseHeaders.concat(cors)};
     }
-    return details.responseHeaders;
+    return {responseHeaders: details.responseHeaders};
   },
   {
     urls: ["*://*/*"],
