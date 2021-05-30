@@ -8,6 +8,12 @@
 
 ### 🛠️ 安装
 
+#### Chrome Web Store
+
+https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafepk
+
+#### 开发版
+
 1. [下载 zip](https://github.com/siyuan-note/chrome-web-clipper/archive/refs/heads/main.zip)
 2. 在 Chrome 地址栏输入 `chrome://extensions` 回车进入扩展管理界面
 3. 打开右上角的 “开发者模式”，然后点击左边的 “加载已解压的扩展程序”，选择刚刚解压的文件夹
