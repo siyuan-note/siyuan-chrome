@@ -24,9 +24,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   const formData = new FormData()
   formData.append('dom', dom)
 
+  const isHTTPS = "https:" === window.location.protocol
   srcList = [...new Set(srcList)];
   for (let i = 0; i < srcList.length; i++) {
-    const src = srcList[i]
+    let src = srcList[i]
+    if (isHTTPS && src.startsWith("http:")) {
+      src = src.replace("http:", "https:")
+    }
     const response = await fetch(src)
     const image = await response.blob()
     formData.append(escape(src), image)
