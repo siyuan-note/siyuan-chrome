@@ -22,7 +22,7 @@ https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafep
 
 1. Run SiYuan
 2. Select the content to be clipped on the web page, and then select "Copy to SiYuan" from the right-click menu
-3. Paste in Siyuan
+3. Paste in SiYuan
 
 Please note: Pulling pictures locally is a paid subscription feature.
 
