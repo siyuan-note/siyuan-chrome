@@ -46,6 +46,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       alert(response.msg)
     } else {
       copyToClipboard(response.data.md).catch(() => console.log('error'));
+      if ("" !== response.msg) {
+        alert(response.msg)
+      }
     }
   }).catch((e) => {
     console.warn('fetch post error', e)
