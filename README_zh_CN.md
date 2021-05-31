@@ -20,8 +20,9 @@ https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafep
 
 ### ✨  使用
 
-1. 运行思源笔记
+1. 运行思源
 2. 在 Web 页面上选择需要剪藏的内容，然后在右键菜单中选择 “Copy to SiYuan”
+3. 在思源中粘贴
 
 请注意：拉取图片到本地是付费订阅特性。
 
