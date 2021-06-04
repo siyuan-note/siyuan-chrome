@@ -10,27 +10,28 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
   const selection = window.getSelection()
   let dom = ""
+  const isHTTPS = "https:" === window.location.protocol
   if (selection && 0 < selection.rangeCount) {
     const range = selection.getRangeAt(0)
     const tempElement = document.createElement('div')
     tempElement.appendChild(range.cloneContents())
-    dom = tempElement.innerHTML
     const images = tempElement.querySelectorAll('img')
     images.forEach(item => {
-      srcList.push(item.getAttribute('src'))
+      let src = item.getAttribute('src')
+      if (isHTTPS && src.startsWith("http:")) {
+        src = src.replace("http:", "https:")
+        item.setAttribute("src", src)
+      }
+      srcList.push(src)
     })
+    dom = tempElement.innerHTML
   }
 
   const formData = new FormData()
   formData.append('dom', dom)
-
-  const isHTTPS = "https:" === window.location.protocol
   srcList = [...new Set(srcList)];
   for (let i = 0; i < srcList.length; i++) {
-    let src = srcList[i]
-    if (isHTTPS && src.startsWith("http:")) {
-      src = src.replace("http:", "https:")
-    }
+    const src = srcList[i];
     const response = await fetch(src)
     const image = await response.blob()
     formData.append(escape(src), image)
