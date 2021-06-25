@@ -44,8 +44,11 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const src = srcList[i]
     const response = await fetch(src)
     const image = await response.blob()
-    const reader = new FileReaderSync();
-    files[escape(src)] = reader.readAsDataURL(image);
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onloadend = function () {
+      files[escape(src)] = {type: image.type, data: reader.result};
+    }
   }
 
   chrome.storage.sync.get({
