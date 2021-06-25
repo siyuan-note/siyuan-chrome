@@ -32,7 +32,8 @@
     "contextMenus",
     "clipboardRead",
     "clipboardWrite",
-    "storage"
+    "storage",
+    "notifications"
   ],
   "name": "SiYuan",
   "options_page": "options.html",
