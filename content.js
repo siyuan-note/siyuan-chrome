@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         showTip(response.msg)
       } else {
         copyToClipboard(response.data.md).catch(() => console.log('error'))
-        if ('' !== response.msg) {
+        if ('' !== response.msg && items.showTip) {
           showTip(response.msg)
         }
       }
