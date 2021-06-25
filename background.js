@@ -4,9 +4,10 @@ chrome.contextMenus.create({
   onclick: siyuan,
 })
 
-function siyuan (info, tab) {
+function siyuan(info, tab) {
   chrome.tabs.sendMessage(tab.id, {
     'func': 'copy',
+    'tabId': tab.id,
     'srcUrl': info.srcUrl,
   })
 }
@@ -33,3 +34,43 @@ chrome.webRequest.onHeadersReceived.addListener(
   },
   ['blocking', 'responseHeaders', 'extraHeaders'],
 )
+
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if (request.func !== 'upload-copy') {
+    return
+  }
+
+  const body = JSON.parse(request.body)
+  const formData = new FormData()
+  Object.keys(body).forEach((key) => {
+    formData.append(key, body[key])
+  })
+  fetch(request.api + '/api/extension/copy', {
+    method: 'POST',
+    body: formData,
+  }).then((response) => {
+    return response.json()
+  }).then((response) => {
+    if (response.code < 0) {
+      chrome.tabs.sendMessage(request.tabId, {
+        "func": 'tip',
+        'msg': response.msg,
+      })
+      return;
+    }
+
+    chrome.tabs.sendMessage(request.tabId, {
+      "func": 'copy2Clipboard',
+      'data': response.data.md,
+    })
+
+    if ('' !== response.msg && request.tip) {
+      chrome.tabs.sendMessage(request.tabId, {
+        "func": 'tip',
+        'msg': response.msg,
+      })
+    }
+  }).catch((e) => {
+    console.warn('fetch post error', e)
+  })
+});

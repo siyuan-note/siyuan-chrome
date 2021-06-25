@@ -1,6 +1,16 @@
 let messageElement = document.getElementById('siyuanmessage')
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if (request.func !== 'copy') {
+  if ("tip" === request.func) {
+    showTip(request.msg);
+    return;
+  }
+
+  if ("copy2Clipboard" === request.func) {
+    copyToClipboard(request.data);
+    return;
+  }
+
+  if ("copy" !== request.func) {
     return
   }
 
@@ -37,37 +47,32 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const image = await response.blob()
     formData.append(escape(src), image)
   }
+
+  chrome.storage.sync.get({
+    ip: 'http://127.0.0.1:6806',
+    showTip: true,
+  }, function (items) {
+    var object = {};
+    formData.forEach((value, key) => object[key] = value);
+    var body = JSON.stringify(object);
+    chrome.runtime.sendMessage({
+      func: "upload-copy",
+      body: body,
+      api: items.ip,
+      tabId: request.tabId,
+    }, function (response) {
+      console.log(response);
+    });
+  })
+})
+
+function showTip(msg) {
   if (!messageElement) {
     document.body.insertAdjacentHTML('afterend', `<div style=" position:fixed;top: 0;z-index: 999999999;transform: translate3d(0, -100px, 0);opacity: 0;transition: opacity 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms, transform 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms;width: 100%;align-items: center;justify-content: center;height: 0;display: flex;" id="siyuanmessage">
 <div style="line-height: 20px;border-radius: 4px;padding: 8px 16px;color: #fff;font-size: inherit;background-color: #4285f4;box-sizing: border-box;box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);transition: transform 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms;transform: scale(0.8);top: 16px;position: absolute;word-break: break-word;max-width: 80vw;"></div></div>`)
     messageElement = document.getElementById('siyuanmessage')
   }
 
-  chrome.storage.sync.get({
-    ip: 'http://127.0.0.1:6806',
-    showTip: true,
-  }, function (items) {
-    fetch(items.ip + '/api/extension/copy', {
-      method: 'POST',
-      body: formData,
-    }).then((response) => {
-      return response.json()
-    }).then((response) => {
-      if (response.code < 0) {
-        showTip(response.msg)
-      } else {
-        copyToClipboard(response.data.md).catch(() => console.log('error'))
-        if ('' !== response.msg && items.showTip) {
-          showTip(response.msg)
-        }
-      }
-    }).catch((e) => {
-      console.warn('fetch post error', e)
-    })
-  })
-})
-
-function showTip (msg) {
   messageElement.style.transform = 'translate3d(0, 0, 0)'
   messageElement.style.opacity = '1'
   messageElement.firstElementChild.innerHTML = msg
@@ -78,7 +83,7 @@ function showTip (msg) {
   }, 3000)
 }
 
-function copyToClipboard (textToCopy) {
+function copyToClipboard(textToCopy) {
   if (navigator.clipboard && window.isSecureContext) {
     return navigator.clipboard.writeText(textToCopy)
   }
