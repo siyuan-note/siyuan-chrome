@@ -45,6 +45,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
   chrome.storage.sync.get({
     ip: 'http://127.0.0.1:6806',
+    showTip: true,
   }, function (items) {
     fetch(items.ip + '/api/extension/copy', {
       method: 'POST',
