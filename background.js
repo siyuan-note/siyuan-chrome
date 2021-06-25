@@ -40,10 +40,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     return
   }
 
-  const body = JSON.parse(request.body)
-  const formData = new FormData()
-  Object.keys(body).forEach((key) => {
-    formData.append(key, body[key])
+  const dom = JSON.parse(request.dom);
+  const files = JSON.parse(request.files);
+  const formData = new FormData();
+  formData.append("dom", dom);
+  Object.keys(files).forEach((key) => {
+    const base64 = files[key];
+    fetch(base64).then(res => res.blob()).then(formData.append(key, res))
   })
   fetch(request.api + '/api/extension/copy', {
     method: 'POST',

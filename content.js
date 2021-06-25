@@ -38,26 +38,24 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     dom = tempElement.innerHTML
   }
 
-  const formData = new FormData()
-  formData.append('dom', dom)
+  const files = {};
   srcList = [...new Set(srcList)]
   for (let i = 0; i < srcList.length; i++) {
     const src = srcList[i]
     const response = await fetch(src)
     const image = await response.blob()
-    formData.append(escape(src), image)
+    const reader = new FileReaderSync();
+    files[escape(src)] = reader.readAsDataURL(image);
   }
 
   chrome.storage.sync.get({
     ip: 'http://127.0.0.1:6806',
     showTip: true,
   }, function (items) {
-    var object = {};
-    formData.forEach((value, key) => object[key] = value);
-    var body = JSON.stringify(object);
     chrome.runtime.sendMessage({
       func: "upload-copy",
-      body: body,
+      files: files,
+      dom: dom,
       api: items.ip,
       tip: items.showTip,
       tabId: request.tabId,
