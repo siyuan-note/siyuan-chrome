@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   chrome.storage.sync.get({
-    ip: 'http://127.0.0.1:68061',
+    ip: 'http://127.0.0.1:6806',
     showTip: true,
   }, function (items) {
-    ipElement.value = items.ip || 'http://127.0.0.1:68061'
+    ipElement.value = items.ip || 'http://127.0.0.1:6806'
     showTipElement.checked = items.showTip
   })
 })
