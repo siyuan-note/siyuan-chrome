@@ -53,21 +53,23 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   }).then((response) => {
     if (response.code < 0) {
       chrome.tabs.sendMessage(request.tabId, {
-        "func": 'tip',
-        'msg': response.msg,
+        "func": "tip",
+        "msg": response.msg,
+        "tip": request.tip,
       })
       return;
     }
 
     chrome.tabs.sendMessage(request.tabId, {
-      "func": 'copy2Clipboard',
+      "func": "copy2Clipboard",
       'data': response.data.md,
     })
 
-    if ('' !== response.msg && request.tip) {
+    if ('' !== response.msg) {
       chrome.tabs.sendMessage(request.tabId, {
-        "func": 'tip',
-        'msg': response.msg,
+        "func": "tip",
+        "msg": response.msg,
+        "tip": request.tip,
       })
     }
   }).catch((e) => {
