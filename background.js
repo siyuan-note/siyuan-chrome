@@ -40,15 +40,16 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     return
   }
 
-  const dom = JSON.parse(request.dom);
-  const files = JSON.parse(request.files);
+  const dom = request.dom;
+  const files = request.files;
   const formData = new FormData();
   formData.append("dom", dom);
-  Object.keys(files).forEach((key) => {
+  for (const key of Object.keys(files)) {
     const data = files[key].data;
-    const type = files[key].type;
-    formData.append(key, b64toBlob(data, type));
-  })
+    const base64Response = await fetch(data);
+    const blob = base64Response.blob();
+    formData.append(key, await blob);
+  }
   fetch(request.api + '/api/extension/copy', {
     method: 'POST',
     body: formData,
@@ -80,18 +81,3 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     console.warn('fetch post error', e)
   })
 });
-
-const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
-  const byteCharacters = atob(b64Data);
-  const byteArrays = [];
-  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    const slice = byteCharacters.slice(offset, offset + sliceSize);
-    const byteNumbers = new Array(slice.length);
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    byteArrays.push(byteArray);
-  }
-  return new Blob(byteArrays, {type: contentType});
-}

@@ -44,11 +44,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const src = srcList[i]
     const response = await fetch(src)
     const image = await response.blob()
-    const reader = new FileReader();
-    reader.readAsDataURL(image);
-    reader.onloadend = function () {
-      files[escape(src)] = {type: image.type, data: reader.result};
-    }
+    files[escape(src)] = {type: image.type, data: await convertBlobToBase64(image)};
   }
 
   chrome.storage.sync.get({
@@ -62,8 +58,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       api: items.ip,
       tip: items.showTip,
       tabId: request.tabId,
-    }, function (response) {
-      console.log(response);
     });
   })
 })
@@ -103,3 +97,10 @@ function copyToClipboard(textToCopy) {
     textArea.remove()
   })
 }
+
+convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
+  const reader = new FileReader;
+  reader.onerror = reject;
+  reader.onload = () => resolve(reader.result);
+  reader.readAsDataURL(blob);
+});
