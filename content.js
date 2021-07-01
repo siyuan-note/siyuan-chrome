@@ -29,6 +29,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const images = tempElement.querySelectorAll('img')
     images.forEach(item => {
       let src = item.getAttribute('src')
+      if (!src) {
+        return
+      }
       if (isHTTPS && src.startsWith('http:')) {
         src = src.replace('http:', 'https:')
         item.setAttribute('src', src)
