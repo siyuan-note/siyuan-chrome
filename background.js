@@ -52,6 +52,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   }
   fetch(request.api + '/api/extension/copy', {
     method: 'POST',
+    headers: {
+      'Authorization': 'Token ' + request.token,
+    },
     body: formData,
   }).then((response) => {
     return response.json()

@@ -53,12 +53,14 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   chrome.storage.sync.get({
     ip: 'http://127.0.0.1:6806',
     showTip: true,
+    token: "",
   }, function (items) {
     chrome.runtime.sendMessage({
       func: "upload-copy",
       files: files,
       dom: dom,
       api: items.ip,
+      token: items.token,
       tip: items.showTip,
       tabId: request.tabId,
     });
