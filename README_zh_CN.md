@@ -12,7 +12,11 @@
 
 https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafepk
 
-#### 开发版
+#### Edge Addons
+
+https://microsoftedge.microsoft.com/addons/detail/siyuan/lclhdlhleinlppggbbgimbekofanbkcf
+
+#### GitHub
 
 1. [下载 zip](https://github.com/siyuan-note/chrome-web-clipper/archive/refs/heads/main.zip)
 2. 在 Chrome 地址栏输入 `chrome://extensions` 回车进入扩展管理界面
@@ -20,11 +24,9 @@ https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafep
 
 ### ✨  使用
 
-1. 运行思源
+1. 安装扩展，在扩展的选项中配置 API token（token 可在思源设置 - 关于中查看）
 2. 在 Web 页面上选择需要剪藏的内容，然后在右键菜单中选择 “Copy to SiYuan”
 3. 在思源中粘贴
-
-请注意：拉取图片到本地是付费订阅特性。
 
 ### 🔒 隐私条款
 

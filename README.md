@@ -12,7 +12,11 @@ A Chrome extension for SiYuan.
 
 https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafepk
 
-#### Dev version
+#### Edge Addons
+
+https://microsoftedge.microsoft.com/addons/detail/siyuan/lclhdlhleinlppggbbgimbekofanbkcf
+
+#### GitHub
 
 1. [Download zip](https://github.com/siyuan-note/chrome-web-clipper/archive/refs/heads/main.zip)
 2. Enter `chrome://extensions` in the Chrome address bar to open the extension management page
@@ -20,11 +24,9 @@ https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafep
 
 ### ✨  Usages
 
-1. Run SiYuan
+1. Install the extension, configure the API token in the extended options (token can be viewed in SiYuan Settings - About)
 2. Select the content to be clipped on the web page, and then select "Copy to SiYuan" from the right-click menu
 3. Paste in SiYuan
-
-Please note: Pulling pictures locally is a paid subscription feature.
 
 ### 🔒 Privacy policy
 
