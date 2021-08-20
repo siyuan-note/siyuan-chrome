@@ -1,11 +1,12 @@
-chrome.contextMenus.create({
-  title: 'Copy to SiYuan',
-  contexts: ['selection', 'image'],
-  onclick: siyuan,
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.contextMenus.create({
+    title: 'Copy to SiYuan',
+    contexts: ['selection', 'image'],
+    onclick: siyuan,
+  })
 })
 
-function siyuan(info, tab) {
-  console.log("click", tab.id)
+function siyuan (info, tab) {
   chrome.tabs.sendMessage(tab.id, {
     'func': 'copy',
     'tabId': tab.id,
@@ -37,20 +38,20 @@ chrome.webRequest.onHeadersReceived.addListener(
 )
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  console.log("background", request.func)
+  console.log('background', request.func)
   if (request.func !== 'upload-copy') {
     return
   }
 
-  const dom = request.dom;
-  const files = request.files;
-  const formData = new FormData();
-  formData.append("dom", dom);
+  const dom = request.dom
+  const files = request.files
+  const formData = new FormData()
+  formData.append('dom', dom)
   for (const key of Object.keys(files)) {
-    const data = files[key].data;
-    const base64Response = await fetch(data);
-    const blob = base64Response.blob();
-    formData.append(key, await blob);
+    const data = files[key].data
+    const base64Response = await fetch(data)
+    const blob = base64Response.blob()
+    formData.append(key, await blob)
   }
   fetch(request.api + '/api/extension/copy', {
     method: 'POST',
@@ -63,26 +64,26 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   }).then((response) => {
     if (response.code < 0) {
       chrome.tabs.sendMessage(request.tabId, {
-        "func": "tip",
-        "msg": response.msg,
-        "tip": request.tip,
+        'func': 'tip',
+        'msg': response.msg,
+        'tip': request.tip,
       })
-      return;
+      return
     }
 
     chrome.tabs.sendMessage(request.tabId, {
-      "func": "copy2Clipboard",
+      'func': 'copy2Clipboard',
       'data': response.data.md,
     })
 
     if ('' !== response.msg) {
       chrome.tabs.sendMessage(request.tabId, {
-        "func": "tip",
-        "msg": response.msg,
-        "tip": request.tip,
+        'func': 'tip',
+        'msg': response.msg,
+        'tip': request.tip,
       })
     }
   }).catch((e) => {
     console.warn('fetch post error', e)
   })
-});
+})
