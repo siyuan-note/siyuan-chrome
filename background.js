@@ -85,7 +85,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   }).catch((e) => {
     chrome.tabs.sendMessage(request.tabId, {
       'func': 'tip',
-      'msg': "Please input API token",
+      'msg': "Please config API token",
       'tip': "tip",
     })
   })
