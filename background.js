@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(function () {
   })
 })
 
-function siyuan (info, tab) {
+function siyuan(info, tab) {
   chrome.tabs.sendMessage(tab.id, {
     'func': 'copy',
     'tabId': tab.id,

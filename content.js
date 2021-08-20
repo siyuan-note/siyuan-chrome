@@ -1,7 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   let messageElement = document.getElementById('siyuanmessage')
   chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-    console.log("content", request.func)
     if ("tip" === request.func && request.tip) {
       showTip(request.msg);
       return;
