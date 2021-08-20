@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(function () {
   })
 })
 
-function siyuan(info, tab) {
+function siyuan (info, tab) {
   chrome.tabs.sendMessage(tab.id, {
     'func': 'copy',
     'tabId': tab.id,
@@ -59,7 +59,14 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     },
     body: formData,
   }).then((response) => {
-    return response.json()
+    if (response.redirected) {
+      chrome.tabs.sendMessage(request.tabId, {
+        'func': 'tip',
+        'msg': 'Please input API token',
+        'tip': 'tip',
+      })
+    }
+    return response.json();
   }).then((response) => {
     if (response.code < 0) {
       chrome.tabs.sendMessage(request.tabId, {
@@ -83,10 +90,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       })
     }
   }).catch((e) => {
-    chrome.tabs.sendMessage(request.tabId, {
-      'func': 'tip',
-      'msg': "Please input API token",
-      'tip': "tip",
-    })
+    console.warn(e)
   })
 })
