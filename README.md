@@ -12,10 +12,6 @@ A Chrome extension for SiYuan.
 * Edge: [SiYuan - Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/siyuan/lclhdlhleinlppggbbgimbekofanbkcf)
 * GitHub: [siyuan-note/siyuan-chrome](https://github.com/siyuan-note/siyuan-chrome)
 
-1. [Download zip](https://github.com/siyuan-note/chrome-web-clipper/archive/refs/heads/main.zip)
-2. Enter `chrome://extensions` in the Chrome address bar to open the extension management page
-3. Open "Developer mode" on the upper right, and then click "Load unpacked" on the upper left, the path is the unzipped directory just now
-
 ### ✨  Usages
 
 1. Install the extension, configure the API token in the extended options (token can be viewed in SiYuan Settings - About)
