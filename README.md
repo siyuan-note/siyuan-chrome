@@ -8,15 +8,9 @@ A Chrome extension for SiYuan.
 
 ### 🛠️ Setup
 
-#### Chrome Web Store
-
-https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafepk
-
-#### Edge Addons
-
-https://microsoftedge.microsoft.com/addons/detail/siyuan/lclhdlhleinlppggbbgimbekofanbkcf
-
-#### GitHub
+* Chrome: [SiYuan - Chrome Web Store](https://chrome.google.com/webstore/detail/siyuan/hkcgjbeblifaincobbcfiffbpgoafepk)
+* Edge: [SiYuan - Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/siyuan/lclhdlhleinlppggbbgimbekofanbkcf)
+* GitHub: [siyuan-note/siyuan-chrome](https://github.com/siyuan-note/siyuan-chrome)
 
 1. [Download zip](https://github.com/siyuan-note/chrome-web-clipper/archive/refs/heads/main.zip)
 2. Enter `chrome://extensions` in the Chrome address bar to open the extension management page
