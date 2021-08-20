@@ -5,7 +5,7 @@ chrome.contextMenus.create({
 })
 
 function siyuan(info, tab) {
-  console.log("click")
+  console.log("click", tab.id)
   chrome.tabs.sendMessage(tab.id, {
     'func': 'copy',
     'tabId': tab.id,
