@@ -38,7 +38,6 @@ chrome.webRequest.onHeadersReceived.addListener(
 )
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  console.log('background', request.func)
   if (request.func !== 'upload-copy') {
     return
   }
