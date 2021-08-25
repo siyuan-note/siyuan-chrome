@@ -1,18 +1,16 @@
-chrome.runtime.onInstalled.addListener(function () {
+chrome.contextMenus.removeAll(function () {
   chrome.contextMenus.create({
     title: 'Copy to SiYuan',
     contexts: ['selection', 'image'],
-    onclick: siyuan,
+    onclick: function (info, tab) {
+      chrome.tabs.sendMessage(tab.id, {
+        'func': 'copy',
+        'tabId': tab.id,
+        'srcUrl': info.srcUrl,
+      })
+    },
   })
 })
-
-function siyuan (info, tab) {
-  chrome.tabs.sendMessage(tab.id, {
-    'func': 'copy',
-    'tabId': tab.id,
-    'srcUrl': info.srcUrl,
-  })
-}
 
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
