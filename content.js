@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
       return
     }
 
+    showTip('Clipping, please wait a moment...')
+
     let srcList = []
     if (request.srcUrl) {
       srcList.push(request.srcUrl)
@@ -56,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
       showTip: true,
       token: "",
     }, function (items) {
+      if (!items.token) {
+        showTip('Please config API token before coping content')
+        return
+      }
+
       chrome.runtime.sendMessage({
         func: "upload-copy",
         files: files,

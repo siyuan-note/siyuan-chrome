@@ -60,7 +60,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (response.redirected) {
       chrome.tabs.sendMessage(request.tabId, {
         'func': 'tip',
-        'msg': 'Please config API token',
+        'msg': 'Invalid API token',
         'tip': 'tip',
       })
     }
