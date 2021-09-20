@@ -1,79 +1,85 @@
 document.addEventListener('DOMContentLoaded', function () {
   let messageElement = document.getElementById('siyuanmessage')
-  chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-    if ("tip" === request.func && request.tip) {
-      showTip(request.msg);
-      return;
-    }
-
-    if ("copy2Clipboard" === request.func) {
-      copyToClipboard(request.data);
-      return;
-    }
-
-    if ("copy" !== request.func) {
-      return
-    }
-
-    showTip('Clipping, please wait a moment...')
-
-    let srcList = []
-    if (request.srcUrl) {
-      srcList.push(request.srcUrl)
-    }
-
-    const selection = window.getSelection()
-    let dom = ''
-    const isHTTPS = 'https:' === window.location.protocol
-    if (selection && 0 < selection.rangeCount) {
-      const range = selection.getRangeAt(0)
-      const tempElement = document.createElement('div')
-      tempElement.appendChild(range.cloneContents())
-      const images = tempElement.querySelectorAll('img')
-      images.forEach(item => {
-        let src = item.getAttribute('src')
-        if (!src) {
-          return
-        }
-        if (isHTTPS && src.startsWith('http:')) {
-          src = src.replace('http:', 'https:')
-          item.setAttribute('src', src)
-        }
-        srcList.push(src)
-      })
-      dom = tempElement.innerHTML
-    }
-
-    const files = {};
-    srcList = [...new Set(srcList)]
-    for (let i = 0; i < srcList.length; i++) {
-      const src = srcList[i]
-      const response = await fetch(src)
-      const image = await response.blob()
-      files[escape(src)] = {type: image.type, data: await convertBlobToBase64(image)};
-    }
-
-    chrome.storage.sync.get({
-      ip: 'http://127.0.0.1:6806',
-      showTip: true,
-      token: "",
-    }, function (items) {
-      if (!items.token) {
-        showTip('Please config API token before coping content')
+  chrome.runtime.onMessage.addListener(
+    async (request, sender, sendResponse) => {
+      if ('tip' === request.func && request.tip) {
+        showTip(request.msg)
         return
       }
 
-      chrome.runtime.sendMessage({
-        func: "upload-copy",
-        files: files,
-        dom: dom,
-        api: items.ip,
-        token: items.token,
-        tip: items.showTip,
-        tabId: request.tabId,
-      });
+      if ('copy2Clipboard' === request.func) {
+        copyToClipboard(request.data)
+        return
+      }
+
+      if ('copy' !== request.func) {
+        return
+      }
+
+      showTip('Clipping, please wait a moment...')
+
+      let srcList = []
+      if (request.srcUrl) {
+        srcList.push(request.srcUrl)
+      }
+
+      const selection = window.getSelection()
+      let dom = ''
+      const isHTTPS = 'https:' === window.location.protocol
+      if (selection && 0 < selection.rangeCount) {
+        const range = selection.getRangeAt(0)
+        const tempElement = document.createElement('div')
+        tempElement.appendChild(range.cloneContents())
+        const images = tempElement.querySelectorAll('img')
+        images.forEach(item => {
+          let src = item.getAttribute('src')
+          if (!src) {
+            return
+          }
+          if (isHTTPS && src.startsWith('http:')) {
+            src = src.replace('http:', 'https:')
+            item.setAttribute('src', src)
+          }
+          srcList.push(src)
+        })
+        dom = tempElement.innerHTML
+      }
+
+      const files = {}
+      srcList = [...new Set(srcList)]
+      for (let i = 0; i < srcList.length; i++) {
+        const src = srcList[i]
+        const response = await fetch(src)
+        const image = await response.blob()
+        files[escape(src)] = {
+          type: image.type,
+          data: await convertBlobToBase64(image),
+        }
+      }
+
+      chrome.storage.sync.get({
+        ip: 'http://127.0.0.1:6806',
+        showTip: true,
+        token: '',
+        notebook: '',
+      }, function (items) {
+        if (!items.token) {
+          showTip('Please config API token before coping content')
+          return
+        }
+
+        chrome.runtime.sendMessage({
+          func: 'upload-copy',
+          files: files,
+          dom: dom,
+          api: items.ip,
+          token: items.token,
+          notebook: items.notebook,
+          tip: items.showTip,
+          tabId: request.tabId,
+        })
+      })
     })
-  })
 
   const showTip = (msg) => {
     if (!messageElement) {
@@ -112,9 +118,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const convertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
-    const reader = new FileReader;
-    reader.onerror = reject;
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(blob);
-  });
+    const reader = new FileReader
+    reader.onerror = reject
+    reader.onload = () => resolve(reader.result)
+    reader.readAsDataURL(blob)
+  })
 })
