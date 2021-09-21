@@ -117,7 +117,7 @@
         }
 
         .b3-select:focus {
-            box-shadow: 0 0 0 3px  rgba(66, 133, 244, 0.38);
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.38);
         }
 
         .b3-button {
@@ -151,7 +151,8 @@
 </head>
 <body>
 <div style="max-width: 184px">
-    <label style="display: flex;align-items: center;padding: 8px 8px 16px 0;">
+    <div id="log" style="color: #d23f31;margin-bottom: 16px"></div>
+    <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
         <div style="flex: 1">Show Tip</div>
         <input class="b3-switch" id="showTip" checked type="checkbox">
     </label>
@@ -161,7 +162,7 @@
     <div style="height: 16px;"></div>
     <select class="b3-select" id="notebooks"></select>
     <div style="height: 16px;"></div>
-    <button class="b3-button">Send to SiYuan</button>
+    <button class="b3-button" id="send">Send to SiYuan</button>
 </div>
 <script src="popup.js"></script>
 </body>

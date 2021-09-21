@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.sync.set({
       token: tokenElement.value,
     })
+    getNotebooks(ipElement, tokenElement, notebooksElement)
   })
   showTipElement.addEventListener('change', () => {
     chrome.storage.sync.set({
@@ -24,6 +25,26 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 
+  const sendElement = document.getElementById('send')
+  sendElement.addEventListener('click', () => {
+    fetch(ipElement.value + '/api/extension/getReadableContent', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Token ' + tokenElement.value,
+      },
+      body: JSON.stringify({
+        url: '',
+        dom: '',
+      }),
+    }).then((response) => {
+      return response.json()
+    }).then((response) => {
+      console.log(response)
+    }).catch((e) => {
+      console.warn(e)
+    })
+  })
+
   chrome.storage.sync.get({
     ip: 'http://127.0.0.1:6806',
     showTip: true,
@@ -33,25 +54,32 @@ document.addEventListener('DOMContentLoaded', () => {
     ipElement.value = items.ip || 'http://127.0.0.1:6806'
     tokenElement.value = items.token || ''
     showTipElement.checked = items.showTip
-
-    fetch(ipElement.value + '/api/notebook/lsNotebooks', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Token ' + tokenElement.value,
-      },
-    }).then((response) => {
-      return response.json()
-    }).then((response) => {
-      if (response.code === 0 && response.data.files.length > 0) {
-        let optionsHTML = ''
-        response.data.files.forEach(file => {
-          optionsHTML = `<option value="${file}">${file}</option>`
-        })
-        notebooksElement.value = items.notebook
-        notebooksElement.innerHTML = optionsHTML
-      }
-    }).catch((e) => {
-      console.warn(e)
-    })
+    getNotebooks(ipElement, tokenElement, notebooksElement)
   })
 })
+
+const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
+  fetch(ipElement.value + '/api/notebook/lsNotebooks', {
+    method: 'POST',
+    redirect: "manual",
+    headers: {
+      'Authorization': 'Token ' + tokenElement.value,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      document.getElementById('log').innerHTML = "Authentication failed"
+    } else {
+      document.getElementById('log').innerHTML = ""
+    }
+    return response.json()
+  }).then((response) => {
+    if (response.code === 0 && response.data.files.length > 0) {
+      let optionsHTML = ''
+      response.data.files.forEach(file => {
+        optionsHTML = `<option value="${file.name}">${file.name}</option>`
+      })
+      notebooksElement.value = tokenElement.value
+      notebooksElement.innerHTML = optionsHTML
+    }
+  })
+}
