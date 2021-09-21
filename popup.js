@@ -62,8 +62,11 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
   }).then((response) => {
     if (response.code === 0 && response.data.notebooks.length > 0) {
       let optionsHTML = ''
-      response.data.notebooks.forEach(file => {
-        optionsHTML = `<option value="${file.name}">${file.name}</option>`
+      response.data.notebooks.forEach(notebook => {
+        if (notebook.closed) {
+          return
+        }
+        optionsHTML += `<option value="${notebook.name}">${notebook.name}</option>`
       })
       notebooksElement.value = tokenElement.value
       notebooksElement.innerHTML = optionsHTML
