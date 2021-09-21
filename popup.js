@@ -27,9 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sendElement = document.getElementById('send')
   sendElement.addEventListener('click', () => {
-    chrome.runtime.sendMessage({
-      func: 'options-send-page',
-    })
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      chrome.tabs.executeScript(null, {
+        code: `siyuanGetReadability(${tabs[0].id})`
+      })
+    });
   })
 
   chrome.storage.sync.get({
