@@ -27,11 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sendElement = document.getElementById('send')
   sendElement.addEventListener('click', () => {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-      chrome.tabs.executeScript(null, {
-        code: `siyuanGetReadability(${tabs[0].id})`
-      })
-    });
+    chrome.runtime.sendMessage({
+      func: 'options-send-page',
+    })
   })
 
   chrome.storage.sync.get({
@@ -62,10 +60,13 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
     }
     return response.json()
   }).then((response) => {
-    if (response.code === 0 && response.data.files.length > 0) {
+    if (response.code === 0 && response.data.notebooks.length > 0) {
       let optionsHTML = ''
-      response.data.files.forEach(file => {
-        optionsHTML = `<option value="${file.id}">${file.name}</option>`
+      response.data.notebooks.forEach(notebook => {
+        if (notebook.closed) {
+          return
+        }
+        optionsHTML += `<option value="${notebook.id}">${notebook.name}</option>`
       })
       notebooksElement.value = tokenElement.value
       notebooksElement.innerHTML = optionsHTML
