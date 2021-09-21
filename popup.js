@@ -27,9 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sendElement = document.getElementById('send')
   sendElement.addEventListener('click', () => {
-    chrome.runtime.sendMessage({
-      func: 'options-send-page',
-    })
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      chrome.tabs.executeScript(null, {
+        code: `siyuanGetReadability(${tabs[0].id})`
+      })
+    });
   })
 
   chrome.storage.sync.get({
@@ -63,10 +65,14 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
     if (response.code === 0 && response.data.files.length > 0) {
       let optionsHTML = ''
       response.data.files.forEach(file => {
-        optionsHTML = `<option value="${file.name}">${file.name}</option>`
+        optionsHTML = `<option value="${file.id}">${file.name}</option>`
       })
       notebooksElement.value = tokenElement.value
       notebooksElement.innerHTML = optionsHTML
+
+      chrome.storage.sync.set({
+        notebook: notebooksElement.value,
+      })
     }
   })
 }

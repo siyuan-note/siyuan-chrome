@@ -15,7 +15,8 @@
         "<all_urls>"
       ],
       "js": [
-        "content.js"
+        "content.js",
+        "lib/Readability.js"
       ]
     }
   ],

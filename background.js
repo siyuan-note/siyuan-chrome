@@ -36,43 +36,6 @@ chrome.webRequest.onHeadersReceived.addListener(
 )
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if (request.func === 'content-send-page') {
-    chrome.storage.sync.get({
-      ip: 'http://127.0.0.1:6806',
-      showTip: true,
-      token: '',
-      notebook: '',
-    }, function (items) {
-      fetch(items.ip + '/api/extension/getReadableContent', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Token ' + items.token,
-        },
-        body: JSON.stringify({
-          url: request.url,
-          dom: request.dom,
-        }),
-      }).then((response) => {
-        return response.json()
-      }).then((response) => {
-        console.log(response)
-      }).catch((e) => {
-        console.warn(e)
-      })
-    })
-    return;
-  }
-  if (request.func === 'options-send-page') {
-    chrome.tabs.executeScript(null, {
-      code: `;chrome.runtime.sendMessage({
-        func: 'content-send-page',
-        dom: document.body.outerHTML,
-        url: window.location.href
-      })`
-    })
-    return
-  }
-
   if (request.func !== 'upload-copy') {
     return
   }
@@ -86,6 +49,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const blob = base64Response.blob()
     formData.append(key, await blob)
   }
+
   fetch(request.api + '/api/extension/copy', {
     method: 'POST',
     headers: {
@@ -116,11 +80,33 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       'data': response.data.md,
     })
 
-    if ('' !== response.msg) {
+    if ('' !== response.msg && request.type !== 'article') {
       chrome.tabs.sendMessage(request.tabId, {
         'func': 'tip',
         'msg': response.msg,
         'tip': request.tip,
+      })
+    }
+
+    if (request.type === 'article') {
+      fetch(request.api + '/api/filetree/createDocWithMd', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Token ' + request.token,
+        },
+        body: JSON.stringify({
+          'notebook': request.notebook,
+          'path': request.title ? ('/' + request.title) : 'Untitled',
+          'markdown': response.data.md,
+        }),
+      }).then((response) => {
+        return response.json()
+      }).then((response) => {
+        chrome.tabs.sendMessage(request.tabId, {
+          'func': 'tip',
+          'msg': "Create article successfully",
+          'tip': request.tip,
+        })
       })
     }
   }).catch((e) => {
