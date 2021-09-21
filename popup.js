@@ -27,21 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sendElement = document.getElementById('send')
   sendElement.addEventListener('click', () => {
-    fetch(ipElement.value + '/api/extension/getReadableContent', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'Token ' + tokenElement.value,
-      },
-      body: JSON.stringify({
-        url: '',
-        dom: '',
-      }),
-    }).then((response) => {
-      return response.json()
-    }).then((response) => {
-      console.log(response)
-    }).catch((e) => {
-      console.warn(e)
+    chrome.runtime.sendMessage({
+      func: 'options-send-page',
     })
   })
 

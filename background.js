@@ -36,10 +36,46 @@ chrome.webRequest.onHeadersReceived.addListener(
 )
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if (request.func !== 'upload-copy') {
+  if (request.func === 'content-send-page') {
+    chrome.storage.sync.get({
+      ip: 'http://127.0.0.1:6806',
+      showTip: true,
+      token: '',
+      notebook: '',
+    }, function (items) {
+      fetch(items.ip + '/api/extension/getReadableContent', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Token ' + items.token,
+        },
+        body: JSON.stringify({
+          url: request.url,
+          dom: request.dom,
+        }),
+      }).then((response) => {
+        return response.json()
+      }).then((response) => {
+        console.log(response)
+      }).catch((e) => {
+        console.warn(e)
+      })
+    })
+    return;
+  }
+  if (request.func === 'options-send-page') {
+    chrome.tabs.executeScript(null, {
+      code: `;chrome.runtime.sendMessage({
+        func: 'content-send-page',
+        dom: document.body.outerHTML,
+        url: window.location.href
+      })`
+    })
     return
   }
 
+  if (request.func !== 'upload-copy') {
+    return
+  }
   const dom = request.dom
   const files = request.files
   const formData = new FormData()
@@ -64,7 +100,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         'tip': 'tip',
       })
     }
-    return response.json();
+    return response.json()
   }).then((response) => {
     if (response.code < 0) {
       chrome.tabs.sendMessage(request.tabId, {
