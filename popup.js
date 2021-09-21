@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
   notebooksElement.addEventListener('change', () => {
+    notebooksElement.setAttribute("data-id",  notebooksElement.value)
     chrome.storage.sync.set({
       notebook: notebooksElement.value,
     })
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ipElement.value = items.ip || 'http://127.0.0.1:6806'
     tokenElement.value = items.token || ''
     showTipElement.checked = items.showTip
+    notebooksElement.setAttribute("data-id", items.notebook)
     getNotebooks(ipElement, tokenElement, notebooksElement)
   })
 })
@@ -70,8 +72,8 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
         }
         optionsHTML += `<option value="${notebook.id}">${notebook.name}</option>`
       })
-      notebooksElement.value = tokenElement.value
       notebooksElement.innerHTML = optionsHTML
+      notebooksElement.value = notebooksElement.getAttribute("data-id")
 
       chrome.storage.sync.set({
         notebook: notebooksElement.value,
