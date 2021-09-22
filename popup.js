@@ -64,20 +64,31 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
     }
     return response.json()
   }).then((response) => {
-    if (response.code === 0 && response.data.notebooks.length > 0) {
-      let optionsHTML = ''
-      response.data.notebooks.forEach(notebook => {
-        if (notebook.closed) {
-          return
-        }
-        optionsHTML += `<option value="${notebook.id}">${notebook.name}</option>`
-      })
-      notebooksElement.innerHTML = optionsHTML
-      notebooksElement.value = notebooksElement.getAttribute("data-id")
+    if (response.code === 0) {
+      if (!response.data.notebooks) {
+        document.getElementById('log').innerHTML = "Please upgrade SiYuan to v1.3.5 or above"
+        return
+      }
 
-      chrome.storage.sync.set({
-        notebook: notebooksElement.value,
-      })
+      if (response.data.notebooks.length > 0) {
+        let optionsHTML = ''
+        response.data.notebooks.forEach(notebook => {
+          if (notebook.closed) {
+            return
+          }
+          optionsHTML += `<option value="${notebook.id}">${notebook.name}</option>`
+        })
+        notebooksElement.innerHTML = optionsHTML
+        notebooksElement.value = notebooksElement.getAttribute("data-id")
+
+        chrome.storage.sync.set({
+          notebook: notebooksElement.value,
+        })
+      } else {
+        document.getElementById('log').innerHTML = "Please create a notebook before"
+      }
+    } else {
+      document.getElementById('log').innerHTML = "Get notebooks failed"
     }
   })
 }
