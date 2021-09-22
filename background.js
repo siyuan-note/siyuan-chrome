@@ -89,7 +89,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     }
 
     if (request.type === 'article') {
-      let title =  request.title ? ('/' + request.title) : 'Untitled'
+      let title = request.title ? ('/' + request.title) : 'Untitled'
       title = title.replaceAll("/", "")
 
       fetch(request.api + '/api/filetree/createDocWithMd', {
@@ -105,11 +105,19 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       }).then((response) => {
         return response.json()
       }).then((response) => {
-        chrome.tabs.sendMessage(request.tabId, {
-          'func': 'tip',
-          'msg': "Create article successfully",
-          'tip': request.tip,
-        })
+        if (0 === response.code) {
+          chrome.tabs.sendMessage(request.tabId, {
+            'func': 'tip',
+            'msg': "Create article successfully",
+            'tip': request.tip,
+          })
+        } else {
+          chrome.tabs.sendMessage(request.tabId, {
+            'func': 'tip',
+            'msg': response.msg,
+            'tip': request.tip,
+          })
+        }
       })
     }
   }).catch((e) => {
