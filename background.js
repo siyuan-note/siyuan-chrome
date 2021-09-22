@@ -89,6 +89,9 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     }
 
     if (request.type === 'article') {
+      let title =  request.title ? ('/' + request.title) : 'Untitled'
+      title = title.replaceAll("/", "")
+
       fetch(request.api + '/api/filetree/createDocWithMd', {
         method: 'POST',
         headers: {
@@ -96,7 +99,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         },
         body: JSON.stringify({
           'notebook': request.notebook,
-          'path': request.title ? ('/' + request.title) : 'Untitled',
+          'path': title,
           'markdown': response.data.md,
         }),
       }).then((response) => {
