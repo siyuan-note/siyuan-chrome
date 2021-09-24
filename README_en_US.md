@@ -1,6 +1,6 @@
 ## SiYuan Chrome Extension 
 
-[中文](https://github.com/siyuan-note/siyuan-chrome/blob/main/README_zh_CN.md)
+[中文](https://github.com/siyuan-note/siyuan-chrome/blob/main/README.md)
 
 ### 💡 Introduction
 

@@ -1,6 +1,6 @@
 ## SiYuan Chrome 扩展
 
-[English](https://github.com/siyuan-note/siyuan-chrome/blob/main/README.md)
+[English](https://github.com/siyuan-note/siyuan-chrome/blob/main/README_en_US.md)
 
 ### 💡 简介
 
