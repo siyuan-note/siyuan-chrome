@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
   notebooksElement.addEventListener('change', () => {
-    notebooksElement.setAttribute("data-id",  notebooksElement.value)
+    notebooksElement.setAttribute("data-id", notebooksElement.value)
     chrome.storage.sync.set({
       notebook: notebooksElement.value,
     })
@@ -28,9 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const sendElement = document.getElementById('send')
   sendElement.addEventListener('click', () => {
-    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+    chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
       chrome.tabs.executeScript(null, {
         code: `siyuanGetReadability(${tabs[0].id})`
+      }, function () {
+        window.close();
       })
     });
   })
