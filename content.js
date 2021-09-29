@@ -127,7 +127,9 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, title) => {
 }
 
 const siyuanGetReadability = (tabId) => {
-  const article = new Readability(document.cloneNode(true)).parse()
+  const article = new Readability(document.cloneNode(true), {
+    keepClasses : true,
+  }).parse()
   const tempElement = document.createElement('div')
   tempElement.innerHTML = article.content
   siyuanSendUpload(tempElement, tabId, undefined, "article", article.title)
