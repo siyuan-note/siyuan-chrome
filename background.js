@@ -49,6 +49,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const blob = base64Response.blob()
     formData.append(key, await blob)
   }
+  formData.append("notebook", request.notebook)
 
   fetch(request.api + '/api/extension/copy', {
     method: 'POST',
