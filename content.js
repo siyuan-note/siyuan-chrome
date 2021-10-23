@@ -111,9 +111,9 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       return
     }
 
-    const title = article ? article.title : "";
-    const siteName = article ? article.siteName : "";
-    const excerpt = article ? article.excerpt : "";
+    let title = article && article.title ? article.title : "";
+    let siteName = article && article.siteName ? article.siteName : "";
+    let excerpt = article && article.excerpt ? article.excerpt : "";
     chrome.runtime.sendMessage({
       func: 'upload-copy',
       files: files,

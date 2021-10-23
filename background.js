@@ -95,8 +95,15 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       const siteName = request.siteName
       const excerpt = request.excerpt
       const href = request.href
-      let markdown = response.data.md
-      markdown = "---\n\n* " + "[" + href + " - " + siteName + "](" + href + ")\n* " + excerpt + "\n* " + getDateTime() + "\n\n---\n\n" + markdown
+      let linkText = href
+      if ("" !== siteName) {
+        linkText += " - " + siteName
+      }
+      let markdown = "---\n\n* " + "[" + linkText + "](" + href + ")\n"
+      if ("" !== excerpt) {
+        markdown += "* " + excerpt + "\n"
+      }
+      markdown += "\n* " + getDateTime() + "\n\n---\n\n" + response.data.md
 
       fetch(request.api + '/api/filetree/createDocWithMd', {
         method: 'POST',
