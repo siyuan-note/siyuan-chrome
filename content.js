@@ -70,7 +70,7 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
   reader.readAsDataURL(blob)
 })
 
-const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, title) => {
+const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
   let srcList = []
   if (srcUrl) {
     srcList.push(srcUrl)
@@ -119,7 +119,10 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, title) => {
       token: items.token,
       notebook: items.notebook,
       tip: items.showTip,
-      title,
+      title: article.title,
+      siteName: article.siteName,
+      excerpt: article.excerpt,
+      href,
       type,
       tabId,
     })
@@ -132,5 +135,6 @@ const siyuanGetReadability = (tabId) => {
   }).parse()
   const tempElement = document.createElement('div')
   tempElement.innerHTML = article.content
-  siyuanSendUpload(tempElement, tabId, undefined, "article", article.title)
+  // console.log(article);
+  siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
 }

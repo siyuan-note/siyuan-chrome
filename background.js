@@ -92,6 +92,11 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     if (request.type === 'article') {
       let title = request.title ? ('/' + request.title) : 'Untitled'
       title = title.replaceAll("/", "")
+      const siteName = request.siteName
+      const excerpt = request.excerpt
+      const href = request.href
+      let markdown = response.data.md
+      markdown = "---\n\n* " + "[" + href + " - " + siteName + "](" + href + ")\n* " + excerpt + "\n* " + getDateTime() + "\n\n---\n\n" + markdown
 
       fetch(request.api + '/api/filetree/createDocWithMd', {
         method: 'POST',
@@ -101,7 +106,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         body: JSON.stringify({
           'notebook': request.notebook,
           'path': title,
-          'markdown': response.data.md,
+          'markdown': markdown,
         }),
       }).then((response) => {
         return response.json()
@@ -125,3 +130,30 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     console.warn(e)
   })
 })
+
+function getDateTime() {
+  var now = new Date();
+  var year = now.getFullYear();
+  var month = now.getMonth() + 1;
+  var day = now.getDate();
+  var hour = now.getHours();
+  var minute = now.getMinutes();
+  var second = now.getSeconds();
+  if (month.toString().length == 1) {
+    month = '0' + month;
+  }
+  if (day.toString().length == 1) {
+    day = '0' + day;
+  }
+  if (hour.toString().length == 1) {
+    hour = '0' + hour;
+  }
+  if (minute.toString().length == 1) {
+    minute = '0' + minute;
+  }
+  if (second.toString().length == 1) {
+    second = '0' + second;
+  }
+  var dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' + minute + ':' + second;
+  return dateTime;
+}
