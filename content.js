@@ -111,6 +111,9 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       return
     }
 
+    const title = article ? article.title : "";
+    const siteName = article ? article.siteName : "";
+    const excerpt = article ? article.excerpt : "";
     chrome.runtime.sendMessage({
       func: 'upload-copy',
       files: files,
@@ -119,9 +122,9 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       token: items.token,
       notebook: items.notebook,
       tip: items.showTip,
-      title: article.title,
-      siteName: article.siteName,
-      excerpt: article.excerpt,
+      title: title,
+      siteName: siteName,
+      excerpt: excerpt,
       href,
       type,
       tabId,
@@ -131,7 +134,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
 
 const siyuanGetReadability = (tabId) => {
   const article = new Readability(document.cloneNode(true), {
-    keepClasses : true,
+    keepClasses: true,
   }).parse()
   const tempElement = document.createElement('div')
   tempElement.innerHTML = article.content
