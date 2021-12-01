@@ -37,6 +37,6 @@
   ],
   "name": "SiYuan",
   "options_page": "options.html",
-  "description": "Web page content processing for SiYuan.",
-  "version": "0.3.4"
+  "description": "Web clipping for SiYuan. 思源笔记网页剪藏。",
+  "version": "0.3.5"
 }
