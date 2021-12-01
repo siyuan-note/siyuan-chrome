@@ -132,10 +132,22 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
   })
 }
 
+var toggle = false;
+var time;
+
 const siyuanGetReadability = (tabId) => {
-  const article = new Readability(document.cloneNode(true), {
-    keepClasses: true,
-  }).parse()
+  window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+  toggle = !toggle;
+  if (toggle) {
+    time = setInterval(function () {
+      window.scrollBy(0, 800);
+    }, 1000);
+  } else {
+    clearInterval(time);
+  }
+  window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+
+  const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
   const tempElement = document.createElement('div')
   tempElement.innerHTML = article.content
   // console.log(article);
