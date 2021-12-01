@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 })
 
-const siyuanShowTip = (msg) => {
+const siyuanShowTip = (msg, timeout) => {
   let messageElement = document.getElementById('siyuanmessage')
   if (!messageElement) {
     document.body.insertAdjacentHTML('afterend', `<div style=" position:fixed;top: 0;z-index: 999999999;transform: translate3d(0, -100px, 0);opacity: 0;transition: opacity 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms, transform 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms;width: 100%;align-items: center;justify-content: center;height: 0;display: flex;" id="siyuanmessage">
@@ -57,10 +57,21 @@ const siyuanShowTip = (msg) => {
   messageElement.style.opacity = '1'
   messageElement.firstElementChild.innerHTML = msg
 
+  if (!timeout) {
+    timeout = 3000
+  }
   setTimeout(() => {
-    messageElement.style.transform = 'translate3d(0, -100px, 0)'
-    messageElement.style.opacity = '0'
-  }, 3000)
+    siyuanClearTip()
+  }, timeout)
+}
+
+const siyuanClearTip = () => {
+  let messageElement = document.getElementById('siyuanmessage')
+  if (!messageElement) {
+    return
+  }
+  messageElement.style.transform = 'translate3d(0, -100px, 0)'
+  messageElement.style.opacity = '0'
 }
 
 const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
@@ -133,23 +144,44 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
 }
 
 var toggle = false;
-var time;
+var scrollTimer;
 
 const siyuanGetReadability = (tabId) => {
+  siyuanShowTip('Clipping, please wait a moment...', 60 * 1000)
   window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+  scrollTo1(document.body.scrollHeight, function () {
+    toggle = false
+    clearInterval(scrollTimer)
+    window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+    const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
+    const tempElement = document.createElement('div')
+    tempElement.innerHTML = article.content
+    // console.log(article)
+    siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
+    siyuanClearTip()
+  })
+}
+
+function scrollTo1(offset, callback) {
+  console.log(offset)
+  const fixedOffset = offset.toFixed();
+  const onScroll = function () {
+    const pageOffset = window.innerHeight + window.scrollY
+    console.log(pageOffset, fixedOffset)
+    if (pageOffset >= fixedOffset - 100) {
+      window.removeEventListener('scroll', onScroll)
+      callback()
+    }
+  }
+
+  window.addEventListener('scroll', onScroll)
+  onScroll()
   toggle = !toggle;
   if (toggle) {
-    time = setInterval(function () {
-      window.scrollBy(0, 800);
+    scrollTimer = setInterval(function () {
+      window.scrollBy(0, 600);
     }, 1000);
   } else {
-    clearInterval(time);
+    clearInterval(scrollTimer);
   }
-  window.scrollTo({top: 0, left: 0, behavior: "smooth"})
-
-  const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
-  const tempElement = document.createElement('div')
-  tempElement.innerHTML = article.content
-  // console.log(article);
-  siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
 }
