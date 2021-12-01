@@ -153,22 +153,26 @@ const siyuanGetReadability = (tabId) => {
     toggle = false
     clearInterval(scrollTimer)
     window.scrollTo({top: 0, left: 0, behavior: "smooth"})
-    const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
-    const tempElement = document.createElement('div')
-    tempElement.innerHTML = article.content
-    // console.log(article)
-    siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
-    siyuanClearTip()
+    try {
+      const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
+      const tempElement = document.createElement('div')
+      tempElement.innerHTML = article.content
+      // console.log(article)
+      siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
+      siyuanClearTip()
+    } catch (e) {
+      console.error(e)
+      siyuanShowTip(e.message, 7 * 1000)
+    }
   })
 }
 
 function scrollTo1(offset, callback) {
-  console.log(offset)
   const fixedOffset = offset.toFixed();
   const onScroll = function () {
     const pageOffset = window.innerHeight + window.scrollY
-    console.log(pageOffset, fixedOffset)
-    if (pageOffset >= fixedOffset - 100) {
+    // console.log(pageOffset, fixedOffset)
+    if (pageOffset >= fixedOffset - 64) {
       window.removeEventListener('scroll', onScroll)
       callback()
     }
@@ -179,7 +183,7 @@ function scrollTo1(offset, callback) {
   toggle = !toggle;
   if (toggle) {
     scrollTimer = setInterval(function () {
-      window.scrollBy(0, 600);
+      window.scrollBy(0, window.innerHeight);
     }, 1000);
   } else {
     clearInterval(scrollTimer);
