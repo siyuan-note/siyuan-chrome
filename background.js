@@ -39,8 +39,11 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.func !== 'upload-copy') {
     return
   }
-  const dom = request.dom
-  const files = request.files
+
+  const jsonBlob = await fetch(request.dataURL).then(r => r.blob())
+  const requestData = JSON.parse(await jsonBlob.text())
+  const dom = requestData.dom
+  const files = requestData.files
   const formData = new FormData()
   formData.append('dom', dom)
   for (const key of Object.keys(files)) {
@@ -49,17 +52,17 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     const blob = base64Response.blob()
     formData.append(key, await blob)
   }
-  formData.append("notebook", request.notebook)
+  formData.append("notebook", requestData.notebook)
 
-  fetch(request.api + '/api/extension/copy', {
+  fetch(requestData.api + '/api/extension/copy', {
     method: 'POST',
     headers: {
-      'Authorization': 'Token ' + request.token,
+      'Authorization': 'Token ' + requestData.token,
     },
     body: formData,
   }).then((response) => {
     if (response.redirected) {
-      chrome.tabs.sendMessage(request.tabId, {
+      chrome.tabs.sendMessage(requestData.tabId, {
         'func': 'tip',
         'msg': 'Invalid API token',
         'tip': 'tip',
@@ -68,33 +71,33 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     return response.json()
   }).then((response) => {
     if (response.code < 0) {
-      chrome.tabs.sendMessage(request.tabId, {
+      chrome.tabs.sendMessage(requestData.tabId, {
         'func': 'tip',
         'msg': response.msg,
-        'tip': request.tip,
+        'tip': requestData.tip,
       })
       return
     }
 
-    chrome.tabs.sendMessage(request.tabId, {
+    chrome.tabs.sendMessage(requestData.tabId, {
       'func': 'copy2Clipboard',
       'data': response.data.md,
     })
 
-    if ('' !== response.msg && request.type !== 'article') {
-      chrome.tabs.sendMessage(request.tabId, {
+    if ('' !== response.msg && requestData.type !== 'article') {
+      chrome.tabs.sendMessage(requestData.tabId, {
         'func': 'tip',
         'msg': response.msg,
-        'tip': request.tip,
+        'tip': requestData.tip,
       })
     }
 
-    if (request.type === 'article') {
-      let title = request.title ? ('/' + request.title) : 'Untitled'
+    if (requestData.type === 'article') {
+      let title = requestData.title ? ('/' + requestData.title) : 'Untitled'
       title = title.replaceAll("/", "")
-      const siteName = request.siteName
-      const excerpt = request.excerpt
-      const href = request.href
+      const siteName = requestData.siteName
+      const excerpt = requestData.excerpt
+      const href = requestData.href
       let linkText = href
       if ("" !== siteName) {
         linkText += " - " + siteName
@@ -105,13 +108,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       }
       markdown += "\n* " + getDateTime() + "\n\n---\n\n" + response.data.md
 
-      fetch(request.api + '/api/filetree/createDocWithMd', {
+      fetch(requestData.api + '/api/filetree/createDocWithMd', {
         method: 'POST',
         headers: {
-          'Authorization': 'Token ' + request.token,
+          'Authorization': 'Token ' + requestData.token,
         },
         body: JSON.stringify({
-          'notebook': request.notebook,
+          'notebook': requestData.notebook,
           'path': title,
           'markdown': markdown,
         }),
@@ -119,16 +122,16 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         return response.json()
       }).then((response) => {
         if (0 === response.code) {
-          chrome.tabs.sendMessage(request.tabId, {
+          chrome.tabs.sendMessage(requestData.tabId, {
             'func': 'tip',
             'msg': "Create article successfully",
-            'tip': request.tip,
+            'tip': requestData.tip,
           })
         } else {
-          chrome.tabs.sendMessage(request.tabId, {
+          chrome.tabs.sendMessage(requestData.tabId, {
             'func': 'tip',
             'msg': response.msg,
-            'tip': request.tip,
+            'tip': requestData.tip,
           })
         }
       })

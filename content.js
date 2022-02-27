@@ -125,8 +125,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     let title = article && article.title ? article.title : "";
     let siteName = article && article.siteName ? article.siteName : "";
     let excerpt = article && article.excerpt ? article.excerpt : "";
-    chrome.runtime.sendMessage({
-      func: 'upload-copy',
+    const msgJSON = {
       files: files,
       dom: tempElement.innerHTML,
       api: items.ip,
@@ -139,7 +138,11 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       href,
       type,
       tabId,
-    })
+    };
+    const jsonStr = JSON.stringify(msgJSON);
+    const jsonBlob = new Blob([jsonStr], {type: "application/json"});
+    const dataURL = URL.createObjectURL(jsonBlob);
+    chrome.runtime.sendMessage({func: 'upload-copy', dataURL: dataURL})
   })
 }
 
