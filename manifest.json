@@ -31,12 +31,11 @@
     "webRequestBlocking",
     "*://*/*",
     "contextMenus",
-    "clipboardRead",
     "clipboardWrite",
     "storage"
   ],
   "name": "SiYuan",
   "options_page": "options.html",
   "description": "Web clipping for SiYuan. 思源笔记网页剪藏。",
-  "version": "1.0.0"
+  "version": "1.0.1"
 }
