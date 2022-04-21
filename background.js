@@ -105,8 +105,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       let markdown = "---\n\n* " + "[" + linkText + "](" + href + ")\n"
       if ("" !== excerpt) {
         markdown += "* " + excerpt + "\n"
+      } else {
+        markdown += "\n"
       }
-      markdown += "\n* " + getDateTime() + "\n\n---\n\n" + response.data.md
+      markdown += "* " + getDateTime() + "\n\n---\n\n" + response.data.md
 
       fetch(requestData.api + '/api/filetree/createDocWithMd', {
         method: 'POST',
