@@ -12,6 +12,25 @@ chrome.contextMenus.removeAll(function () {
   })
 })
 
+// TODO: v3
+// chrome.contextMenus.removeAll(function () {
+//   chrome.contextMenus.create({
+//     id: 'Copy to SiYuan',
+//     title: 'Copy to SiYuan',
+//     contexts: ['selection', 'image'],
+//   })
+//
+//   chrome.contextMenus.onClicked.addListener(function (info, tab) {
+//     if (info.menuItemId === 'Copy to SiYuan') {
+//       chrome.tabs.sendMessage(tab.id, {
+//         'func': 'copy',
+//         'tabId': tab.id,
+//         'srcUrl': info.srcUrl,
+//       })
+//     }
+//   })
+// })
+
 chrome.webRequest.onHeadersReceived.addListener(
   function (details) {
     let existAllowOrigin = false

@@ -29,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const sendElement = document.getElementById('send')
   sendElement.addEventListener('click', () => {
     chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
+      // TODO: v3
+      // chrome.scripting.executeScript(null, {
       chrome.tabs.executeScript(null, {
         code: `siyuanGetReadability(${tabs[0].id})`
       }, function () {
