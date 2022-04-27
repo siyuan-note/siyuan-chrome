@@ -103,7 +103,13 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
   srcList = [...new Set(srcList)]
   for (let i = 0; i < srcList.length; i++) {
     const src = srcList[i]
-    const response = await fetch(src)
+    let response;
+    try {
+      response = await fetch(src)
+    } catch (e) {
+      console.warn("fetch [" + src + "] failed", e)
+      continue
+    }
     const image = await response.blob()
     files[escape(src)] = {
       type: image.type,
