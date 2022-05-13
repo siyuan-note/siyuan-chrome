@@ -124,7 +124,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     notebook: '',
   }, function (items) {
     if (!items.token) {
-      siyuanShowTip('Please config API token before coping content')
+      siyuanShowTip('Please config API token before clipping content')
       return
     }
 
