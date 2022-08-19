@@ -163,6 +163,12 @@ const siyuanGetReadability = (tabId) => {
     clearInterval(scrollTimer)
     window.scrollTo({top: 0, left: 0, behavior: "smooth"})
     try {
+      // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
+      document.querySelectorAll(".hljs-comment").forEach(item => {
+        item.classList.remove("hljs-comment")
+        item.classList.add("hljs-cmt")
+      })
+
       const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
       const tempElement = document.createElement('div')
       tempElement.innerHTML = article.content
