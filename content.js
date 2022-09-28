@@ -153,13 +153,12 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
 }
 
 let toggle = false;
+let scrollTimer;
 
-const scrollTo1 = (offset, callback) => {
-  const fixedOffset = offset.toFixed();
+const scrollTo1 = (callback) => {
   const onScroll = function () {
-    const pageOffset = window.innerHeight + window.scrollY
-    // console.log(pageOffset, fixedOffset)
-    if (pageOffset >= fixedOffset - window.innerHeight / 2) {
+    // console.log(window.innerHeight + window.scrollY, document.body.offsetHeight - window.innerHeight / 2)
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - window.innerHeight / 2) {
       window.removeEventListener('scroll', onScroll)
       callback()
     }
@@ -171,7 +170,7 @@ const scrollTo1 = (offset, callback) => {
   if (toggle) {
     scrollTimer = setInterval(function () {
       window.scrollBy(0, window.innerHeight);
-    }, 1000);
+    }, 666);
   } else {
     clearInterval(scrollTimer);
   }

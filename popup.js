@@ -97,12 +97,11 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
   })
 }
 
-let scrollTimer;
 
 const siyuanGetReadability = (tabId) => {
   siyuanShowTip('Clipping, please wait a moment...', 60 * 1000)
   window.scrollTo({top: 0, left: 0, behavior: "smooth"})
-  scrollTo1(document.body.scrollHeight, function () {
+  scrollTo1(() => {
     toggle = false
     clearInterval(scrollTimer)
     window.scrollTo({top: 0, left: 0, behavior: "smooth"})
