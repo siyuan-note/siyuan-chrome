@@ -1,58 +1,20 @@
 chrome.contextMenus.removeAll(function () {
   chrome.contextMenus.create({
+    id: 'copy-to-siyuan',
     title: 'Copy to SiYuan',
     contexts: ['selection', 'image'],
-    onclick: function (info, tab) {
+  })
+
+  chrome.contextMenus.onClicked.addListener(function (info, tab) {
+    if (info.menuItemId === 'copy-to-siyuan') {
       chrome.tabs.sendMessage(tab.id, {
         'func': 'copy',
         'tabId': tab.id,
         'srcUrl': info.srcUrl,
       })
-    },
+    }
   })
 })
-
-// TODO: v3
-// chrome.contextMenus.removeAll(function () {
-//   chrome.contextMenus.create({
-//     id: 'Copy to SiYuan',
-//     title: 'Copy to SiYuan',
-//     contexts: ['selection', 'image'],
-//   })
-//
-//   chrome.contextMenus.onClicked.addListener(function (info, tab) {
-//     if (info.menuItemId === 'Copy to SiYuan') {
-//       chrome.tabs.sendMessage(tab.id, {
-//         'func': 'copy',
-//         'tabId': tab.id,
-//         'srcUrl': info.srcUrl,
-//       })
-//     }
-//   })
-// })
-
-chrome.webRequest.onHeadersReceived.addListener(
-  function (details) {
-    let existAllowOrigin = false
-    for (let i = 0; i < details.responseHeaders.length; i++) {
-      if ('access-control-allow-origin' ===
-        details.responseHeaders[i].name.toLowerCase()) {
-        existAllowOrigin = true
-        break
-      }
-    }
-
-    if (!existAllowOrigin) {
-      const cors = {name: 'Access-Control-Allow-Origin', value: '*'}
-      return {responseHeaders: details.responseHeaders.concat(cors)}
-    }
-    return {responseHeaders: details.responseHeaders}
-  },
-  {
-    urls: ['*://*/*'],
-  },
-  ['blocking', 'responseHeaders', 'extraHeaders'],
-)
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   if (request.func !== 'upload-copy') {

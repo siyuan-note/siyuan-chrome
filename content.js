@@ -152,37 +152,9 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
   })
 }
 
-var toggle = false;
-var scrollTimer;
+let toggle = false;
 
-const siyuanGetReadability = (tabId) => {
-  siyuanShowTip('Clipping, please wait a moment...', 60 * 1000)
-  window.scrollTo({top: 0, left: 0, behavior: "smooth"})
-  scrollTo1(document.body.scrollHeight, function () {
-    toggle = false
-    clearInterval(scrollTimer)
-    window.scrollTo({top: 0, left: 0, behavior: "smooth"})
-    try {
-      // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
-      document.querySelectorAll(".hljs-comment").forEach(item => {
-        item.classList.remove("hljs-comment")
-        item.classList.add("hljs-cmt")
-      })
-
-      const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
-      const tempElement = document.createElement('div')
-      tempElement.innerHTML = article.content
-      // console.log(article)
-      siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
-      siyuanClearTip()
-    } catch (e) {
-      console.error(e)
-      siyuanShowTip(e.message, 7 * 1000)
-    }
-  })
-}
-
-function scrollTo1(offset, callback) {
+const scrollTo1 = (offset, callback) => {
   const fixedOffset = offset.toFixed();
   const onScroll = function () {
     const pageOffset = window.innerHeight + window.scrollY
