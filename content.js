@@ -187,7 +187,7 @@ function scrollTo1(offset, callback) {
   const onScroll = function () {
     const pageOffset = window.innerHeight + window.scrollY
     // console.log(pageOffset, fixedOffset)
-    if (pageOffset >= fixedOffset - 64) {
+    if (pageOffset >= fixedOffset - window.innerHeight / 2) {
       window.removeEventListener('scroll', onScroll)
       callback()
     }
