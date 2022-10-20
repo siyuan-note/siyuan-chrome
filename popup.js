@@ -100,11 +100,11 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
 
 const siyuanGetReadability = (tabId) => {
   siyuanShowTip('Clipping, please wait a moment...', 60 * 1000)
-  window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+  window.scrollTo(0, document.body.scrollHeight);
   scrollTo1(() => {
     toggle = false
     clearInterval(scrollTimer)
-    window.scrollTo({top: 0, left: 0, behavior: "smooth"})
+    window.scrollTo(0, 0);
     try {
       // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
       document.querySelectorAll(".hljs-comment").forEach(item => {

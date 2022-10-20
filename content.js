@@ -157,8 +157,8 @@ let scrollTimer;
 
 const scrollTo1 = (callback) => {
   const onScroll = function () {
-    // console.log(window.innerHeight + window.scrollY, document.body.offsetHeight - window.innerHeight / 2)
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - window.innerHeight / 2) {
+    // console.log(window.innerHeight, window.scrollY)
+    if (0 >= window.scrollY || window.innerHeight / 2 > window.scrollY) {
       window.removeEventListener('scroll', onScroll)
       callback()
     }
@@ -169,7 +169,7 @@ const scrollTo1 = (callback) => {
   toggle = !toggle;
   if (toggle) {
     scrollTimer = setInterval(function () {
-      window.scrollBy(0, window.innerHeight);
+      window.scrollBy(0, -window.innerHeight);
     }, 666);
   } else {
     clearInterval(scrollTimer);
