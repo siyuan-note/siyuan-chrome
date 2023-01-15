@@ -97,9 +97,15 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
   })
 }
 
-
 const siyuanGetReadability = (tabId) => {
-  siyuanShowTip('Clipping, please wait a moment...', 60 * 1000)
+  try {
+    siyuanShowTip('Clipping, please wait a moment...', 60 * 1000)
+  } catch (e) {
+    alert("After installing the SiYuan extension for the first time, please refresh the page before using it")
+    window.location.reload()
+    return
+  }
+
   window.scrollTo(0, document.body.scrollHeight);
   scrollTo1(() => {
     toggle = false
