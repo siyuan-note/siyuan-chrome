@@ -101,6 +101,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
 
   const files = {}
   srcList = [...new Set(srcList)]
+  let fetchFileErr = false;
   for (let i = 0; i < srcList.length; i++) {
     const src = srcList[i]
     let response;
@@ -108,6 +109,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       response = await fetch(src)
     } catch (e) {
       console.warn("fetch [" + src + "] failed", e)
+      fetchFileErr = true;
       continue
     }
     const image = await response.blob()
@@ -132,6 +134,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     let siteName = article && article.siteName ? article.siteName : "";
     let excerpt = article && article.excerpt ? article.excerpt : "";
     const msgJSON = {
+      fetchFileErr,
       files: files,
       dom: tempElement.innerHTML,
       api: items.ip,

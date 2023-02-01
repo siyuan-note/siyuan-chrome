@@ -23,6 +23,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
   const jsonBlob = await fetch(request.dataURL).then(r => r.blob())
   const requestData = JSON.parse(await jsonBlob.text())
+  const fetchFileErr = requestData.fetchFileErr
   const dom = requestData.dom
   const files = requestData.files
   const formData = new FormData()
@@ -110,6 +111,19 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             'msg': "Create article successfully",
             'tip': requestData.tip,
           })
+
+          if (fetchFileErr) {
+            // 可能因为跨域问题导致下载图片失败，这里调用内核接口 `网络图片转换为本地图片` https://github.com/siyuan-note/siyuan/issues/7224
+            fetch(requestData.api + '/api/format/netImg2LocalAssets', {
+              method: 'POST',
+              headers: {
+                'Authorization': 'Token ' + requestData.token,
+              },
+              body: JSON.stringify({
+                'id': response.data,
+              }),
+            })
+          }
         } else {
           chrome.tabs.sendMessage(requestData.tabId, {
             'func': 'tip',
