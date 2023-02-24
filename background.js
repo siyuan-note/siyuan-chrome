@@ -121,7 +121,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
               },
               body: JSON.stringify({
                 'id': response.data,
-                'url': requestData.href, // 改进浏览器剪藏扩展转换本地图片 https://github.com/siyuan-note/siyuan/issues/7464
+                'url': requestData.href, // 改进浏览器剪藏扩展转换本地图片成功率 https://github.com/siyuan-note/siyuan/issues/7464
               }),
             })
           }
