@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tagEnable: tagEnableElement.checked,
     })
     tagGroupDisplay(tagEnableElement)
+    getTags(ipElement, tokenElement, tagEnableElement, tagsElement, tagPrefixElement)
   })
   tagPrefixElement.addEventListener('change', () => {
     tagPrefixElement.setAttribute("data-id", tagPrefixElement.value)
