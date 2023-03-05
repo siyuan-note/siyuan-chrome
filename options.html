@@ -162,6 +162,24 @@
     <div style="height: 16px;"></div>
     <select class="b3-select" id="notebooks"></select>
     <div style="height: 16px;"></div>
+    <hr/>
+    <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+        <div style="flex: 1">tag-based features</div>
+        <input class="b3-switch" id="tagEnable" type="checkbox">
+    </label>
+    <div style="height: 120px;" id="tagGroup" style="display: inline;">
+        <input id="tagPrefix" class="b3-text-filed" placeholder="tag prefix">
+        <select class="b3-select" id="tags" style="margin-top: 5px;"></select>
+        <label style="display: flex;align-items: center;padding: 0 8px 5px 0; margin-top: 8px;">
+            <div style="flex: 1"> add tag to doc:</div>
+            <input class="b3-switch" id="addTag" type="checkbox">
+        </label>
+        <label style="display: flex;align-items: center;padding: 0 8px 5px 0;">
+            <div style="flex: 1"> use tag in doc path:</div>
+            <input class="b3-switch" id="tagToPath" type="checkbox">
+        </label>
+    </div>
+    <div style="height: 16px;"></div>
     <button class="b3-button" id="send">Send to SiYuan</button>
 </div>
 <script src="popup.js"></script>

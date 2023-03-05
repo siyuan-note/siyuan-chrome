@@ -92,6 +92,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       }
       markdown += "* " + getDateTime() + "\n\n---\n\n" + response.data.md
 
+      let docPath = title
+      if(requestData.tagToPath && requestData.tags.length > 0) {   // 如果开启了根据标签来定义文档路径
+        docPath = requestData.tags + '/' + title
+      }
       fetch(requestData.api + '/api/filetree/createDocWithMd', {
         method: 'POST',
         headers: {
@@ -99,7 +103,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         },
         body: JSON.stringify({
           'notebook': requestData.notebook,
-          'path': title,
+          'path': docPath,
           'markdown': markdown,
         }),
       }).then((response) => {
@@ -125,6 +129,23 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
               }),
             })
           }
+
+          // 如果开启了要添加tag，在有设置tag的情况下就给文章继续添加 tag
+          if(requestData.addTag && requestData.tags.length > 0) {
+            fetch(requestData.api + '/api/attr/setBlockAttrs', {
+              method: 'POST',
+              headers: {
+                'Authorization': 'Token ' + requestData.token,
+              },
+              body: JSON.stringify({
+                'id': response.data,
+                'attrs': {
+                  "tags": requestData.tags,  
+                }
+              }),
+            })
+          }
+          
         } else {
           chrome.tabs.sendMessage(requestData.tabId, {
             'func': 'tip',

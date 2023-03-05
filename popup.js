@@ -3,6 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const tokenElement = document.getElementById('token')
   const showTipElement = document.getElementById('showTip')
   const notebooksElement = document.getElementById('notebooks')
+  const tagPrefixElement = document.getElementById('tagPrefix')
+  const tagsElement = document.getElementById('tags')
+  const tagEnableElement = document.getElementById('tagEnable')
+  const addTagElement = document.getElementById('addTag')
+  const tagToPathElement = document.getElementById('tagToPath')
   ipElement.addEventListener('change', () => {
     chrome.storage.sync.set({
       ip: ipElement.value,
@@ -13,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       token: tokenElement.value,
     })
     getNotebooks(ipElement, tokenElement, notebooksElement)
+    getTags(ipElement, tokenElement, tagEnableElement, tagsElement, tagPrefixElement)
   })
   showTipElement.addEventListener('change', () => {
     chrome.storage.sync.set({
@@ -23,6 +29,35 @@ document.addEventListener('DOMContentLoaded', () => {
     notebooksElement.setAttribute("data-id", notebooksElement.value)
     chrome.storage.sync.set({
       notebook: notebooksElement.value,
+    })
+  })
+  tagEnableElement.addEventListener('change', () => {
+    chrome.storage.sync.set({
+      tagEnable: tagEnableElement.checked,
+    })
+    tagGroupDisplay(tagEnableElement)
+  })
+  tagPrefixElement.addEventListener('change', () => {
+    tagPrefixElement.setAttribute("data-id", tagPrefixElement.value)
+    chrome.storage.sync.set({
+      tagPrefix: tagPrefixElement.value,
+    })
+    getTags(ipElement, tokenElement, tagEnableElement, tagsElement, tagPrefixElement)
+  })
+  tagsElement.addEventListener('change', () => {
+    tagsElement.setAttribute("data-id", tagsElement.value)
+    chrome.storage.sync.set({
+      tags: tagsElement.value,
+    })
+  })
+  addTagElement.addEventListener('change', () => {
+    chrome.storage.sync.set({
+      addTag: addTagElement.checked,
+    })
+  })
+  tagToPathElement.addEventListener('change', () => {
+    chrome.storage.sync.set({
+      tagToPath: tagToPathElement.checked,
     })
   })
 
@@ -44,12 +79,24 @@ document.addEventListener('DOMContentLoaded', () => {
     showTip: true,
     token: '',
     notebook: '',
+    tagEnable: false,
+    tags: '',
+    tagPrefix: '',
+    addTag: false,
+    tagToPath: false,
   }, function (items) {
     ipElement.value = items.ip || 'http://127.0.0.1:6806'
     tokenElement.value = items.token || ''
     showTipElement.checked = items.showTip
     notebooksElement.setAttribute("data-id", items.notebook)
+    tagEnableElement.checked = items.tagEnable
+    tagPrefixElement.value = items.tagPrefix || ''
+    tagsElement.setAttribute("data-id", items.tags)
+    addTagElement.checked = items.addTag
+    tagToPathElement.checked = items.tagToPath
     getNotebooks(ipElement, tokenElement, notebooksElement)
+    getTags(ipElement, tokenElement, tagEnableElement, tagsElement, tagPrefixElement)
+    tagGroupDisplay(tagEnableElement)
   })
 })
 
@@ -93,6 +140,73 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
       }
     } else {
       document.getElementById('log').innerHTML = "Get notebooks failed"
+    }
+  })
+}
+
+const tagGroupDisplay = (tagEnableElement) => {
+  if(tagEnableElement.checked) {
+    document.getElementById('tagGroup').style.display = 'inline'
+  }else{
+    document.getElementById('tagGroup').style.display = 'none'
+  }
+}
+const getTags = (ipElement, tokenElement, tagEnableElement, tagsElement, tagPrefixElement) => {
+  if(!tagEnableElement.checked) {
+    return   
+  }
+  fetch(ipElement.value + '/api/tag/getTag', {
+    method: 'POST',
+    redirect: "manual",
+    headers: {
+      'Authorization': 'Token ' + tokenElement.value,
+      "Content-Typent": 'application/json',
+    },
+    body: '{}',
+  }).then((response) => {
+    if (response.status !== 200) {
+      document.getElementById('log').innerHTML = "Authentication failed"
+    } else {
+      document.getElementById('log').innerHTML = ""
+    }
+    return response.json()
+  }).then((response) => {
+    if (response.code === 0) {
+      if (!response.data) {
+        document.getElementById('log').innerHTML = "Please upgrade SiYuan to v1.3.5 or above"
+        return
+      }
+
+      if (response.data.length > 0) {
+        let optionsHTML = `<option value="">--choose tags--</option>`    // 增加一个空行用来表示不需要标签
+        function addLeafTag(obj) {
+          if(obj.length == 0) {
+            return
+          }
+          obj.forEach(sub => {
+            if (sub.type != 'tag') {
+              return
+            }
+            if (!sub.children || sub.children == null) {
+              if(sub.label.startsWith(tagPrefixElement.value)) { 
+                optionsHTML += `<option value="${sub.label}">${sub.label}</option>` 
+              }
+            }else{
+              addLeafTag(sub.children)
+            }
+          })
+        }
+        addLeafTag(response.data)
+
+        tagsElement.innerHTML = optionsHTML
+        tagsElement.value = tagsElement.getAttribute("data-id")
+
+        chrome.storage.sync.set({
+          tags: tagsElement.value,
+        })
+      } 
+    } else {
+      document.getElementById('log').innerHTML = response.msg
     }
   })
 }
