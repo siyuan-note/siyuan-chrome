@@ -189,7 +189,8 @@ const getTags = (ipElement, tokenElement, tagEnableElement, tagsElement, tagPref
               return
             }
             if (!sub.children || sub.children == null) {
-              if(sub.label.startsWith(tagPrefixElement.value)) { 
+              if(sub.label.startsWith(tagPrefixElement.value)) {
+                sub.label = sub.label.replace(new RegExp("^"+tagPrefixElement.value), "");     // 去除前缀
                 optionsHTML += `<option value="${sub.label}">${sub.label}</option>` 
               }
             }else{

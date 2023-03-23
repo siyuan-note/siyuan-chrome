@@ -132,6 +132,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
           // 如果开启了要添加tag，在有设置tag的情况下就给文章继续添加 tag
           if(requestData.addTag && requestData.tags.length > 0) {
+            console.log(requestData.tags.substring(requestData.tags.indexOf("/")+1));
             fetch(requestData.api + '/api/attr/setBlockAttrs', {
               method: 'POST',
               headers: {
@@ -140,7 +141,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
               body: JSON.stringify({
                 'id': response.data,
                 'attrs': {
-                  "tags": requestData.tags,  
+                  "tags": requestData.tags,   // 定制化给自己用。去除一级前缀
                 }
               }),
             })
