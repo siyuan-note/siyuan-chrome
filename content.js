@@ -104,6 +104,8 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
   let fetchFileErr = false;
   for (let i = 0; i < srcList.length; i++) {
     const src = srcList[i]
+    const msgSrc = src.length > 64 ? src.substring(0, 64) + '...' : src
+    siyuanShowTip('Clipping images [' + msgSrc + '], please wait a moment...')
     let response;
     try {
       response = await fetch(src)
