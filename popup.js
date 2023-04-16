@@ -60,6 +60,7 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
     headers: {
       'Authorization': 'Token ' + tokenElement.value,
     },
+    body: JSON.stringify({"flashcard": false})
   }).then((response) => {
     if (response.status !== 200) {
       document.getElementById('log').innerHTML = "Authentication failed"
