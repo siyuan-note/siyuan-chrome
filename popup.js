@@ -81,7 +81,8 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
           if (notebook.closed) {
             return
           }
-          optionsHTML += `<option value="${notebook.id}">${notebook.name}</option>`
+
+          optionsHTML += `<option value="${notebook.id}">${escapeHtml(notebook.name)}</option>`
         })
         notebooksElement.innerHTML = optionsHTML
         notebooksElement.value = notebooksElement.getAttribute("data-id")
@@ -96,6 +97,15 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
       document.getElementById('log').innerHTML = "Get notebooks failed"
     }
   })
+}
+
+const escapeHtml = (unsafe) => {
+  return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
 }
 
 const siyuanGetReadability = (tabId) => {
