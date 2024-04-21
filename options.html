@@ -2,26 +2,221 @@
 <html>
 <head>
     <style>
-        .b3-text-filed {
-            border: 1px solid #5f6368;
-            border-radius: 4px;
+        :root {
+            /* 主色 */
+            --b3-theme-primary: #3575f0;
+            --b3-theme-primary-light: rgba(53, 117, 240, .54);
+            --b3-theme-primary-lighter: rgba(53, 117, 240, .38);
+            --b3-theme-primary-lightest: rgba(53, 117, 240, .12);
+            --b3-theme-secondary: #f3a92f;
+            --b3-theme-background: #fff;
+            --b3-theme-background-light: #dfe0e1;
+            --b3-theme-surface: #f6f6f6;
+            --b3-theme-surface-light: rgba(243, 243, 243, .86);
+            --b3-theme-surface-lighter: #e0e0e0;
+            --b3-theme-error: #d23f31;
+            --b3-theme-success: #65b84d;
+
+            /* 文字颜色 */
+            --b3-theme-on-primary: #fff;
+            --b3-theme-on-secondary: #fff;
+            --b3-theme-on-background: #222;
+            --b3-theme-on-surface: #5f6368;
+            --b3-theme-on-surface-light: rgba(95, 99, 104, .68);
+            --b3-theme-on-error: #fff;
+
+            /* 字体 */
+            --b3-font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", "Hiragino Sans GB", "Microsoft Yahei", sans-serif, "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols";
+            --b3-font-family-protyle: var(--b3-font-family);
+            --b3-font-family-code: "JetBrainsMono-Regular", mononoki, Consolas, "Liberation Mono", Menlo, Courier, monospace, var(--b3-font-family);
+            --b3-font-family-graph: mononoki;
+            --b3-font-family-emoji: "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "Android Emoji";
+            --b3-font-family-math: KaTeX_Math;
+
+            /* 顶部工具栏 */
+            --b3-toolbar-background: var(--b3-theme-surface);
+            --b3-toolbar-blur-background: #fcfcfc;
+            --b3-toolbar-color: var(--b3-theme-on-surface);
+            --b3-toolbar-hover: var(--b3-theme-background-light);
+            --b3-toolbar-left-mac: 69px;
+
+            /* 线条 */
+            --b3-border-color: var(--b3-theme-surface-lighter);
+            --b3-border-radius: 6px;
+            --b3-border-radius-b: 12px;
+
+            /* 滚动条 */
+            --b3-scroll-color: rgba(0, 0, 0, .2);
+
+            /* 列表 */
+            --b3-list-hover: rgba(0, 0, 0, .075);
+            --b3-list-icon-hover: rgba(33, 34, 36, .1);
+
+            /* 菜单 */
+            --b3-menu-background: var(--b3-theme-surface);
+
+            /* 提示 */
+            --b3-tooltips-background: rgba(0, 0, 0, .9);
+            --b3-tooltips-color: var(--b3-theme-background-light);
+            --b3-tooltips-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+
+            /* av */
+            --b3-av-hover: #e8e8e9;
+            --b3-av-background-hl: #e8eefc;
+
+            /* 为空提示 */
+            --b3-empty-color: var(--b3-theme-on-surface-light);
+
+            /* 遮罩 */
+            --b3-mask-background: rgba(220, 220, 220, .4);
+
+            /* 卡片背景 */
+            --b3-card-error-color: rgb(97, 26, 21);
+            --b3-card-error-background: #f5d1cf;
+            --b3-card-warning-color: rgb(102, 60, 0);
+            --b3-card-warning-background: #ffe8c8;
+            --b3-card-info-color: rgb(13, 60, 97);
+            --b3-card-info-background: #d6eaf9;
+            --b3-card-success-color: rgb(30, 70, 32);
+            --b3-card-success-background: #d7eed8;
+
+            /* 自定义文字 */
+            --b3-font-color1: var(--b3-card-error-color);
+            --b3-font-color2: var(--b3-card-warning-color);
+            --b3-font-color3: var(--b3-card-info-color);
+            --b3-font-color4: var(--b3-card-success-color);
+            --b3-font-color5: var(--b3-theme-on-surface);
+            --b3-font-color6: var(--b3-theme-primary);
+            --b3-font-color7: var(--b3-theme-secondary);
+            --b3-font-color8: var(--b3-theme-error);
+            --b3-font-color9: #f5539e;
+            --b3-font-color10: #944194;
+            --b3-font-color11: #65b84d;
+            --b3-font-color12: #f5822e;
+            --b3-font-color13: var(--b3-theme-background);
+            --b3-font-background1: var(--b3-card-error-background);
+            --b3-font-background2: var(--b3-card-warning-background);
+            --b3-font-background3: var(--b3-card-info-background);
+            --b3-font-background4: var(--b3-card-success-background);
+            --b3-font-background5: #e2e3e4;
+            --b3-font-background6: #acd0fc;
+            --b3-font-background7: #fdeed6;
+            --b3-font-background8: #fae1cf;
+            --b3-font-background9: #fdd5e7;
+            --b3-font-background10: #e6c7e6;
+            --b3-font-background11: #def0d9;
+            --b3-font-background12: #fae3e4;
+            --b3-font-background13: var(--b3-theme-on-background);
+
+            /* 动画效果 */
+            --b3-transition: all .2s cubic-bezier(0, 0, .2, 1) 0ms;
+            --b3-width-transition: width .2s cubic-bezier(0, 0, .2, 1) 0ms;
+            --b3-color-transition: color .2s cubic-bezier(0, 0, .2, 1) 0ms;
+
+            /* 下拉菜单 */
+            --b3-select-background: url("data:image/svg+xml;utf8,<svg fill='rgba(95, 99, 104, .68)' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>") no-repeat right 2px center var(--b3-theme-background);
+
+            /* 阴影 */
+            --b3-point-shadow: 0 0 1px 0 rgba(0, 0, 0, .1), 0 0 2px 0 rgba(0, 0, 0, .2);
+            --b3-dialog-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+            --b3-button-shadow: 0 5px 5px -3px rgb(0 0 0 / .2), 0 8px 10px 1px rgb(0 0 0 / .14), 0 3px 14px 2px rgb(0 0 0 / .12);
+
+            /* 图表颜色 */
+            --b3-graph-p-point: #076f7e;
+            --b3-graph-heading-point: #8250df;
+            --b3-graph-math-point: #80FFA5;
+            --b3-graph-code-point: #00DDFF;
+            --b3-graph-table-point: #37A2FF;
+            --b3-graph-list-point: #FF0087;
+            --b3-graph-todo-point: #FFBF00;
+            --b3-graph-olist-point: #b3005f;
+            --b3-graph-listitem-point: #f65b00;
+            --b3-graph-bq-point: #8d48e3;
+            --b3-graph-super-point: #dd79ff;
+            --b3-graph-doc-point: #202124;
+            --b3-graph-tag-point: #dbf32f;
+            --b3-graph-asset-point: #05c091;
+            --b3-graph-line: #5f6368;
+            --b3-graph-ref-line: #d23f31;
+            --b3-graph-tag-line: #5f6b06;
+            --b3-graph-tag-tag-line: #dbf32f;
+            --b3-graph-asset-line: #037457;
+            --b3-graph-hl-point: #f3a92f;
+            --b3-graph-hl-line: #4285f4;
+
+            /* 编辑器搜索颜色 */
+            --b3-protyle-search-background: #ffe955;
+            --b3-protyle-search-border-color: #f2e680;
+            --b3-protyle-search-current-background: #a5d3fe;
+
+            /* 代码片段背景 */
+            --b3-protyle-code-background: rgba(27, 31, 35, .05);
+            --b3-protyle-code-linenumber-hl: #b9d1f4;
+
+            /* 所见即所得行内元素颜色 */
+            --b3-protyle-inline-strong-color: #202124;
+            --b3-protyle-inline-em-color: #202124;
+            --b3-protyle-inline-s-color: #202124;
+            --b3-protyle-inline-link-color: #4285f4;
+            --b3-protyle-inline-mark-background: rgb(252, 212, 126);
+            --b3-protyle-inline-mark-color: #202124;
+            --b3-protyle-inline-tag-color: #5f6368;
+            --b3-protyle-inline-blockref-color: #8957e5;
+            --b3-protyle-inline-fileref-color: #21862e;
+
+            /* PDF */
+            --b3-pdf-selection: #d0e9c8;
+            --b3-pdf-sidebar-width: 200px;
+            --b3-pdf-offset: 0;
+            --b3-pdf-background1: var(--b3-theme-error);
+            --b3-pdf-background2: #f5822e;
+            --b3-pdf-background3: #FACA5A;
+            --b3-pdf-background4: #7CC868;
+            --b3-pdf-background5: #FC5C88;
+            --b3-pdf-background6: #69B0F2;
+            --b3-pdf-background7: #C885DA;
+            --b3-pdf-dark: #212224;
+        }
+
+        /* https://github.com/siyuan-note/siyuan/issues/6440 */
+        .protyle-action--order:after {
+            mix-blend-mode: multiply;
+        }
+
+        .b3-typography .hljs, .protyle-wysiwyg .hljs {
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            border-radius: var(--b3-border-radius);
+            font-family: var(--b3-font-family-code);
+            word-break: break-word;
+            background-size: 20px 20px;
+            white-space: pre-wrap;
+            background-color: var(--b3-protyle-code-background);
+        }
+
+        .b3-text-field {
+            border: 0;
+            border-radius: 6px;
+            box-shadow: inset 0 0 0 0.6px #5f6368;
             padding: 4px 8px;
             line-height: 20px;
             box-sizing: border-box;
-            color: #202124;
-            transition: border-color 120ms 0ms cubic-bezier(0, 0, 0.2, 1), box-shadow 120ms 0ms cubic-bezier(0, 0, 0.2, 1);
-            background-color: #f8f9fa;
+            color: #222;
+            transition: box-shadow 120ms 0ms cubic-bezier(0, 0, 0.2, 1);
+            background-color: #fff;
+            -webkit-appearance: none;
+            font-variant-ligatures: none;
             width: 184px;
         }
 
-        .b3-text-filed:hover {
-            border-color: #202124;
+        .b3-text-field:hover {
+            box-shadow: inset 0 0 0 .6px #222;
         }
 
-        .b3-text-filed:focus {
+        .b3-text-field:focus {
             outline: none;
-            border-color: #4285f4;
-            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.12);
+            box-shadow: inset 0 0 0 1px #3575f0, 0 0 0 3px rgba(53, 117, 240, .12);
         }
 
         .b3-switch {
@@ -31,23 +226,23 @@
             width: 28px;
             height: 12px;
             border: 1px solid transparent;
-            border-radius: 7px;
+            border-radius: var(--b3-border-radius-b);
             margin: 0;
             outline: none;
             display: inline-block;
             position: relative;
             cursor: pointer;
-            background-color: rgba(0, 0, 0, .1);
+            background-color: var(--b3-theme-surface-lighter);
             overflow: inherit;
             user-select: none;
         }
 
         .b3-switch:after {
-            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--b3-theme-surface-lighter);
+            box-shadow: var(--b3-point-shadow);
             box-sizing: border-box;
             width: 16px;
             height: 16px;
-            border: 1px solid #fff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 1;
@@ -67,7 +262,7 @@
             top: -13px;
             width: 36px;
             height: 36px;
-            background-color: rgba(158, 158, 158, 0.12);
+            background-color: rgba(158, 158, 158, .12);
             display: none;
             border-radius: 24px;
             position: absolute;
@@ -76,21 +271,21 @@
         }
 
         .b3-switch:checked {
-            background-color: rgba(66, 133, 244, 0.54);
+            background-color: var(--b3-theme-primary-light);
         }
 
         .b3-switch:checked:after {
-            background-color: #4285f4;
-            border-color: #4285f4;
+            background-color: var(--b3-theme-primary);
+            border-color: var(--b3-theme-primary);
         }
 
         .b3-switch:checked:before, .b3-switch:checked:after {
             transform: translateX(19px);
-            transition: transform 0.6s cubic-bezier(0.2, 0.85, 0.32, 1.2), opacity 0.3s;
+            transition: transform .6s cubic-bezier(.2, .85, .32, 1.2), opacity .3s;
         }
 
         .b3-switch:disabled {
-            opacity: 0.38;
+            opacity: .38;
             cursor: not-allowed;
         }
 
@@ -99,40 +294,50 @@
         }
 
         .b3-switch:focus:not(:disabled):before {
-            background-color: rgba(66, 133, 244, 0.12);
+            background-color: var(--b3-theme-primary-lightest);
         }
 
         .b3-select {
             border: 0;
-            border-radius: 4px;
-            padding: 4px 8px;
-            line-height: 20px;
+            border-radius: var(--b3-border-radius);
+            padding: 4px 26px 4px 8px;
             box-sizing: border-box;
-            color: #202124;
-            transition: box-shadow 120ms 0ms cubic-bezier(0, 0, 0.2, 1);
-            background-color: #f8f9fa;
+            line-height: 20px;
+            color: var(--b3-theme-on-background);
+            transition: box-shadow 120ms 0ms cubic-bezier(0, 0, .2, 1), background-color .2s cubic-bezier(0, 0, .2, 1) 0ms;
             height: 28px;
             font-size: 14px;
+            box-shadow: inset 0 0 0 .6px var(--b3-theme-on-surface);
+            background: var(--b3-select-background);
+            appearance: none;
+            cursor: pointer;
+            overflow: hidden;
             width: 184px;
         }
 
+        .b3-select:hover {
+            box-shadow: inset 0 0 0 .6px var(--b3-theme-on-background);
+            background-color: var(--b3-theme-surface);
+        }
+
         .b3-select:focus {
-            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.38);
+            outline: none;
+            box-shadow: inset 0 0 0 1px var(--b3-theme-primary), 0 0 0 3px var(--b3-theme-primary-lightest);
         }
 
         .b3-button {
             width: 184px;
             cursor: pointer;
-            color: #fff;
-            border-radius: 4px;
+            color: var(--b3-theme-on-primary);
+            border-radius: var(--b3-border-radius);
             line-height: 20px;
             padding: 4px 8px;
-            background-color: #4285f4;
+            background-color: var(--b3-theme-primary);
             white-space: nowrap;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+            transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
             border: 0;
             box-sizing: border-box;
             text-align: center;
@@ -141,11 +346,34 @@
         .b3-button:hover,
         .b3-button:focus {
             text-decoration: none;
-            box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, .12);
+            box-shadow: var(--b3-button-shadow);
         }
 
         .b3-button:active {
-            box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, .12);
+            box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+        }
+
+        .fn__hr {
+            height: 8px;
+        }
+
+        .b3-label {
+            color: var(--b3-theme-on-surface);
+            margin-bottom: 4px;
+        }
+
+        .b3-icon {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            height: 16px;
+            width: 16px;
+            cursor: pointer;
+            padding: 5px;
+            fill: currentColor;
+            display: inline-block;
+            color: var(--b3-theme-on-surface);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -156,12 +384,21 @@
         <div style="flex: 1">Show Tip</div>
         <input class="b3-switch" id="showTip" checked type="checkbox">
     </label>
-    <input id="ip" class="b3-text-filed" placeholder="SiYuan URL">
-    <div style="height: 16px;"></div>
-    <input id="token" class="b3-text-filed" placeholder="API token">
-    <div style="height: 16px;"></div>
+    <div class="b3-label">SiYuan URL</div>
+    <input id="ip" class="b3-text-field">
+    <div class="fn__hr"></div>
+    <div class="b3-label">API token</div>
+    <div style="position: relative">
+        <input id="token" type="password" class="b3-text-field" style="padding-left: 28px">
+        <svg class="b3-icon" viewBox="0 0 32 32">
+            <path d="M16 22.182q2.582 0 4.382-1.8t1.8-4.382-1.8-4.382-4.382-1.8-4.382 1.8-1.8 4.382 1.8 4.382 4.382 1.8zM16 20.073q-1.709 0-2.891-1.182t-1.182-2.891 1.182-2.891 2.891-1.182 2.891 1.182 1.182 2.891-1.182 2.891-2.891 1.182zM16 26.909q-5.309 0-9.6-3.018t-6.4-7.891q2.109-4.873 6.4-7.891t9.6-3.018 9.6 3.018 6.4 7.891q-2.109 4.873-6.4 7.891t-9.6 3.018zM16 24.727q4.4 0 8.091-2.382t5.618-6.345q-1.927-3.964-5.618-6.345t-8.091-2.382-8.091 2.382-5.655 6.345q1.964 3.964 5.655 6.345t8.091 2.382z"></path>
+        </svg>
+    </div>
+    <div class="fn__hr"></div>
+    <div class="b3-label">Notebook</div>
     <select class="b3-select" id="notebooks"></select>
-    <div style="height: 16px;"></div>
+    <div class="fn__hr"></div>
+    <div class="fn__hr"></div>
     <button class="b3-button" id="send">Send to SiYuan</button>
 </div>
 <script src="popup.js"></script>
