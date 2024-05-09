@@ -78,14 +78,26 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       let title = requestData.title ? ('/' + requestData.title) : 'Untitled'
       title = title.replaceAll("/", "")
       const siteName = requestData.siteName
-      const excerpt = requestData.excerpt
+      let excerpt = requestData.excerpt.trim()
       const href = requestData.href
       let linkText = href
-      if ("" !== siteName) {
-        linkText += " - " + siteName
+      try {
+          linkText = decodeURIComponent(linkText)
+      } catch (e) {
+          console.warn(e)
       }
-      let markdown = "---\n\n* " + "[" + linkText + "](" + href + ")\n"
+      let markdown = "---\n\n* " + title
+      if ("" !== siteName) {
+        markdown += " - " + siteName
+      }
+      markdown += "\n"
+      markdown += "* " + "[" + linkText + "](" + href + ")\n"
       if ("" !== excerpt) {
+        // 将连续的三个换行符替换为两个换行符
+        excerpt = excerpt.replace(/\n{3,}/g, "\n\n")
+        // 从第二行开始，每行前面加两个空格 https://github.com/siyuan-note/siyuan/issues/11315
+        excerpt = excerpt.replace(/\n/g, "\n  ")
+        excerpt = excerpt.trim()
         markdown += "* " + excerpt + "\n"
       } else {
         markdown += "\n"
