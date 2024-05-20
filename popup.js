@@ -4,6 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const showTipElement = document.getElementById('showTip')
     const notebooksElement = document.getElementById('notebooks')
     ipElement.addEventListener('change', () => {
+        let ip = ipElement.value;
+        // 去掉结尾的斜杆 https://github.com/siyuan-note/siyuan/issues/11478
+        for (let i = ip.length - 1; i >= 0; i--) {
+            if ('/' === ip[i]) {
+                ip = ip.substring(0, i)
+            } else {
+                break
+            }
+        }
+        ipElement.value = ip
+
         chrome.storage.sync.set({
             ip: ipElement.value,
         })
