@@ -151,7 +151,7 @@ const siyuanGetReadability = (tabId) => {
                 item.classList.add("hljs-cmt")
             })
 
-            const article = new Readability(document.cloneNode(true), {keepClasses: true,}).parse()
+            const article = new Readability(document.cloneNode(true), {keepClasses: true, debug: true}).parse()
             const tempElement = document.createElement('div')
             tempElement.innerHTML = article.content
             // console.log(article)
