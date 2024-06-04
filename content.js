@@ -108,12 +108,18 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     siyuanShowTip('Clipping images [' + msgSrc + '], please wait a moment...')
     let response;
     try {
-      // 为 Wikipedia svg 优化 https://github.com/siyuan-note/siyuan/issues/11640
-      if (src.indexOf('wikipedia/commons/thumb/') !== -1 && src.indexOf('.svg.png') !== -1 && src.indexOf('.svg/') !== -1) {
-        src = src.replace('/commons/thumb/', '/commons/')
-        src = src.replace('.svg.png', '.svg')
-        const idx = src.indexOf('.svg/')
-        src = src.substring(0, idx + 4)
+      // Wikipedia 使用图片原图 https://github.com/siyuan-note/siyuan/issues/11640
+      if (-1 !== src.indexOf('wikipedia/commons/thumb/')) {
+        let idx = src.lastIndexOf('.')
+        let ext = src.substring(idx)
+        if (0 < src.indexOf('.svg.png')) {
+          ext = '.svg'
+        }
+        idx = src.indexOf(ext + '/')
+        if (0 < idx) {
+          src = src.substring(0, idx + ext.length)
+          src = src.replace('/commons/thumb/', '/commons/')
+        }
       }
 
       response = await fetch(src)
