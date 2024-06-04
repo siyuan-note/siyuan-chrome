@@ -103,11 +103,19 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
   srcList = [...new Set(srcList)]
   let fetchFileErr = false;
   for (let i = 0; i < srcList.length; i++) {
-    const src = srcList[i]
+    let src = srcList[i]
     const msgSrc = src.length > 64 ? src.substring(0, 64) + '...' : src
     siyuanShowTip('Clipping images [' + msgSrc + '], please wait a moment...')
     let response;
     try {
+      // 为 Wikipedia svg 优化 https://github.com/siyuan-note/siyuan/issues/11640
+      if (src.indexOf('wikipedia/commons/thumb/') !== -1 && src.indexOf('.svg.png') !== -1 && src.indexOf('.svg/') !== -1) {
+        src = src.replace('/commons/thumb/', '/commons/')
+        src = src.replace('.svg.png', '.svg')
+        const idx = src.indexOf('.svg/')
+        src = src.substring(0, idx + 4)
+      }
+
       response = await fetch(src)
     } catch (e) {
       console.warn("fetch [" + src + "] failed", e)
