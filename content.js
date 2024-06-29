@@ -92,6 +92,13 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     if (!src) {
       return
     }
+
+    // 处理使用 data-original 属性的情况 https://github.com/siyuan-note/siyuan/issues/11826
+    let dataOriginal = item.getAttribute('data-original')
+    if (dataOriginal) {
+      src = dataOriginal
+    }
+
     if ('https:' === window.location.protocol && src.startsWith('http:')) {
       src = src.replace('http:', 'https:')
       item.setAttribute('src', src)
