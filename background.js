@@ -138,6 +138,31 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
               }),
             })
           }
+
+          // 发送 URL 和原网页标题至属性 (Send URL and original page title to custom attributes)
+          let attrsBody = {}
+          if (title != 'Untitled') {
+            attrsBody = {
+                'custom-web-url': requestData.href,
+                'custom-web-title': requestData.title
+            }
+          } else {
+            attrsBody = {
+                'custom-web-url': requestData.href
+            }
+          }
+
+          fetch(requestData.api + '/api/attr/setBlockAttrs', {
+            method: 'POST',
+            headers: {
+              'Authorization': 'Token ' + requestData.token,
+            },
+            body: JSON.stringify({
+              'id': response.data,
+              'attrs': attrsBody
+            }),
+          })
+
         } else {
           chrome.tabs.sendMessage(requestData.tabId, {
             'func': 'tip',
