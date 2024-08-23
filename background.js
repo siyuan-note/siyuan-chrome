@@ -75,10 +75,14 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     }
 
     if (requestData.type === 'article') {
-      let title = requestData.title ? ('/' + requestData.title) : 'Untitled'
+      let title = requestData.title ? requestData.title : 'Untitled'
+      let markdown = "---\n\n* " + title
       title = title.replaceAll("/", "")
       const siteName = requestData.siteName
-      let excerpt = requestData.excerpt.trim()
+      if ("" !== siteName) {
+        markdown += " - " + siteName
+      }
+      markdown += "\n"
       const href = requestData.href
       let linkText = href
       try {
@@ -86,12 +90,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
       } catch (e) {
           console.warn(e)
       }
-      let markdown = "---\n\n* " + title
-      if ("" !== siteName) {
-        markdown += " - " + siteName
-      }
-      markdown += "\n"
       markdown += "* " + "[" + linkText + "](" + href + ")\n"
+      let excerpt = requestData.excerpt.trim()
       if ("" !== excerpt) {
         // 将连续的三个换行符替换为两个换行符
         excerpt = excerpt.replace(/\n{3,}/g, "\n\n")
