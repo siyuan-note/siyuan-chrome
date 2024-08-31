@@ -35,6 +35,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     formData.append(key, await blob)
   }
   formData.append("notebook", requestData.notebook)
+  formData.append("href", requestData.href)
 
   fetch(requestData.api + '/api/extension/copy', {
     method: 'POST',
