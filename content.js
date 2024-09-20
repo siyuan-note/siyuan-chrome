@@ -149,6 +149,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     showTip: true,
     token: '',
     notebook: '',
+    tags: '',
   }, function (items) {
     if (!items.token) {
       siyuanShowTip('Please config API token before clipping content 剪藏前请先配置 API token')
@@ -165,6 +166,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       api: items.ip,
       token: items.token,
       notebook: items.notebook,
+      tags: items.tags,
       tip: items.showTip,
       title: title,
       siteName: siteName,

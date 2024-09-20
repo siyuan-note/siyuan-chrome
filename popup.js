@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tokenElement = document.getElementById('token')
     const showTipElement = document.getElementById('showTip')
     const notebooksElement = document.getElementById('notebooks')
+    const tagsElement = document.getElementById('tags')
     ipElement.addEventListener('change', () => {
         let ip = ipElement.value;
         // 去掉结尾的斜杆 https://github.com/siyuan-note/siyuan/issues/11478
@@ -36,6 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
             notebook: notebooksElement.value,
         })
     })
+    tagsElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            tags: tagsElement.value,
+        })
+    })
 
     const eyeElement = document.querySelector('.b3-icon')
     eyeElement.addEventListener('click', () => {
@@ -66,11 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
         showTip: true,
         token: '',
         notebook: '',
+        tags: '',
     }, function (items) {
         ipElement.value = items.ip || 'http://127.0.0.1:6806'
         tokenElement.value = items.token || ''
         showTipElement.checked = items.showTip
         notebooksElement.setAttribute("data-id", items.notebook)
+        tagsElement.value = items.tags || ''
         getNotebooks(ipElement, tokenElement, notebooksElement)
     })
 })
@@ -151,7 +159,11 @@ const siyuanGetReadability = (tabId) => {
                 item.classList.add("hljs-cmt")
             })
 
-            const article = new Readability(document.cloneNode(true), {keepClasses: true, charThreshold: 16, debug: true }).parse()
+            const article = new Readability(document.cloneNode(true), {
+                keepClasses: true,
+                charThreshold: 16,
+                debug: true
+            }).parse()
             const tempElement = document.createElement('div')
             tempElement.innerHTML = article.content
             // console.log(article)

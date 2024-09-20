@@ -36,6 +36,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   }
   formData.append("notebook", requestData.notebook)
   formData.append("href", requestData.href)
+  formData.append("tags", requestData.tags)
 
   fetch(requestData.api + '/api/extension/copy', {
     method: 'POST',
@@ -112,6 +113,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         },
         body: JSON.stringify({
           'notebook': requestData.notebook,
+          'tags': requestData.tags,
           'path': title,
           'markdown': markdown,
           'withMath': response.data.withMath
