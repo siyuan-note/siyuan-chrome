@@ -149,6 +149,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     showTip: true,
     token: '',
     notebook: '',
+    parentDoc: '',
     tags: '',
   }, function (items) {
     if (!items.token) {
@@ -166,6 +167,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       api: items.ip,
       token: items.token,
       notebook: items.notebook,
+      parentDoc: items.parentDoc,
       tags: items.tags,
       tip: items.showTip,
       title: title,

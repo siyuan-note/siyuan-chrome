@@ -35,6 +35,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     formData.append(key, await blob)
   }
   formData.append("notebook", requestData.notebook)
+  formData.append("parentID", requestData.parentDoc)
   formData.append("href", requestData.href)
   formData.append("tags", requestData.tags)
 
@@ -113,6 +114,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         },
         body: JSON.stringify({
           'notebook': requestData.notebook,
+          'parentID': requestData.parentDoc,
           'tags': requestData.tags,
           'path': title,
           'markdown': markdown,

@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tokenElement = document.getElementById('token')
     const showTipElement = document.getElementById('showTip')
     const notebooksElement = document.getElementById('notebooks')
+    const searchDocElement = document.getElementById('searchDoc')
+    const parentDocElement = document.getElementById('parentDoc')
     const tagsElement = document.getElementById('tags')
     ipElement.addEventListener('change', () => {
         let ip = ipElement.value;
@@ -35,6 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
         notebooksElement.setAttribute("data-id", notebooksElement.value)
         chrome.storage.sync.set({
             notebook: notebooksElement.value,
+        })
+
+        searchDocElement.value = ""
+        parentDocElement.setAttribute("data-id", "")
+        parentDocElement.innerHTML = ""
+    })
+    searchDocElement.addEventListener('change', () => {
+        updateSearch()
+    })
+    parentDocElement.addEventListener('change', () => {
+        parentDocElement.setAttribute("data-id", parentDocElement.value)
+        chrome.storage.sync.set({
+            parentDoc: parentDocElement.value,
         })
     })
     tagsElement.addEventListener('change', () => {
@@ -73,16 +88,71 @@ document.addEventListener('DOMContentLoaded', () => {
         showTip: true,
         token: '',
         notebook: '',
+        parentDoc: '',
         tags: '',
     }, function (items) {
         ipElement.value = items.ip || 'http://127.0.0.1:6806'
         tokenElement.value = items.token || ''
         showTipElement.checked = items.showTip
         notebooksElement.setAttribute("data-id", items.notebook)
+        parentDocElement.setAttribute("data-id", items.parentDoc)
         tagsElement.value = items.tags || ''
         getNotebooks(ipElement, tokenElement, notebooksElement)
     })
 })
+
+const updateSearch = () => {
+    const ipElement = document.getElementById('ip')
+    const tokenElement = document.getElementById('token')
+    const notebooksElement = document.getElementById('notebooks')
+    const searchDocElement = document.getElementById('searchDoc')
+    const parentDocElement = document.getElementById('parentDoc')
+
+    console.log("searchDoc: " + searchDocElement.value, "parentDoc: " + parentDocElement.value)
+
+    fetch(ipElement.value + '/api/filetree/searchDocs', {
+        method: 'POST',
+        redirect: "manual",
+        headers: {
+            'Authorization': 'Token ' + tokenElement.value,
+        },
+        body: JSON.stringify({
+            "k": searchDocElement.value,
+            "flashcard": false
+        })
+    }).then((response) => {
+        if (response.status !== 200) {
+            document.getElementById('log').innerHTML = "Authentication failed"
+        } else {
+            document.getElementById('log').innerHTML = ""
+        }
+        return response.json()
+    }).then((response) => {
+        if (response.code === 0) {
+            let notebook;
+            if (notebooksElement.selectedOptions.length > 0) {
+                notebook = notebooksElement.selectedOptions[0].text
+            }
+            let optionsHTML = ''
+            response.data.forEach(doc => {
+                let hPath = doc.hPath.toString()
+                if ("" !== notebook) {
+                    hPath = hPath.substring(notebook.indexOf('/') + 1)
+                }
+                let parentDoc = doc.path.substring(doc.path.toString().lastIndexOf('/') + 1).replace(".sy", '')
+                optionsHTML += `<option value="${parentDoc}">${escapeHtml(hPath)}</option>`
+            })
+            parentDocElement.innerHTML = optionsHTML
+            parentDocElement.value = parentDocElement.getAttribute("data-id")
+            chrome.storage.sync.set({
+                parentDoc: parentDocElement.value,
+            })
+        } else {
+            document.getElementById('log').innerHTML = "Search docs failed"
+        }
+
+    })
+}
 
 const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
     fetch(ipElement.value + '/api/notebook/lsNotebooks', {
@@ -100,33 +170,31 @@ const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
         }
         return response.json()
     }).then((response) => {
-        if (response.code === 0) {
-            if (!response.data.notebooks) {
-                document.getElementById('log').innerHTML = "Please upgrade SiYuan to v1.3.5 or above"
+        if (0 !== response.code) {
+            document.getElementById('log').innerHTML = "Get notebooks failed"
+            return
+        }
+
+        if (!response.data.notebooks || 1 > response.data.notebooks.length) {
+            document.getElementById('log').innerHTML = "Please create a notebook before"
+            return
+        }
+
+        let optionsHTML = ''
+        response.data.notebooks.forEach(notebook => {
+            if (notebook.closed) {
                 return
             }
 
-            if (response.data.notebooks.length > 0) {
-                let optionsHTML = ''
-                response.data.notebooks.forEach(notebook => {
-                    if (notebook.closed) {
-                        return
-                    }
+            optionsHTML += `<option value="${notebook.id}">${escapeHtml(notebook.name)}</option>`
+        })
+        notebooksElement.innerHTML = optionsHTML
+        notebooksElement.value = notebooksElement.getAttribute("data-id")
+        chrome.storage.sync.set({
+            notebook: notebooksElement.value,
+        })
 
-                    optionsHTML += `<option value="${notebook.id}">${escapeHtml(notebook.name)}</option>`
-                })
-                notebooksElement.innerHTML = optionsHTML
-                notebooksElement.value = notebooksElement.getAttribute("data-id")
-
-                chrome.storage.sync.set({
-                    notebook: notebooksElement.value,
-                })
-            } else {
-                document.getElementById('log').innerHTML = "Please create a notebook before"
-            }
-        } else {
-            document.getElementById('log').innerHTML = "Get notebooks failed"
-        }
+        updateSearch()
     })
 }
 

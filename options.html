@@ -207,7 +207,7 @@
             background-color: #fff;
             -webkit-appearance: none;
             font-variant-ligatures: none;
-            width: 184px;
+            width: 256px;
         }
 
         .b3-text-field:hover {
@@ -312,7 +312,7 @@
             appearance: none;
             cursor: pointer;
             overflow: hidden;
-            width: 184px;
+            width: 256px;
         }
 
         .b3-select:hover {
@@ -326,7 +326,7 @@
         }
 
         .b3-button {
-            width: 184px;
+            width: 256px;
             cursor: pointer;
             color: var(--b3-theme-on-primary);
             border-radius: var(--b3-border-radius);
@@ -378,7 +378,7 @@
     </style>
 </head>
 <body>
-<div style="max-width: 184px">
+<div style="max-width: 256px">
     <div id="log" style="color: #d23f31;margin-bottom: 16px"></div>
     <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
         <div style="flex: 1">Show Tip</div>
@@ -398,8 +398,13 @@
     <div class="b3-label">Notebook</div>
     <select class="b3-select" id="notebooks"></select>
     <div class="fn__hr"></div>
+    <div class="b3-label">Path</div>
+    <input class="b3-text-field" id="searchDoc" placeholder="Input the keyword then Enter to search"/>
+    <div class="fn__hr"></div>
+    <select class="b3-select" id="parentDoc"></select>
+    <div class="fn__hr"></div>
     <div class="b3-label">Tags</div>
-    <input id="tags" class="b3-text-field">
+    <input class="b3-text-field" id="tags" placeholder="Use commas to separate multiple tags" />
     <div class="fn__hr"></div>
     <div class="fn__hr"></div>
     <button class="b3-button" id="send">Send to SiYuan</button>
