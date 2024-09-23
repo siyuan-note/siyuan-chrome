@@ -36,6 +36,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
   }
   formData.append("notebook", requestData.notebook)
   formData.append("parentID", requestData.parentDoc)
+  formData.append("parentHPath", requestData.parentHPath)
   formData.append("href", requestData.href)
   formData.append("tags", requestData.tags)
 
@@ -116,7 +117,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
           'notebook': requestData.notebook,
           'parentID': requestData.parentDoc,
           'tags': requestData.tags,
-          'path': title,
+          'path': requestData.parentHPath + "/" + title,
           'markdown': markdown,
           'withMath': response.data.withMath
         }),

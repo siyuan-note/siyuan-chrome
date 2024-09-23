@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ipElement = document.getElementById('ip')
     const tokenElement = document.getElementById('token')
     const showTipElement = document.getElementById('showTip')
-    const notebooksElement = document.getElementById('notebooks')
     const searchDocElement = document.getElementById('searchDoc')
     const parentDocElement = document.getElementById('parentDoc')
     const tagsElement = document.getElementById('tags')
@@ -26,30 +25,29 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.sync.set({
             token: tokenElement.value,
         })
-        getNotebooks(ipElement, tokenElement, notebooksElement)
+        updateSearch()
     })
     showTipElement.addEventListener('change', () => {
         chrome.storage.sync.set({
             showTip: showTipElement.checked,
         })
     })
-    notebooksElement.addEventListener('change', () => {
-        notebooksElement.setAttribute("data-id", notebooksElement.value)
-        chrome.storage.sync.set({
-            notebook: notebooksElement.value,
-        })
-
-        searchDocElement.value = ""
-        parentDocElement.setAttribute("data-id", "")
-        parentDocElement.innerHTML = ""
-    })
     searchDocElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            searchKey: searchDocElement.value,
+        })
         updateSearch()
     })
     parentDocElement.addEventListener('change', () => {
-        parentDocElement.setAttribute("data-id", parentDocElement.value)
+        const selectElement = document.getElementById('parentDoc');
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const notebook = selectedOption.getAttribute('data-notebook');
+        const parentDoc = selectedOption.getAttribute('data-parent');
+
         chrome.storage.sync.set({
-            parentDoc: parentDocElement.value,
+            notebook: notebook,
+            parentDoc: parentDoc,
+            parentHPath: selectedOption.innerText.substring(selectedOption.innerText.indexOf('/') + 1),
         })
     })
     tagsElement.addEventListener('change', () => {
@@ -87,28 +85,28 @@ document.addEventListener('DOMContentLoaded', () => {
         ip: 'http://127.0.0.1:6806',
         showTip: true,
         token: '',
+        searchKey: '',
         notebook: '',
         parentDoc: '',
+        parentHPath: '',
         tags: '',
     }, function (items) {
         ipElement.value = items.ip || 'http://127.0.0.1:6806'
         tokenElement.value = items.token || ''
         showTipElement.checked = items.showTip
-        notebooksElement.setAttribute("data-id", items.notebook)
-        parentDocElement.setAttribute("data-id", items.parentDoc)
+        searchDocElement.value = items.searchKey || ''
+        parentDocElement.setAttribute("data-notebook", items.notebook)
+        parentDocElement.setAttribute("data-parent", items.parentDoc)
         tagsElement.value = items.tags || ''
-        getNotebooks(ipElement, tokenElement, notebooksElement)
+        updateSearch()
     })
 })
 
 const updateSearch = () => {
     const ipElement = document.getElementById('ip')
     const tokenElement = document.getElementById('token')
-    const notebooksElement = document.getElementById('notebooks')
     const searchDocElement = document.getElementById('searchDoc')
     const parentDocElement = document.getElementById('parentDoc')
-
-    console.log("searchDoc: " + searchDocElement.value, "parentDoc: " + parentDocElement.value)
 
     fetch(ipElement.value + '/api/filetree/searchDocs', {
         method: 'POST',
@@ -128,73 +126,37 @@ const updateSearch = () => {
         }
         return response.json()
     }).then((response) => {
-        if (response.code === 0) {
-            let notebook;
-            if (notebooksElement.selectedOptions.length > 0) {
-                notebook = notebooksElement.selectedOptions[0].text
-            }
-            let optionsHTML = ''
-            response.data.forEach(doc => {
-                let hPath = doc.hPath.toString()
-                if ("" !== notebook) {
-                    hPath = hPath.substring(notebook.indexOf('/') + 1)
-                }
-                let parentDoc = doc.path.substring(doc.path.toString().lastIndexOf('/') + 1).replace(".sy", '')
-                optionsHTML += `<option value="${parentDoc}">${escapeHtml(hPath)}</option>`
-            })
-            parentDocElement.innerHTML = optionsHTML
-            parentDocElement.value = parentDocElement.getAttribute("data-id")
-            chrome.storage.sync.set({
-                parentDoc: parentDocElement.value,
-            })
-        } else {
-            document.getElementById('log').innerHTML = "Search docs failed"
-        }
-
-    })
-}
-
-const getNotebooks = (ipElement, tokenElement, notebooksElement) => {
-    fetch(ipElement.value + '/api/notebook/lsNotebooks', {
-        method: 'POST',
-        redirect: "manual",
-        headers: {
-            'Authorization': 'Token ' + tokenElement.value,
-        },
-        body: JSON.stringify({"flashcard": false})
-    }).then((response) => {
-        if (response.status !== 200) {
-            document.getElementById('log').innerHTML = "Authentication failed"
-        } else {
-            document.getElementById('log').innerHTML = ""
-        }
-        return response.json()
-    }).then((response) => {
         if (0 !== response.code) {
-            document.getElementById('log').innerHTML = "Get notebooks failed"
-            return
-        }
-
-        if (!response.data.notebooks || 1 > response.data.notebooks.length) {
-            document.getElementById('log').innerHTML = "Please create a notebook before"
+            document.getElementById('log').innerHTML = "Search docs failed"
             return
         }
 
         let optionsHTML = ''
-        response.data.notebooks.forEach(notebook => {
-            if (notebook.closed) {
-                return
+        response.data.forEach(doc => {
+            let parentDoc = doc.path.substring(doc.path.toString().lastIndexOf('/') + 1).replace(".sy", '')
+            let box = doc.box
+            optionsHTML += `<option data-notebook="${box}" data-parent="${parentDoc}">${escapeHtml(doc.hPath)}</option>`
+        })
+
+        if (parentDocElement.selectedOptions && parentDocElement.selectedOptions.length > 0) {
+            let selected = parentDocElement.selectedOptions[0]
+            if (selected) {
+                let selectedNotebook = selected.getAttribute("data-notebook")
+                let selectedParent = selected.getAttribute("data-parent")
+                chrome.storage.sync.set({
+                    notebook: selectedNotebook,
+                    parentDoc: selectedParent,
+                    parentHPath: selected.innerText.substring(selected.innerText.indexOf('/') + 1),
+                })
             }
+        } else {
+            chrome.storage.sync.set({
+                notebook: '',
+                parentDoc: '',
+            })
+        }
 
-            optionsHTML += `<option value="${notebook.id}">${escapeHtml(notebook.name)}</option>`
-        })
-        notebooksElement.innerHTML = optionsHTML
-        notebooksElement.value = notebooksElement.getAttribute("data-id")
-        chrome.storage.sync.set({
-            notebook: notebooksElement.value,
-        })
-
-        updateSearch()
+        parentDocElement.innerHTML = optionsHTML
     })
 }
 
