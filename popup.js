@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.sync.set({
             notebook: notebook,
             parentDoc: parentDoc,
-            parentHPath: selectedOption.innerText.substring(selectedOption.innerText.indexOf('/') + 1),
+            parentHPath: selectedOption.innerText,
         })
     })
     tagsElement.addEventListener('change', () => {
@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchDocElement.value = items.searchKey || ''
         parentDocElement.setAttribute("data-notebook", items.notebook)
         parentDocElement.setAttribute("data-parent", items.parentDoc)
+        parentDocElement.setAttribute("data-parenthpath", items.parentHPath)
         tagsElement.value = items.tags || ''
         updateSearch()
     })
@@ -133,30 +134,33 @@ const updateSearch = () => {
 
         let optionsHTML = ''
         response.data.forEach(doc => {
-            let parentDoc = doc.path.substring(doc.path.toString().lastIndexOf('/') + 1).replace(".sy", '')
-            let box = doc.box
-            optionsHTML += `<option data-notebook="${box}" data-parent="${parentDoc}">${escapeHtml(doc.hPath)}</option>`
+            const parentDoc = doc.path.substring(doc.path.toString().lastIndexOf('/') + 1).replace(".sy", '')
+            let selected = ""
+            if (parentDocElement.dataset.notebook === doc.box && parentDocElement.dataset.parent === parentDoc &&
+                parentDocElement.dataset.parenthpath === doc.hPath) {
+                selected = "selected";
+            }
+            optionsHTML += `<option ${selected} data-notebook="${doc.box}" data-parent="${parentDoc}">${escapeHtml(doc.hPath)}</option>`
         })
+        parentDocElement.innerHTML = optionsHTML
 
         if (parentDocElement.selectedOptions && parentDocElement.selectedOptions.length > 0) {
-            let selected = parentDocElement.selectedOptions[0]
-            if (selected) {
-                let selectedNotebook = selected.getAttribute("data-notebook")
-                let selectedParent = selected.getAttribute("data-parent")
+            let selected = parentDocElement.querySelector('option[selected]')
+            if (!selected) {
+                selected = parentDocElement.selectedOptions[0]
                 chrome.storage.sync.set({
-                    notebook: selectedNotebook,
-                    parentDoc: selectedParent,
-                    parentHPath: selected.innerText.substring(selected.innerText.indexOf('/') + 1),
+                    notebook: selected.getAttribute("data-notebook"),
+                    parentDoc: selected.getAttribute("data-parent"),
+                    parentHPath: selected.innerText,
                 })
             }
         } else {
             chrome.storage.sync.set({
                 notebook: '',
                 parentDoc: '',
+                parentHPath: ''
             })
         }
-
-        parentDocElement.innerHTML = optionsHTML
     })
 }
 

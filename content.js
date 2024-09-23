@@ -169,7 +169,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       token: items.token,
       notebook: items.notebook,
       parentDoc: items.parentDoc,
-      parentHPath: items.parentHPath,
+      parentHPath: items.parentHPath.substring(items.parentHPath.indexOf('/')),
       tags: items.tags,
       tip: items.showTip,
       title: title,
