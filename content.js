@@ -158,6 +158,11 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
       return
     }
 
+    if (!items.notebook) {
+        siyuanShowTip('Please select save path before clipping content 剪藏前请先选择保存路径')
+        return
+    }
+
     let title = article && article.title ? article.title : "";
     let siteName = article && article.siteName ? article.siteName : "";
     let excerpt = article && article.excerpt ? article.excerpt : "";
