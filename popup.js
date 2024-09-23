@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
     tagsElement.addEventListener('change', () => {
+        tagsElement.value = tagsElement.value.replace(/#/g, '')
         chrome.storage.sync.set({
             tags: tagsElement.value,
         })
