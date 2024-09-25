@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchDocElement = document.getElementById('searchDoc')
     const parentDocElement = document.getElementById('parentDoc')
     const tagsElement = document.getElementById('tags')
+    const assetsElement = document.getElementById('assets')
+
     ipElement.addEventListener('change', () => {
         let ip = ipElement.value;
         // 去掉结尾的斜杆 https://github.com/siyuan-note/siyuan/issues/11478
@@ -56,6 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tags: tagsElement.value,
         })
     })
+    assetsElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            assets: assetsElement.checked,
+        })
+    })
 
     const eyeElement = document.querySelector('.b3-icon')
     eyeElement.addEventListener('click', () => {
@@ -90,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
         parentDoc: '',
         parentHPath: '',
         tags: '',
+        assets: true,
     }, function (items) {
         ipElement.value = items.ip || 'http://127.0.0.1:6806'
         tokenElement.value = items.token || ''
@@ -99,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         parentDocElement.setAttribute("data-parent", items.parentDoc)
         parentDocElement.setAttribute("data-parenthpath", items.parentHPath)
         tagsElement.value = items.tags || ''
+        assetsElement.checked = items.assets
         updateSearch()
     })
 })
