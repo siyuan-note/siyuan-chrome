@@ -154,7 +154,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             })
         }
     }).catch((e) => {
-        console.warn(e)
+        console.error(e)
+        chrome.tabs.sendMessage(requestData.tabId, {
+            'func': 'tip',
+            'msg': "Please start SiYuan and ensure network connectivity before trying again 请启动思源并确保网络连通后再试",
+            'tip': "tip",
+        });
     })
 })
 

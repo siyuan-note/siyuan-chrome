@@ -58,7 +58,7 @@ const siyuanShowTip = (msg, timeout) => {
     messageElement.firstElementChild.innerHTML = msg
 
     if (!timeout) {
-        timeout = 3000
+        timeout = 5000
     }
     setTimeout(() => {
         siyuanClearTip()
