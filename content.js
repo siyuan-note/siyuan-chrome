@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.onMessage.addListener(
         async (request, sender, sendResponse) => {
             if ('tip' === request.func && request.tip) {
-                siyuanShowTip(request.msg)
+                siyuanShowTip(request.msg, request.timeout)
                 return
             }
 
@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
+let tipTimeoutId
+
 const siyuanShowTip = (msg, timeout) => {
     let messageElement = document.getElementById('siyuanmessage')
     if (!messageElement) {
@@ -56,13 +58,17 @@ const siyuanShowTip = (msg, timeout) => {
     messageElement.style.transform = 'translate3d(0, 0, 0)'
     messageElement.style.opacity = '1'
     messageElement.firstElementChild.innerHTML = msg
-
     if (!timeout) {
         timeout = 5000
     }
-    setTimeout(() => {
-        siyuanClearTip()
-    }, timeout)
+
+    if (tipTimeoutId) {
+        clearTimeout(tipTimeoutId);
+    }
+
+    tipTimeoutId = setTimeout(() => {
+        siyuanClearTip();
+    }, timeout);
 }
 
 const siyuanClearTip = () => {
@@ -143,7 +149,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         for (let i = 0; i < srcList.length; i++) {
             let src = srcList[i]
             const msgSrc = src.length > 64 ? src.substring(0, 64) + '...' : src
-            siyuanShowTip('Clipping images [' + msgSrc + '], please wait a moment...')
+            siyuanShowTip('Clipping images [' + i + '/' + srcList.length + ']...')
             let response;
             try {
                 // Wikipedia 使用图片原图 https://github.com/siyuan-note/siyuan/issues/11640
@@ -200,28 +206,4 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         const dataURL = URL.createObjectURL(jsonBlob);
         chrome.runtime.sendMessage({func: 'upload-copy', dataURL: dataURL})
     })
-}
-
-let toggle = false;
-let scrollTimer;
-
-const scrollTo1 = (callback) => {
-    const onScroll = function () {
-        // console.log(window.innerHeight, window.scrollY)
-        if (0 >= window.scrollY || window.innerHeight / 2 > window.scrollY) {
-            window.removeEventListener('scroll', onScroll)
-            callback()
-        }
-    }
-
-    window.addEventListener('scroll', onScroll)
-    onScroll()
-    toggle = !toggle;
-    if (toggle) {
-        scrollTimer = setInterval(function () {
-            window.scrollBy(0, -window.innerHeight);
-        }, 666);
-    } else {
-        clearInterval(scrollTimer);
-    }
 }

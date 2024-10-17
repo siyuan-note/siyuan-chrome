@@ -127,7 +127,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                 if (0 === response.code) {
                     chrome.tabs.sendMessage(requestData.tabId, {
                         'func': 'tip',
-                        'msg': "Create article successfully",
+                        'msg': "Clipping successfully",
                         'tip': requestData.tip,
                     })
 

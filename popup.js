@@ -191,31 +191,25 @@ const siyuanGetReadability = (tabId) => {
         return
     }
 
-    window.scrollTo(0, document.body.scrollHeight);
-    scrollTo1(() => {
-        toggle = false
-        clearInterval(scrollTimer)
-        window.scrollTo(0, 0);
-        try {
-            // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
-            document.querySelectorAll(".hljs-comment").forEach(item => {
-                item.classList.remove("hljs-comment")
-                item.classList.add("hljs-cmt")
-            })
+    try {
+        // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
+        document.querySelectorAll(".hljs-comment").forEach(item => {
+            item.classList.remove("hljs-comment")
+            item.classList.add("hljs-cmt")
+        })
 
-            const article = new Readability(document.cloneNode(true), {
-                keepClasses: true,
-                charThreshold: 16,
-                debug: true
-            }).parse()
-            const tempElement = document.createElement('div')
-            tempElement.innerHTML = article.content
-            // console.log(article)
-            siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
-            siyuanClearTip()
-        } catch (e) {
-            console.error(e)
-            siyuanShowTip(e.message, 7 * 1000)
-        }
-    })
+        const article = new Readability(document.cloneNode(true), {
+            keepClasses: true,
+            charThreshold: 16,
+            debug: true
+        }).parse()
+        const tempElement = document.createElement('div')
+        tempElement.innerHTML = article.content
+        // console.log(article)
+        siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
+        siyuanClearTip()
+    } catch (e) {
+        console.error(e)
+        siyuanShowTip(e.message, 7 * 1000)
+    }
 }
