@@ -148,7 +148,6 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         let fetchFileErr = false;
         for (let i = 0; i < srcList.length; i++) {
             let src = srcList[i]
-            const msgSrc = src.length > 64 ? src.substring(0, 64) + '...' : src
             siyuanShowTip('Clipping images [' + i + '/' + srcList.length + ']...')
             let response;
             try {
@@ -165,8 +164,12 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
                         src = src.replace('/commons/thumb/', '/commons/')
                     }
                 }
-
-                response = await fetch(src)
+                response = await fetch(src, {
+                    "headers": {
+                        "accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+                        "sec-fetch-dest": "image",
+                    },
+                });
             } catch (e) {
                 console.warn("fetch [" + src + "] failed", e)
                 fetchFileErr = true;
