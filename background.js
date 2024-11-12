@@ -119,7 +119,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                     'tags': requestData.tags,
                     'path': requestData.parentHPath + "/" + title,
                     'markdown': markdown,
-                    'withMath': response.data.withMath
+                    'withMath': response.data.withMath,
+                    'clippingHref': requestData.href,
                 }),
             }).then((response) => {
                 return response.json()
