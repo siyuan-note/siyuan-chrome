@@ -135,6 +135,12 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
                 }
                 item.setAttribute('src', src)
             }
+
+            if (-1 < item.className.indexOf("ztext-gif") &&  -1 < src.indexOf("zhimg.com")) {
+                // 处理知乎动图
+                src = src.replace(".jpg", ".webp")
+            }
+
             srcList.push(src)
         })
 
