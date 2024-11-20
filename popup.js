@@ -198,6 +198,10 @@ const siyuanGetReadability = (tabId) => {
             item.classList.add("hljs-cmt")
         })
 
+        // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+        // 处理会换行的span后添加 <br>，让kernel能识别到换行
+        siyuanSpansAddBr(document)
+
         const article = new Readability(document.cloneNode(true), {
             keepClasses: true,
             charThreshold: 16,
@@ -208,6 +212,10 @@ const siyuanGetReadability = (tabId) => {
         // console.log(article)
         siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
         siyuanClearTip()
+
+        // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+        // 移除由 span_add_br 添加的 <br>，还原原有样式
+        siyuanSpansDelBr(document)
     } catch (e) {
         console.error(e)
         siyuanShowTip(e.message, 7 * 1000)

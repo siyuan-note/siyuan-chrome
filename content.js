@@ -87,6 +87,33 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
     reader.readAsDataURL(blob)
 })
 
+
+// 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+// 处理会换行的span后添加 <br>，让kernel能识别到换行
+function siyuanSpansAddBr(tempElement) {
+    console.log('siyuanSpansAddBr');
+    const spans = tempElement.querySelectorAll('span');
+    spans.forEach((span) => {
+        const style = window.getComputedStyle(span);
+        if (
+            (style.whiteSpace.trim().toLowerCase() === 'normal' || style.whiteSpace.trim().toLowerCase() === 'pre-wrap') &&
+            (style.wordWrap.trim().toLowerCase() === 'break-word' || style.overflowWrap.trim().toLowerCase() === 'break-word' || style.wordBreak.trim().toLowerCase() === 'break-word')
+        ) {
+            const br = tempElement.createElement('br');
+            br.setAttribute('data-added-by-siyuan', 'true');
+            span.parentNode.insertBefore(br, span.nextSibling);
+        }
+    });
+};
+
+// 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+// 移除由 span_add_br 添加的 <br>，还原原有样式
+function siyuanSpansDelBr(tempElement) {
+    console.log('siyuanSpansDelBr');
+    const brs = tempElement.querySelectorAll('br[data-added-by-siyuan="true"]');
+    brs.forEach((br) => br.parentNode.removeChild(br));
+};
+
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
     chrome.storage.sync.get({
         ip: 'http://127.0.0.1:6806',
