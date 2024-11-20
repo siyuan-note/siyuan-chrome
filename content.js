@@ -94,29 +94,50 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
     reader.readAsDataURL(blob)
 })
 
-
 // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 处理会换行的span后添加 <br>，让kernel能识别到换行
 function siyuanSpansAddBr(tempElement) {
     const spans = tempElement.querySelectorAll('span');
+    if (!spans || spans.length === 0) {
+        console.log('No span elements found.');
+        return;
+    }
+
+    // 用于存储符合条件的 span 元素
+    const matchedSpans = [];
+
     spans.forEach((span) => {
         const style = window.getComputedStyle(span);
         if (
             (style.whiteSpace.trim().toLowerCase() === 'normal' || style.whiteSpace.trim().toLowerCase() === 'pre-wrap') &&
             (style.wordWrap.trim().toLowerCase() === 'break-word' || style.overflowWrap.trim().toLowerCase() === 'break-word' || style.wordBreak.trim().toLowerCase() === 'break-word')
         ) {
-            const br = tempElement.createElement('br');
+            const br = document.createElement('br'); // 修正为从 document 创建元素
             br.setAttribute('data-added-by-siyuan', 'true');
             span.parentNode.insertBefore(br, span.nextSibling);
+
+            // 添加到符合条件的数组中
+            matchedSpans.push(span);
         }
     });
+
+    if (matchedSpans.length > 0) {
+        console.log(`Added <br> for ${matchedSpans.length} span elements.`);
+        console.log('Matched span elements:', matchedSpans);
+    } else {
+        console.log('No span elements matched the criteria.');
+    }
 };
 
 // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 移除由 span_add_br 添加的 <br>，还原原有样式
 function siyuanSpansDelBr(tempElement) {
     const brs = tempElement.querySelectorAll('br[data-added-by-siyuan="true"]');
+    if (!brs || brs.length === 0) {
+        return;
+    }
     brs.forEach((br) => br.parentNode.removeChild(br));
+    console.log(`siyuanSpansDelBr Removed ${brs.length} <br> elements.`);
 };
 
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
