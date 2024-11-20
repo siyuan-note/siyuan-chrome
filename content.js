@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if ('copy2Clipboard' === request.func) {
-                copyToClipboard(request.data)
+                await copyToClipboard(request.data)
                 return
             }
 
@@ -25,9 +25,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part")
             }
         })
-    const copyToClipboard = (textToCopy) => {
+    const copyToClipboard = async (textToCopy) => {
+		// 修复无焦点的未捕获异常：https://github.com/siyuan-note/siyuan/issues/13208
+		await new Promise(resolve => requestAnimationFrame(resolve));
+
         if (navigator.clipboard && window.isSecureContext) {
-            return navigator.clipboard.writeText(textToCopy)
+			try {
+				return await navigator.clipboard.writeText(textToCopy);
+			} catch (error) {
+				//console.warn('Failed to copy text: ', error);
+			}
         }
 
         let textArea = document.createElement('textarea')
@@ -91,7 +98,6 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
 // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 处理会换行的span后添加 <br>，让kernel能识别到换行
 function siyuanSpansAddBr(tempElement) {
-    console.log('siyuanSpansAddBr');
     const spans = tempElement.querySelectorAll('span');
     spans.forEach((span) => {
         const style = window.getComputedStyle(span);
@@ -109,7 +115,6 @@ function siyuanSpansAddBr(tempElement) {
 // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 移除由 span_add_br 添加的 <br>，还原原有样式
 function siyuanSpansDelBr(tempElement) {
-    console.log('siyuanSpansDelBr');
     const brs = tempElement.querySelectorAll('br[data-added-by-siyuan="true"]');
     brs.forEach((br) => br.parentNode.removeChild(br));
 };
