@@ -102,14 +102,14 @@ function isIgnoredElement(element) {
 		const tagName = element.tagName.toLowerCase();
         const className = element.className.toLowerCase();
         if (tagName === 'math' ||
-            className.includes('math') || className.includes('mathjax') || className.includes('latex') || 
-            className.includes('katex') || className.includes('mjx') || className.includes('mathml') || 
+            className.includes('math') || className.includes('mathjax') || className.includes('latex') ||
+            className.includes('katex') || className.includes('mjx') || className.includes('mathml') ||
             className.includes('equation') || className.includes('formula')) {
             return true;
         }
-        
+
         element = element.parentElement; // 移动到父元素
-        
+
 		// 如果父元素是 pre、code、span、math 或与数学相关的类名
         if (tagName === 'pre' || tagName === 'code' || tagName === 'span') {
             return true;
