@@ -109,6 +109,8 @@ function isIgnoredElement(element) {
         }
 
         element = element.parentElement; // 移动到父元素
+        if(!element)
+            break;
         tagName = element.tagName.toLowerCase();
 
 		// 如果父元素是 pre、code、span、math 或与数学相关的类名
