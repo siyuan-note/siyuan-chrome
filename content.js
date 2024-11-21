@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if ('copy2Clipboard' === request.func) {
-                copyToClipboard(request.data)
+                await copyToClipboard(request.data)
                 return
             }
 
@@ -25,9 +25,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part")
             }
         })
-    const copyToClipboard = (textToCopy) => {
+    const copyToClipboard = async (textToCopy) => {
+        // 修复无焦点的未捕获异常：https://github.com/siyuan-note/siyuan/issues/13208
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
         if (navigator.clipboard && window.isSecureContext) {
-            return navigator.clipboard.writeText(textToCopy)
+            try {
+                return await navigator.clipboard.writeText(textToCopy);
+            } catch (error) {
+                //console.warn('Failed to copy text: ', error);
+            }
         }
 
         let textArea = document.createElement('textarea')
@@ -86,6 +93,90 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
     reader.onload = () => resolve(reader.result)
     reader.readAsDataURL(blob)
 })
+
+// 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+// 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
+function isIgnoredElement(element) {
+    // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
+    while (element) {
+        let tagName = element.tagName.toLowerCase();
+        const className = element.className.toLowerCase();
+        if (tagName === 'math' ||
+            className.includes('math') || className.includes('mathjax') || className.includes('latex') ||
+            className.includes('katex') || className.includes('mjx') || className.includes('mathml') ||
+            className.includes('equation') || className.includes('formula')) {
+            return true;
+        }
+
+        element = element.parentElement; // 移动到父元素
+        if(!element) {
+            break;
+        }
+
+        tagName = element.tagName.toLowerCase();
+
+        // 如果父元素是 pre、code、span、math 或与数学相关的类名
+        if (tagName === 'pre' || tagName === 'code' || tagName === 'span') {
+            return true;
+        } else if (tagName === 'div' || tagName === 'p') {
+            return false; // 找到 div、p 直接返回
+        }
+    }
+    return false; // 没找到时返回 false
+}
+
+// 处理会换行的span后添加 <br>，让kernel能识别到换行
+function siyuanSpansAddBr(tempElement) {
+    const spans = tempElement.querySelectorAll('span');
+    if (!spans || spans.length === 0) {
+        console.log('No span elements found.');
+        return;
+    }
+
+    // 用于存储符合条件的 span 元素
+    const matchedSpans = [];
+
+    spans.forEach((span) => {
+        const style = window.getComputedStyle(span);
+
+        // 现有的条件判断，判断是否满足换行条件
+        if (
+            (style.whiteSpace.trim().toLowerCase() === 'normal' || style.whiteSpace.trim().toLowerCase() === 'pre-wrap') &&
+            (style.wordWrap.trim().toLowerCase() === 'break-word' || style.overflowWrap.trim().toLowerCase() === 'break-word' || style.wordBreak.trim().toLowerCase() === 'break-word')
+        ) {
+            // 检查父元素是否是 pre、code 或 span
+            if (isIgnoredElement(span)) {
+                console.log('Skipping span due to parent being pre, code or span.');
+                return; // 如果父元素是 pre、code 或 span 或者数学公式，跳过该 span
+            }
+
+            const br = document.createElement('br'); // 修正为从 document 创建元素
+            br.setAttribute('data-added-by-siyuan', 'true');
+            span.parentNode.insertBefore(br, span.nextSibling);
+
+            // 添加到符合条件的数组中
+            matchedSpans.push(span);
+        }
+    });
+
+    if (matchedSpans.length > 0) {
+        console.log(`Added <br> for ${matchedSpans.length} span elements.(Total span: ${spans.length})`);
+        console.log('Matched span elements:', matchedSpans);
+    } else {
+        console.log('No span elements matched the criteria.');
+    }
+};
+
+// 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+// 移除由 span_add_br 添加的 <br>，还原原有样式
+function siyuanSpansDelBr(tempElement) {
+    const brs = tempElement.querySelectorAll('br[data-added-by-siyuan="true"]');
+    if (!brs || brs.length === 0) {
+        return;
+    }
+    brs.forEach((br) => br.parentNode.removeChild(br));
+    console.log(`siyuanSpansDelBr Removed ${brs.length} <br> elements.`);
+};
 
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
     chrome.storage.sync.get({
