@@ -99,7 +99,7 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
 function isIgnoredElement(element) {
     // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
     while (element) {
-		let tagName = element.tagName.toLowerCase();
+        let tagName = element.tagName.toLowerCase();
         const className = element.className.toLowerCase();
         if (tagName === 'math' ||
             className.includes('math') || className.includes('mathjax') || className.includes('latex') ||
@@ -109,11 +109,13 @@ function isIgnoredElement(element) {
         }
 
         element = element.parentElement; // 移动到父元素
-        if(!element)
+        if(!element) {
             break;
+        }
+
         tagName = element.tagName.toLowerCase();
 
-		// 如果父元素是 pre、code、span、math 或与数学相关的类名
+        // 如果父元素是 pre、code、span、math 或与数学相关的类名
         if (tagName === 'pre' || tagName === 'code' || tagName === 'span') {
             return true;
         } else if (tagName === 'div' || tagName === 'p') {
@@ -142,11 +144,11 @@ function siyuanSpansAddBr(tempElement) {
             (style.whiteSpace.trim().toLowerCase() === 'normal' || style.whiteSpace.trim().toLowerCase() === 'pre-wrap') &&
             (style.wordWrap.trim().toLowerCase() === 'break-word' || style.overflowWrap.trim().toLowerCase() === 'break-word' || style.wordBreak.trim().toLowerCase() === 'break-word')
         ) {
-			// 检查父元素是否是 pre、code 或 span
-			if (isIgnoredElement(span)) {
-				console.log('Skipping span due to parent being pre, code or span.');
-				return; // 如果父元素是 pre、code 或 span 或者数学公式，跳过该 span
-			}
+            // 检查父元素是否是 pre、code 或 span
+            if (isIgnoredElement(span)) {
+                console.log('Skipping span due to parent being pre, code or span.');
+                return; // 如果父元素是 pre、code 或 span 或者数学公式，跳过该 span
+            }
 
             const br = document.createElement('br'); // 修正为从 document 创建元素
             br.setAttribute('data-added-by-siyuan', 'true');
