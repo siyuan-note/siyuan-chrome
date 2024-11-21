@@ -99,7 +99,7 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
 function isIgnoredElement(element) {
     // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
     while (element) {
-		const tagName = element.tagName.toLowerCase();
+		let tagName = element.tagName.toLowerCase();
         const className = element.className.toLowerCase();
         if (tagName === 'math' ||
             className.includes('math') || className.includes('mathjax') || className.includes('latex') ||
@@ -109,6 +109,7 @@ function isIgnoredElement(element) {
         }
 
         element = element.parentElement; // 移动到父元素
+        tagName = element.tagName.toLowerCase();
 
 		// 如果父元素是 pre、code、span、math 或与数学相关的类名
         if (tagName === 'pre' || tagName === 'code' || tagName === 'span') {
@@ -161,7 +162,6 @@ function siyuanSpansAddBr(tempElement) {
         console.log('No span elements matched the criteria.');
     }
 };
-
 
 // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 移除由 span_add_br 添加的 <br>，还原原有样式
