@@ -116,7 +116,7 @@ function isIgnoredElement(element) {
         tagName = element.tagName.toLowerCase();
 
         // 如果父元素是 pre、code、span、math 或与数学相关的类名
-        if (tagName === 'pre' || tagName === 'code' || tagName === 'span') {
+        if (tagName === 'pre' || tagName === 'code' || tagName === 'span' || tagName === 'section') {
             return true;
         } else if (tagName === 'div' || tagName === 'p') {
             return false; // 找到 div、p 直接返回
