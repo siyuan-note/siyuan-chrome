@@ -348,6 +348,11 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
                 return
             }
 
+            if (item.className.includes("emoji") && "" !== item.getAttribute("alt")) {
+                // 图片 Emoji 直接使用 alt https://github.com/siyuan-note/siyuan/issues/13342
+                return
+            }
+
             // 处理使用 data-original 属性的情况 https://github.com/siyuan-note/siyuan/issues/11826
             let dataOriginal = item.getAttribute('data-original')
             if (dataOriginal) {
