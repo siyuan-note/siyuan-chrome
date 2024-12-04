@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const parentDocElement = document.getElementById('parentDoc')
     const tagsElement = document.getElementById('tags')
     const assetsElement = document.getElementById('assets')
+    const expElement = document.getElementById('exp')
+    const expGroupElement = document.getElementById('expGroup')
+    const expSpanElement = document.getElementById('expSpan')
+    const expBoldElement = document.getElementById('expBold')
+    const expItalicElement = document.getElementById('expItalic')
 
     ipElement.addEventListener('change', () => {
         let ip = ipElement.value;
@@ -63,6 +68,28 @@ document.addEventListener('DOMContentLoaded', () => {
             assets: assetsElement.checked,
         })
     })
+    expSpanElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            expSpan: expSpanElement.checked,
+        })
+    })
+    expBoldElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            expBold: expBoldElement.checked,
+        })
+    })
+    expItalicElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            expItalic: expItalicElement.checked,
+        })
+    })
+    expElement.addEventListener('change', function () {
+        if (expElement.checked) {
+            expGroupElement.style.display = 'block';
+        } else {
+            expGroupElement.style.display = 'none';
+        }
+    });
 
     const eyeElement = document.querySelector('.b3-icon')
     eyeElement.addEventListener('click', () => {
@@ -98,6 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
         parentHPath: '',
         tags: '',
         assets: true,
+        expSpan: true,
+        expBold: false,
+        expItalic: false,
     }, function (items) {
         ipElement.value = items.ip || 'http://127.0.0.1:6806'
         tokenElement.value = items.token || ''
@@ -108,6 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
         parentDocElement.setAttribute("data-parenthpath", items.parentHPath)
         tagsElement.value = items.tags || ''
         assetsElement.checked = items.assets
+        expSpanElement.checked = items.expSpan
+        expBoldElement.checked = items.expBold
+        expItalicElement.checked = items.expItalic
         updateSearch()
     })
 })
@@ -182,7 +215,7 @@ const escapeHtml = (unsafe) => {
         .replace(/'/g, "&#039;");
 }
 
-const siyuanGetReadability = (tabId) => {
+const siyuanGetReadability = async (tabId) => {
     try {
         siyuanShowTip('Clipping, please wait a moment...', 60 * 1000)
     } catch (e) {
@@ -198,11 +231,8 @@ const siyuanGetReadability = (tabId) => {
             item.classList.add("hljs-cmt")
         })
 
-        // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
-        // 处理会换行的span后添加 <br>，让kernel能识别到换行
-        siyuanSpansAddBr(document)
-        const clonedDoc = document.cloneNode(true);
-        siyuanSpansDelBr(document)
+        // 重构并合并Readability前处理 https://github.com/siyuan-note/siyuan/issues/13306
+        const clonedDoc = await siyuanGetCloneNode(document);
 
         const article = new Readability(clonedDoc, {
             keepClasses: true,
