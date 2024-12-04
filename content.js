@@ -178,6 +178,141 @@ function siyuanSpansDelBr(tempElement) {
     console.log(`siyuanSpansDelBr Removed ${brs.length} <br> elements.`);
 };
 
+// 替换粗体样式为内核可识别<b>标签 https://github.com/siyuan-note/siyuan/issues/13306
+function siyuanProcessBoldStyle(tempElement) {
+    // 获取所有应用了 font-weight: bold 的元素
+    const boldElements = tempElement.querySelectorAll('*');
+
+    boldElements.forEach(element => {
+        const style = window.getComputedStyle(element);
+
+        // 判断是否具有 font-weight: bold
+        if (style.fontWeight === 'bold' || style.fontWeight === '700') { // '700' 是 bold 的常见数值
+            // 获取当前元素的文本内容
+            const innerHTML = element.innerHTML;
+
+            // 将文本内容包裹在 <b> 标签中
+            element.innerHTML = `<b b-added-by-siyuan="true">${innerHTML}</b>`;
+        }
+    });
+}
+
+function revertBoldStyles(tempElement) {
+    // 获取所有带有 b-added-by-siyuan="true" 的 <b> 标签
+    const elements = tempElement.querySelectorAll('b[b-added-by-siyuan="true"]');
+
+    elements.forEach(element => {
+        // 获取元素的原始文本内容
+        const innerHTML = element.innerHTML;
+
+        // 将 <b> 标签移除，恢复原本的文本
+        const parent = element.parentNode;
+        parent.innerHTML = parent.innerHTML.replace(element.outerHTML, innerHTML);
+    });
+
+    console.log(`revertBoldStyles reverted ${elements.length} <br> elements.`);
+}
+
+// 替换斜体样式为内核可识别<i>标签 https://github.com/siyuan-note/siyuan/issues/13306
+function siyuanProcessItalicStyle(tempElement) {
+    // 获取所有元素
+    const allElements = tempElement.querySelectorAll('*');
+
+    allElements.forEach(element => {
+        const style = window.getComputedStyle(element);
+
+        // 判断是否具有 font-style: italic
+        if (style.fontStyle === 'italic') {
+            // 获取当前元素的文本内容
+            const innerHTML = element.innerHTML;
+
+            // 将文本内容包裹在 <i> 标签中
+            element.innerHTML = `<i i-added-by-siyuan="true">${innerHTML}</i>`;
+        }
+    });
+}
+
+function revertItalicStyles(tempElement) {
+    // 获取所有带有 b-added-by-siyuan="true" 的 <b> 标签
+    const elements = tempElement.querySelectorAll('i[i-added-by-siyuan="true"]');
+
+    elements.forEach(element => {
+        // 获取元素的原始文本内容
+        const innerHTML = element.innerHTML;
+
+        // 将 <b> 标签移除，恢复原本的文本
+        const parent = element.parentNode;
+        parent.innerHTML = parent.innerHTML.replace(element.outerHTML, innerHTML);
+    });
+
+    console.log(`revertItalicStyles reverted ${elements.length} <br> elements.`);
+}
+
+// 重构并合并Readability前处理 https://github.com/siyuan-note/siyuan/issues/13306
+async function siyuanGetCloneNode(tempElement) {
+    let items;
+    try {
+        items = await new Promise((resolve, reject) => {
+            chrome.storage.sync.get({
+                expSpan: true,
+                expBold: false,
+                expItalic: false,
+            }, (result) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    } catch (error) {
+        console.error("获取失败，错误信息：", error);
+        items = {
+            expSpan: true,
+            expBold: false,
+            expItalic: false,
+        };
+    }
+
+    //前处理，增加可识别样式
+    if (items.expBold) {
+        // 替换粗体样式为内核可识别<b>标签 https://github.com/siyuan-note/siyuan/issues/13306
+        siyuanProcessBoldStyle(tempElement);
+    }
+
+    if (items.expItalic) {
+        // 替换斜体样式为内核可识别<i>标签 https://github.com/siyuan-note/siyuan/issues/13306
+        siyuanProcessItalicStyle(tempElement);
+    }
+
+    if (items.expSpan) {
+        // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+        // 处理会换行的span后添加 <br>，让kernel能识别到换行
+        siyuanSpansAddBr(tempElement);
+    }
+
+    const clonedDoc = document.cloneNode(true);
+
+    //后处理，还原样式
+    if (items.expBold) {
+        // 还原粗体样式
+        revertBoldStyles(tempElement);
+    }
+
+    if (items.expItalic) {
+        // 还原斜体样式
+        revertItalicStyles(tempElement);
+    }
+
+    if (items.expSpan) {
+        // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+        // 处理会换行的span后添加 <br>，让kernel能识别到换行
+        siyuanSpansDelBr(tempElement);
+    }
+
+    return clonedDoc;
+}
+
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
     chrome.storage.sync.get({
         ip: 'http://127.0.0.1:6806',
@@ -188,6 +323,9 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         parentHPath: '',
         tags: '',
         assets: true,
+        expSpan: true,
+        expBold: false,
+        expItalic: false,
     }, async function (items) {
         if (!items.token) {
             siyuanShowTip('Please config API token before clipping content 剪藏前请先配置 API token')

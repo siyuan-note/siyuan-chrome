@@ -408,6 +408,25 @@
         <div style="flex: 1">Download assets</div>
         <input class="b3-switch" id="assets" checked type="checkbox">
     </label>
+    <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+        <div class="b3-label" style="flex: 1">Show experimental features</div>
+        <input class="b3-switch" id="exp" type="checkbox">
+    </label>
+    <div id="expGroup" style="display: none;">
+      <div class="b3-label" style="font-size: 14px; color: red;">*:Experimental features may be unstable. If there is a problem with clipping, consider switching it.</div>
+      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+          <div style="flex: 1">Detect span text newlines*</div>
+          <input class="b3-switch" id="expSpan" checked type="checkbox">
+      </label>
+      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+          <div style="flex: 1">Detect bold style*</div>
+          <input class="b3-switch" id="expBold" type="checkbox">
+      </label>
+      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+          <div style="flex: 1">Detect italic style*</div>
+          <input class="b3-switch" id="expItalic" type="checkbox">
+      </label>
+    </div>
     <div class="fn__hr"></div>
     <div class="fn__hr"></div>
     <button class="b3-button" id="send">Send to SiYuan</button>
