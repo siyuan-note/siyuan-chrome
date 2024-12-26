@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Web-Clipping für SiYuan."
+  },
+  "copy_to_siyuan": {
+    "message": "Nach SiYuan kopieren"
+  },
+  
+  "show_tip": {
+    "message": "Tipp anzeigen"
+  },
+  "siyuan_url": {
+    "message": "SiYuan URL"
+  },
+  "api_token": {
+    "message": "API-Token"
+  },
+  "save_path": {
+    "message": "Speicherort"
+  },
+  "save_path_placeholder": {
+    "message": "Geben Sie das Schlüsselwort ein und drücken Sie Enter, um zu suchen"
+  },
+  "tags": {
+    "message": "Tags"
+  },
+  "tags_placeholder": {
+    "message": "Verwenden Sie Kommas, um mehrere Tags zu trennen"
+  },
+  "assets": {
+    "message": "Assets herunterladen"
+  },
+  "exp": {
+    "message": "Experimentelle Funktionen anzeigen"
+  },
+  "exp_tips": {
+    "message": "*: Experimentelle Funktionen können instabil sein. Wenn es ein Problem mit dem Clipping gibt, versuchen Sie, es zu wechseln."
+  },
+  "exp_span": {
+    "message": "Textumbruch in span erkennen*"
+  },
+  "exp_bold": {
+    "message": "Fettdruck-Stil erkennen*"
+  },
+  "exp_italic": {
+    "message": "Kursiv-Stil erkennen*"
+  },
+  "language": {
+    "message": "Sprache*"
+  },
+  "send": {
+    "message": "Nach SiYuan senden"
+  },
+
+  "tip_first_time": {
+    "message": "Bitte laden Sie die Seite nach der ersten Installation der SiYuan-Erweiterung neu, bevor Sie sie verwenden"
+  },
+  "tip_clipping": {
+    "message": "Clipping, bitte warten..."
+  },
+  "tip_clip_img": {
+    "message": "Bilder werden gerade gespeichert"
+  },
+  "tip_clip_ok": {
+    "message": "Clipping erfolgreich"
+  },
+  "tip_token_miss": {
+    "message": "Bitte konfigurieren Sie das API-Token, bevor Sie den Inhalt speichern"
+  },
+  "tip_token_invalid": {
+    "message": "Ungültiges API-Token"
+  },
+  "tip_save_path_miss": {
+    "message": "Bitte wählen Sie den Speicherort, bevor Sie den Inhalt speichern"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Bitte starten Sie SiYuan und stellen Sie sicher, dass die Netzwerkverbindung funktioniert, bevor Sie es erneut versuchen"
+  }
+}

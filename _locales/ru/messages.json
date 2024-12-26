@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Веб-клиппинг для SiYuan."
+  },
+  "copy_to_siyuan": {
+    "message": "Копировать в SiYuan"
+  },
+  
+  "show_tip": {
+    "message": "Показать подсказку"
+  },
+  "siyuan_url": {
+    "message": "URL SiYuan"
+  },
+  "api_token": {
+    "message": "API токен"
+  },
+  "save_path": {
+    "message": "Путь сохранения"
+  },
+  "save_path_placeholder": {
+    "message": "Введите ключевое слово и нажмите Enter для поиска"
+  },
+  "tags": {
+    "message": "Теги"
+  },
+  "tags_placeholder": {
+    "message": "Используйте запятые для разделения нескольких тегов"
+  },
+  "assets": {
+    "message": "Скачать ресурсы"
+  },
+  "exp": {
+    "message": "Показать экспериментальные функции"
+  },
+  "exp_tips": {
+    "message": "*: Экспериментальные функции могут быть нестабильными. Если возникли проблемы с клиппингом, попробуйте изменить настройки."
+  },
+  "exp_span": {
+    "message": "Обнаружить разрывы строк в span*"
+  },
+  "exp_bold": {
+    "message": "Обнаружить стиль полужирного текста*"
+  },
+  "exp_italic": {
+    "message": "Обнаружить стиль курсивом*"
+  },
+  "language": {
+    "message": "Язык*"
+  },
+  "send": {
+    "message": "Отправить в SiYuan"
+  },
+
+  "tip_first_time": {
+    "message": "После первого установления расширения SiYuan, пожалуйста, обновите страницу перед использованием"
+  },
+  "tip_clipping": {
+    "message": "Клиппинг, подождите..."
+  },
+  "tip_clip_img": {
+    "message": "Клиппинг изображений"
+  },
+  "tip_clip_ok": {
+    "message": "Клиппинг выполнен успешно"
+  },
+  "tip_token_miss": {
+    "message": "Пожалуйста, настройте API токен перед клиппингом"
+  },
+  "tip_token_invalid": {
+    "message": "Неверный API токен"
+  },
+  "tip_save_path_miss": {
+    "message": "Пожалуйста, выберите путь сохранения перед клиппингом"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Пожалуйста, запустите SiYuan и убедитесь в наличии сетевого соединения перед повторной попыткой"
+  }
+}

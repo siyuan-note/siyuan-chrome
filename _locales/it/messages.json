@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Clip web per SiYuan."
+  },
+  "copy_to_siyuan": {
+    "message": "Copia in SiYuan"
+  },
+  
+  "show_tip": {
+    "message": "Mostra suggerimenti"
+  },
+  "siyuan_url": {
+    "message": "URL di SiYuan"
+  },
+  "api_token": {
+    "message": "Token API"
+  },
+  "save_path": {
+    "message": "Percorso di salvataggio"
+  },
+  "save_path_placeholder": {
+    "message": "Inserisci la parola chiave e premi Invio per cercare"
+  },
+  "tags": {
+    "message": "Tag"
+  },
+  "tags_placeholder": {
+    "message": "Usa le virgole per separare più tag"
+  },
+  "assets": {
+    "message": "Scarica risorse"
+  },
+  "exp": {
+    "message": "Mostra funzionalità sperimentali"
+  },
+  "exp_tips": {
+    "message": "*: Le funzionalità sperimentali potrebbero non essere stabili. Se hai problemi con il clipping, prova a cambiarle."
+  },
+  "exp_span": {
+    "message": "Rileva interruzioni di riga in span*"
+  },
+  "exp_bold": {
+    "message": "Rileva stile grassetto*"
+  },
+  "exp_italic": {
+    "message": "Rileva stile corsivo*"
+  },
+  "language": {
+    "message": "Lingua*"
+  },
+  "send": {
+    "message": "Invia a SiYuan"
+  },
+
+  "tip_first_time": {
+    "message": "Dopo aver installato l'estensione SiYuan per la prima volta, aggiorna la pagina prima di utilizzarla"
+  },
+  "tip_clipping": {
+    "message": "Clipping, attendi un momento..."
+  },
+  "tip_clip_img": {
+    "message": "Clipping delle immagini"
+  },
+  "tip_clip_ok": {
+    "message": "Clipping riuscito"
+  },
+  "tip_token_miss": {
+    "message": "Configura il token API prima di eseguire il clipping"
+  },
+  "tip_token_invalid": {
+    "message": "Token API non valido"
+  },
+  "tip_save_path_miss": {
+    "message": "Seleziona il percorso di salvataggio prima di eseguire il clipping"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Avvia SiYuan e assicurati che la connessione di rete funzioni prima di riprovare"
+  }
+}

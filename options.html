@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <style>
@@ -381,13 +381,13 @@
 <div style="max-width: 256px">
     <div id="log" style="color: #d23f31;margin-bottom: 16px"></div>
     <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-        <div style="flex: 1">Show Tip</div>
+        <div style="flex: 1" data-i18n="show_tip">Show Tip</div>
         <input class="b3-switch" id="showTip" checked type="checkbox">
     </label>
-    <div class="b3-label">SiYuan URL</div>
+    <div class="b3-label" data-i18n="siyuan_url">SiYuan URL</div>
     <input id="ip" class="b3-text-field">
     <div class="fn__hr"></div>
-    <div class="b3-label">API token</div>
+    <div class="b3-label" data-i18n="api_token">API token</div>
     <div style="position: relative">
         <input id="token" type="password" class="b3-text-field" style="padding-left: 28px">
         <svg class="b3-icon" viewBox="0 0 32 32">
@@ -395,41 +395,58 @@
         </svg>
     </div>
     <div class="fn__hr"></div>
-    <div class="b3-label">Save path</div>
-    <input class="b3-text-field" id="searchDoc" placeholder="Input the keyword then Enter to search"/>
+    <div class="b3-label" data-i18n="save_path">Save path</div>
+    <input class="b3-text-field" id="searchDoc" data-i18n="save_path_placeholder" placeholder="Input the keyword then Enter to search"/>
     <div class="fn__hr"></div>
     <select class="b3-select" id="parentDoc"></select>
     <div class="fn__hr"></div>
-    <div class="b3-label">Tags</div>
-    <input class="b3-text-field" id="tags" placeholder="Use commas to separate multiple tags" />
+    <div class="b3-label" data-i18n="tags">Tags</div>
+    <input class="b3-text-field" id="tags" data-i18n="tags_placeholder" placeholder="Use commas to separate multiple tags" />
     <div class="fn__hr"></div>
     <div class="fn__hr"></div>
     <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-        <div style="flex: 1">Download assets</div>
+        <div style="flex: 1" data-i18n="assets">Download assets</div>
         <input class="b3-switch" id="assets" checked type="checkbox">
     </label>
     <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-        <div class="b3-label" style="flex: 1">Show experimental features</div>
+        <div class="b3-label" style="flex: 1" data-i18n="exp">Show experimental features</div>
         <input class="b3-switch" id="exp" type="checkbox">
     </label>
     <div id="expGroup" style="display: none;">
-      <div class="b3-label" style="font-size: 14px; color: red;">*: Experimental features may be unstable. If there is a problem with clipping, consider switching it.</div>
+      <div class="b3-label" style="font-size: 14px; color: red;" data-i18n="exp_tips">*: Experimental features may be unstable. If there is a problem with clipping, consider switching it.</div>
       <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1">Detect span text newlines*</div>
+          <div style="flex: 1" data-i18n="exp_span">Detect span text newlines*</div>
           <input class="b3-switch" id="expSpan" checked type="checkbox">
       </label>
       <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1">Detect bold style*</div>
+          <div style="flex: 1" data-i18n="exp_bold">Detect bold style*</div>
           <input class="b3-switch" id="expBold" type="checkbox">
       </label>
       <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1">Detect italic style*</div>
+          <div style="flex: 1" data-i18n="exp_italic">Detect italic style*</div>
           <input class="b3-switch" id="expItalic" type="checkbox">
+      </label>
+      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+          <div style="flex: 1" data-i18n="language">Language*</div>
+          <select style="flex: 1" class="b3-select" id="language">
+            <option value="ar">العربية</option>
+            <option value="de">Deutsch</option>
+            <option value="en" selected>English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="he">עברית</option>
+            <option value="it">Italiano</option>
+            <option value="ja">日本語</option>
+            <option value="pl">Polski</option>
+            <option value="ru">Русский</option>
+            <option value="zh_TW">繁體中文</option>
+            <option value="zh_CN">简体中文</option>
+          </select>
       </label>
     </div>
     <div class="fn__hr"></div>
     <div class="fn__hr"></div>
-    <button class="b3-button" id="send">Send to SiYuan</button>
+    <button class="b3-button" id="send" data-i18n="send">Send to SiYuan</button>
 </div>
 <script src="popup.js"></script>
 </body>

@@ -1,7 +1,8 @@
 chrome.contextMenus.removeAll(function () {
+    const title = chrome.i18n.getMessage("copy_to_siyuan");
     chrome.contextMenus.create({
         id: 'copy-to-siyuan',
-        title: 'Copy to SiYuan',
+        title: title,
         contexts: ['selection', 'image'],
     })
 
@@ -49,8 +50,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     }).then((response) => {
         if (response.redirected) {
             chrome.tabs.sendMessage(requestData.tabId, {
-                'func': 'tip',
-                'msg': 'Invalid API token',
+                'func': 'tipKey',
+                'msg': 'tip_token_invalid',
                 'tip': 'tip',
             })
         }
@@ -127,8 +128,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             }).then((response) => {
                 if (0 === response.code) {
                     chrome.tabs.sendMessage(requestData.tabId, {
-                        'func': 'tip',
-                        'msg': "Clipping successfully",
+                        'func': 'tipKey',
+                        'msg': "tip_clip_ok",
                         'tip': requestData.tip,
                     })
 
@@ -157,8 +158,8 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     }).catch((e) => {
         console.error(e)
         chrome.tabs.sendMessage(requestData.tabId, {
-            'func': 'tip',
-            'msg': "Please start SiYuan and ensure network connectivity before trying again 请启动思源并确保网络连通后再试",
+            'func': 'tipKey',
+            'msg': "tip_siyuan_kernel_unavailable",
             'tip': "tip",
         });
     })

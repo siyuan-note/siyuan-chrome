@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 return
             }
 
+            if ('tipKey' === request.func && request.tip) {
+                siyuanShowTipByKey(request.msg, request.timeout)
+                return
+            }
+
             if ('copy2Clipboard' === request.func) {
                 await copyToClipboard(request.data)
                 return
@@ -15,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return
             }
 
-            siyuanShowTip('Clipping, please wait a moment...')
+            siyuanShowTipByKey("tip_clipping")
 
             const selection = window.getSelection()
             if (selection && 0 < selection.rangeCount) {
@@ -76,6 +81,11 @@ const siyuanShowTip = (msg, timeout) => {
     tipTimeoutId = setTimeout(() => {
         siyuanClearTip();
     }, timeout);
+}
+
+// Add i18n support https://github.com/siyuan-note/siyuan/issues/13559
+const siyuanShowTipByKey = (msgKey, timeout) => {
+    siyuanShowTip(chrome.i18n.getMessage(msgKey), timeout);
 }
 
 const siyuanClearTip = () => {
@@ -328,12 +338,12 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         expItalic: false,
     }, async function (items) {
         if (!items.token) {
-            siyuanShowTip('Please config API token before clipping content 剪藏前请先配置 API token')
+            siyuanShowTipByKey("tip_token_miss")
             return
         }
 
         if (!items.notebook) {
-            siyuanShowTip('Please select save path before clipping content 剪藏前请先选择保存路径')
+            siyuanShowTipByKey("tip_save_path_miss")
             return
         }
 
@@ -388,7 +398,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         let fetchFileErr = false;
         for (let i = 0; i < srcList.length; i++) {
             let src = srcList[i]
-            siyuanShowTip('Clipping images [' + i + '/' + srcList.length + ']...')
+            siyuanShowTip(chrome.i18n.getMessage("tip_clip_img") + ' [' + i + '/' + srcList.length + ']...');
             let response;
             try {
                 // Wikipedia 使用图片原图 https://github.com/siyuan-note/siyuan/issues/11640

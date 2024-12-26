@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Web clipping dla SiYuan."
+  },
+  "copy_to_siyuan": {
+    "message": "Skopiuj do SiYuan"
+  },
+  
+  "show_tip": {
+    "message": "Pokaż wskazówki"
+  },
+  "siyuan_url": {
+    "message": "URL SiYuan"
+  },
+  "api_token": {
+    "message": "Token API"
+  },
+  "save_path": {
+    "message": "Ścieżka zapisu"
+  },
+  "save_path_placeholder": {
+    "message": "Wprowadź słowo kluczowe i naciśnij Enter, aby wyszukać"
+  },
+  "tags": {
+    "message": "Tagi"
+  },
+  "tags_placeholder": {
+    "message": "Użyj przecinków, aby oddzielić tagi"
+  },
+  "assets": {
+    "message": "Pobierz zasoby"
+  },
+  "exp": {
+    "message": "Pokaż funkcje eksperymentalne"
+  },
+  "exp_tips": {
+    "message": "*: Funkcje eksperymentalne mogą być niestabilne. Jeśli napotkasz problem z clippingiem, spróbuj je przełączyć."
+  },
+  "exp_span": {
+    "message": "Wykryj łamanie linii w span*"
+  },
+  "exp_bold": {
+    "message": "Wykryj styl pogrubiony*"
+  },
+  "exp_italic": {
+    "message": "Wykryj styl kursywy*"
+  },
+  "language": {
+    "message": "Język*"
+  },
+  "send": {
+    "message": "Wyślij do SiYuan"
+  },
+
+  "tip_first_time": {
+    "message": "Po zainstalowaniu rozszerzenia SiYuan po raz pierwszy, odśwież stronę przed użyciem"
+  },
+  "tip_clipping": {
+    "message": "Trwa clipping, proszę czekać..."
+  },
+  "tip_clip_img": {
+    "message": "Clipping obrazów"
+  },
+  "tip_clip_ok": {
+    "message": "Clipping zakończony sukcesem"
+  },
+  "tip_token_miss": {
+    "message": "Skonfiguruj token API przed rozpoczęciem clippingu"
+  },
+  "tip_token_invalid": {
+    "message": "Nieprawidłowy token API"
+  },
+  "tip_save_path_miss": {
+    "message": "Wybierz ścieżkę zapisu przed rozpoczęciem clippingu"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Uruchom SiYuan i upewnij się, że połączenie z siecią jest aktywne przed ponowną próbą"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "思源(SiYuan)"
+  },
+  "extension_description": {
+    "message": "思源筆記網頁剪藏。"
+  },
+  "copy_to_siyuan": {
+    "message": "複製到思源(SiYuan)"
+  },
+  
+  "show_tip": {
+    "message": "顯示提示"
+  },
+  "siyuan_url": {
+    "message": "思源(SiYuan) URL"
+  },
+  "api_token": {
+    "message": "API令牌(API token)"
+  },
+  "save_path": {
+    "message": "儲存路徑"
+  },
+  "save_path_placeholder": {
+    "message": "輸入關鍵字然後按回車鍵開始搜尋"
+  },
+  "tags": {
+    "message": "標籤"
+  },
+  "tags_placeholder": {
+    "message": "使用逗號分隔多個標籤"
+  },
+  "assets": {
+    "message": "下載資源"
+  },
+  "exp": {
+    "message": "顯示實驗性特性"
+  },
+  "exp_tips": {
+    "message": "*: 實驗性特性可能不穩定。如果剪藏遇到問題，可以考慮切換對應的開關看看能否解決。"
+  },
+  "exp_span": {
+    "message": "識別span節點的換行樣式*"
+  },
+  "exp_bold": {
+    "message": "識別粗體樣式*"
+  },
+  "exp_italic": {
+    "message": "識別斜體樣式*"
+  },
+  "language": {
+    "message": "語言*"
+  },
+  "send": {
+    "message": "發送到思源(SiYuan)"
+  },
+
+  "tip_first_time": {
+    "message": "首次安裝思源擴展後，請刷新頁面後再使用"
+  },
+  "tip_clipping": {
+    "message": "剪藏中，請稍等..."
+  },
+  "tip_clip_img": {
+    "message": "剪藏圖像中"
+  },
+  "tip_clip_ok": {
+    "message": "剪藏成功"
+  },
+  "tip_token_miss": {
+    "message": "剪藏前請先配置API令牌(API token)"
+  },
+  "tip_token_invalid": {
+    "message": "無效的API令牌(API token)"
+  },
+  "tip_save_path_miss": {
+    "message": "剪藏前請先選擇儲存路徑"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "請啟動思源並確保網路連通後再試"
+  }
+}
