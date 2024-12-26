@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Clipping web pour SiYuan."
+  },
+  "copy_to_siyuan": {
+    "message": "Copier vers SiYuan"
+  },
+  
+  "show_tip": {
+    "message": "Afficher les astuces"
+  },
+  "siyuan_url": {
+    "message": "URL de SiYuan"
+  },
+  "api_token": {
+    "message": "Jeton API"
+  },
+  "save_path": {
+    "message": "Chemin de sauvegarde"
+  },
+  "save_path_placeholder": {
+    "message": "Entrez le mot-clé puis appuyez sur Entrée pour rechercher"
+  },
+  "tags": {
+    "message": "Tags"
+  },
+  "tags_placeholder": {
+    "message": "Utilisez des virgules pour séparer plusieurs tags"
+  },
+  "assets": {
+    "message": "Télécharger les ressources"
+  },
+  "exp": {
+    "message": "Afficher les fonctionnalités expérimentales"
+  },
+  "exp_tips": {
+    "message": "*: Les fonctionnalités expérimentales peuvent être instables. Si vous avez un problème de clipping, essayez de les changer."
+  },
+  "exp_span": {
+    "message": "Détecter les sauts de ligne dans span*"
+  },
+  "exp_bold": {
+    "message": "Détecter le style gras*"
+  },
+  "exp_italic": {
+    "message": "Détecter le style italique*"
+  },
+  "language": {
+    "message": "Langue*"
+  },
+  "send": {
+    "message": "Envoyer à SiYuan"
+  },
+
+  "tip_first_time": {
+    "message": "Après avoir installé l'extension SiYuan pour la première fois, veuillez rafraîchir la page avant de l'utiliser"
+  },
+  "tip_clipping": {
+    "message": "Clipping, veuillez patienter..."
+  },
+  "tip_clip_img": {
+    "message": "Clipping des images"
+  },
+  "tip_clip_ok": {
+    "message": "Clipping réussi"
+  },
+  "tip_token_miss": {
+    "message": "Veuillez configurer le jeton API avant de recouper le contenu"
+  },
+  "tip_token_invalid": {
+    "message": "Jeton API invalide"
+  },
+  "tip_save_path_miss": {
+    "message": "Veuillez sélectionner le chemin de sauvegarde avant de recouper le contenu"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Veuillez démarrer SiYuan et vous assurer que la connexion réseau fonctionne avant de réessayer"
+  }
+}

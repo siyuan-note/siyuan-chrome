@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Recorte web para SiYuan."
+  },
+  "copy_to_siyuan": {
+    "message": "Copiar a SiYuan"
+  },
+  
+  "show_tip": {
+    "message": "Mostrar consejo"
+  },
+  "siyuan_url": {
+    "message": "URL de SiYuan"
+  },
+  "api_token": {
+    "message": "Token API"
+  },
+  "save_path": {
+    "message": "Ruta de guardado"
+  },
+  "save_path_placeholder": {
+    "message": "Introduce la palabra clave y presiona Enter para buscar"
+  },
+  "tags": {
+    "message": "Etiquetas"
+  },
+  "tags_placeholder": {
+    "message": "Usa comas para separar múltiples etiquetas"
+  },
+  "assets": {
+    "message": "Descargar recursos"
+  },
+  "exp": {
+    "message": "Mostrar características experimentales"
+  },
+  "exp_tips": {
+    "message": "*: Las características experimentales pueden ser inestables. Si hay un problema con el recorte, intenta cambiarlo."
+  },
+  "exp_span": {
+    "message": "Detectar saltos de línea en span*"
+  },
+  "exp_bold": {
+    "message": "Detectar estilo negrita*"
+  },
+  "exp_italic": {
+    "message": "Detectar estilo cursiva*"
+  },
+  "language": {
+    "message": "Idioma*"
+  },
+  "send": {
+    "message": "Enviar a SiYuan"
+  },
+
+  "tip_first_time": {
+    "message": "Después de instalar la extensión SiYuan por primera vez, actualice la página antes de usarla"
+  },
+  "tip_clipping": {
+    "message": "Recortando, por favor espere..."
+  },
+  "tip_clip_img": {
+    "message": "Recortando imagen"
+  },
+  "tip_clip_ok": {
+    "message": "Recorte exitoso"
+  },
+  "tip_token_miss": {
+    "message": "Configure el token API antes de recortar el contenido"
+  },
+  "tip_token_invalid": {
+    "message": "Token API inválido"
+  },
+  "tip_save_path_miss": {
+    "message": "Seleccione la ruta de guardado antes de recortar el contenido"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Inicie SiYuan y asegúrese de que haya conectividad de red antes de intentar nuevamente"
+  }
+}

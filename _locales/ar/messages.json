@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "سييوان (SiYuan)"
+  },
+  "extension_description": {
+    "message": "قص الويب لسييوان."
+  },
+  "copy_to_siyuan": {
+    "message": "نسخ إلى سييوان"
+  },
+  
+  "show_tip": {
+    "message": "إظهار النصائح"
+  },
+  "siyuan_url": {
+    "message": "رابط سييوان"
+  },
+  "api_token": {
+    "message": "رمز API"
+  },
+  "save_path": {
+    "message": "مسار الحفظ"
+  },
+  "save_path_placeholder": {
+    "message": "أدخل الكلمة المفتاحية ثم اضغط Enter للبحث"
+  },
+  "tags": {
+    "message": "العلامات"
+  },
+  "tags_placeholder": {
+    "message": "استخدم الفواصل لفصل العلامات"
+  },
+  "assets": {
+    "message": "تحميل الأصول"
+  },
+  "exp": {
+    "message": "عرض الميزات التجريبية"
+  },
+  "exp_tips": {
+    "message": "*: الميزات التجريبية قد تكون غير مستقرة. إذا كانت هناك مشكلة في القص، حاول التبديل بينها."
+  },
+  "exp_span": {
+    "message": "اكتشاف فواصل النص في span*"
+  },
+  "exp_bold": {
+    "message": "اكتشاف النصوص العريضة*"
+  },
+  "exp_italic": {
+    "message": "اكتشاف النصوص المائلة*"
+  },
+  "language": {
+    "message": "اللغة*"
+  },
+  "send": {
+    "message": "إرسال إلى سييوان"
+  },
+
+  "tip_first_time": {
+    "message": "بعد تثبيت الإضافة لأول مرة، يُرجى تحديث الصفحة قبل استخدامها"
+  },
+  "tip_clipping": {
+    "message": "جارٍ القص، يرجى الانتظار..."
+  },
+  "tip_clip_img": {
+    "message": "جارٍ قص الصورة"
+  },
+  "tip_clip_ok": {
+    "message": "تم القص بنجاح"
+  },
+  "tip_token_miss": {
+    "message": "يرجى تكوين رمز API قبل قص المحتوى"
+  },
+  "tip_token_invalid": {
+    "message": "رمز API غير صالح"
+  },
+  "tip_save_path_miss": {
+    "message": "يرجى اختيار مسار الحفظ قبل قص المحتوى"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "يرجى تشغيل سييوان والتأكد من الاتصال بالشبكة قبل المحاولة مرة أخرى"
+  }
+}

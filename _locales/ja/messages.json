@@ -1,0 +1,82 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "SiYuan用のWebクリッピング"
+  },
+  "copy_to_siyuan": {
+    "message": "SiYuanにコピー"
+  },
+  
+  "show_tip": {
+    "message": "ヒントを表示"
+  },
+  "siyuan_url": {
+    "message": "SiYuanのURL"
+  },
+  "api_token": {
+    "message": "APIトークン"
+  },
+  "save_path": {
+    "message": "保存先"
+  },
+  "save_path_placeholder": {
+    "message": "キーワードを入力し、Enterキーを押して検索"
+  },
+  "tags": {
+    "message": "タグ"
+  },
+  "tags_placeholder": {
+    "message": "複数のタグをカンマで区切ってください"
+  },
+  "assets": {
+    "message": "リソースをダウンロード"
+  },
+  "exp": {
+    "message": "実験的な機能を表示"
+  },
+  "exp_tips": {
+    "message": "*: 実験的な機能は不安定な場合があります。クリッピングに問題がある場合は、切り替えてみてください。"
+  },
+  "exp_span": {
+    "message": "spanの改行スタイルを検出*"
+  },
+  "exp_bold": {
+    "message": "太字スタイルを検出*"
+  },
+  "exp_italic": {
+    "message": "斜体スタイルを検出*"
+  },
+  "language": {
+    "message": "言語*"
+  },
+  "send": {
+    "message": "SiYuanに送信"
+  },
+
+  "tip_first_time": {
+    "message": "SiYuan拡張機能を初めてインストールした後、使用する前にページを更新してください"
+  },
+  "tip_clipping": {
+    "message": "クリッピング中、しばらくお待ちください..."
+  },
+  "tip_clip_img": {
+    "message": "画像をクリッピング中"
+  },
+  "tip_clip_ok": {
+    "message": "クリッピング成功"
+  },
+  "tip_token_miss": {
+    "message": "コンテンツをクリッピングする前にAPIトークンを設定してください"
+  },
+  "tip_token_invalid": {
+    "message": "無効なAPIトークン"
+  },
+  "tip_save_path_miss": {
+    "message": "コンテンツをクリッピングする前に保存先を選択してください"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "SiYuanを起動し、ネットワーク接続が確立されていることを確認してから再試行してください"
+  }
+}
