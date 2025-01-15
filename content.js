@@ -199,6 +199,10 @@ function siyuanProcessBoldStyle(tempElement) {
             return; // 如果元素本身是 <b> 或 <strong> 标签，跳过
         }
 
+        if (parentContainsBold(element)) {
+            return;  // 如果元素的父元素是 B 或 STRONG 标签，跳过
+        }
+
         // 判断是否具有 font-weight: bold
         if (style.fontWeight === 'bold' || style.fontWeight === '700') { // '700' 是 bold 的常见数值
             // 获取当前元素的文本内容
@@ -208,6 +212,17 @@ function siyuanProcessBoldStyle(tempElement) {
             element.innerHTML = `<b b-added-by-siyuan="true">${innerHTML}</b>`;
         }
     });
+}
+
+function parentContainsBold(element) {
+    let parent = element.parentElement;
+    while (parent) {
+        if (parent.tagName === 'B' || parent.tagName === 'STRONG') {
+            return true;
+        }
+        parent = parent.parentElement;
+    }
+    return false;
 }
 
 function revertBoldStyles(tempElement) {
@@ -237,6 +252,10 @@ function siyuanProcessItalicStyle(tempElement) {
             return; // 如果元素本身是 <i> 或 <em> 标签，跳过
         }
 
+        if (parentContainsItalic(element)) {
+            return;  // 如果元素的父元素是 I 或 EM 标签，跳过
+        }
+
         // 判断是否具有 font-style: italic
         if (style.fontStyle === 'italic') {
             // 获取当前元素的文本内容
@@ -264,8 +283,54 @@ function revertItalicStyles(tempElement) {
     console.log(`revertItalicStyles reverted ${elements.length} <br> elements.`);
 }
 
+function parentContainsItalic(element) {
+    let parent = element.parentElement;
+    while (parent) {
+        if (parent.tagName === 'I' || parent.tagName === 'EM') {
+            return true;
+        }
+        parent = parent.parentElement;
+    }
+    return false;
+}
+
+function simplifyNestedStrongTags(root) {
+    let strongElements = root.querySelectorAll('strong');
+    let hasNestedStrong = true;
+
+    while (hasNestedStrong) {
+        hasNestedStrong = false;
+        strongElements.forEach(strong => {
+            if (simplifyStrong(strong)) {
+                hasNestedStrong = true;
+            }
+        });
+        strongElements = root.querySelectorAll('strong');
+    }
+
+    function simplifyStrong(element) {
+        let nestedStrongFound = false;
+        if (element.hasChildNodes()) {
+            element.childNodes.forEach(child => {
+                if (child.nodeType === Node.ELEMENT_NODE) {
+                    if (child.tagName === 'STRONG') {
+                        nestedStrongFound = true;
+                        while (child.firstChild) {
+                            element.insertBefore(child.firstChild, child);
+                        }
+                        child.remove();
+                    } else {
+                        nestedStrongFound = nestedStrongFound || simplifyStrong(child);
+                    }
+                }
+            });
+        }
+        return nestedStrongFound;
+    }
+}
+
 // 重构并合并Readability前处理 https://github.com/siyuan-note/siyuan/issues/13306
-async function siyuanGetCloneNode(tempElement) {
+async function siyuanGetCloneNode(tempDoc) {
     let items;
     try {
         items = await new Promise((resolve, reject) => {
@@ -293,37 +358,40 @@ async function siyuanGetCloneNode(tempElement) {
     //前处理，增加可识别样式
     if (items.expBold) {
         // 替换粗体样式为内核可识别<b>标签 https://github.com/siyuan-note/siyuan/issues/13306
-        siyuanProcessBoldStyle(tempElement);
+        siyuanProcessBoldStyle(tempDoc);
     }
 
     if (items.expItalic) {
         // 替换斜体样式为内核可识别<i>标签 https://github.com/siyuan-note/siyuan/issues/13306
-        siyuanProcessItalicStyle(tempElement);
+        siyuanProcessItalicStyle(tempDoc);
     }
 
     if (items.expSpan) {
         // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
         // 处理会换行的span后添加 <br>，让kernel能识别到换行
-        siyuanSpansAddBr(tempElement);
+        siyuanSpansAddBr(tempDoc);
     }
+
+    // 合并嵌套的 strong 标签
+    simplifyNestedStrongTags(tempDoc);
 
     const clonedDoc = document.cloneNode(true);
 
     //后处理，还原样式
     if (items.expBold) {
         // 还原粗体样式
-        revertBoldStyles(tempElement);
+        revertBoldStyles(tempDoc);
     }
 
     if (items.expItalic) {
         // 还原斜体样式
-        revertItalicStyles(tempElement);
+        revertItalicStyles(tempDoc);
     }
 
     if (items.expSpan) {
         // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
         // 处理会换行的span后添加 <br>，让kernel能识别到换行
-        siyuanSpansDelBr(tempElement);
+        siyuanSpansDelBr(tempDoc);
     }
 
     return clonedDoc;
