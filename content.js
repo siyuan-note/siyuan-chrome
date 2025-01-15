@@ -195,6 +195,9 @@ function siyuanProcessBoldStyle(tempElement) {
 
     boldElements.forEach(element => {
         const style = window.getComputedStyle(element);
+        if (element.tagName === 'B' || element.tagName === 'STRONG') {
+            return; // 如果元素本身是 <b> 或 <strong> 标签，跳过
+        }
 
         // 判断是否具有 font-weight: bold
         if (style.fontWeight === 'bold' || style.fontWeight === '700') { // '700' 是 bold 的常见数值
@@ -230,6 +233,9 @@ function siyuanProcessItalicStyle(tempElement) {
 
     allElements.forEach(element => {
         const style = window.getComputedStyle(element);
+        if (element.tagName === 'I' || element.tagName === 'EM') {
+            return; // 如果元素本身是 <i> 或 <em> 标签，跳过
+        }
 
         // 判断是否具有 font-style: italic
         if (style.fontStyle === 'italic') {
