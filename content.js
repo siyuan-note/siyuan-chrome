@@ -294,38 +294,38 @@ function parentContainsItalic(element) {
     return false;
 }
 
-function simplifyNestedStrongTags(root) {
-    let strongElements = root.querySelectorAll('strong');
-    let hasNestedStrong = true;
+function simplifyNestedTags(root, tagName) {
+    let elements = root.querySelectorAll(tagName);
+    let hasNested = true;
 
-    while (hasNestedStrong) {
-        hasNestedStrong = false;
-        strongElements.forEach(strong => {
-            if (simplifyStrong(strong)) {
-                hasNestedStrong = true;
+    while (hasNested) {
+        hasNested = false;
+        elements.forEach(element => {
+            if (simplifyElement(element, tagName)) {
+                hasNested = true;
             }
         });
-        strongElements = root.querySelectorAll('strong');
+        elements = root.querySelectorAll(tagName);
     }
 
-    function simplifyStrong(element) {
-        let nestedStrongFound = false;
+    function simplifyElement(element, tagName) {
+        let nestedFound = false;
         if (element.hasChildNodes()) {
             element.childNodes.forEach(child => {
                 if (child.nodeType === Node.ELEMENT_NODE) {
-                    if (child.tagName === 'STRONG') {
-                        nestedStrongFound = true;
+                    if (child.tagName === tagName) {
+                        nestedFound = true;
                         while (child.firstChild) {
                             element.insertBefore(child.firstChild, child);
                         }
                         child.remove();
                     } else {
-                        nestedStrongFound = nestedStrongFound || simplifyStrong(child);
+                        nestedFound = nestedFound || simplifyElement(child, tagName);
                     }
                 }
             });
         }
-        return nestedStrongFound;
+        return nestedFound;
     }
 }
 
@@ -373,7 +373,10 @@ async function siyuanGetCloneNode(tempDoc) {
     }
 
     // 合并嵌套的 strong 标签
-    simplifyNestedStrongTags(tempDoc);
+    simplifyNestedTags(tempDoc, 'STRONG');
+    simplifyNestedTags(tempDoc, 'B');
+    simplifyNestedTags(tempDoc, 'I');
+    simplifyNestedTags(tempDoc, 'EM');
 
     const clonedDoc = document.cloneNode(true);
 
