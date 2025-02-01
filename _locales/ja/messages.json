@@ -48,13 +48,16 @@
   "exp_italic": {
     "message": "斜体スタイルを検出*"
   },
+  "exp_remove_img_link": {
+    "message": "画像リンクを削除"
+  },
   "language": {
     "message": "言語*"
   },
+
   "send": {
     "message": "SiYuanに送信"
   },
-
   "tip_first_time": {
     "message": "SiYuan拡張機能を初めてインストールした後、使用する前にページを更新してください"
   },

@@ -48,6 +48,9 @@
   "exp_italic": {
     "message": "Kursiv-Stil erkennen*"
   },
+  "exp_remove_img_link": {
+    "message": "Bildlink entfernen*"
+  },
   "language": {
     "message": "Sprache*"
   },

@@ -48,6 +48,9 @@
   "exp_italic": {
     "message": "Detect italic style*"
   },
+  "exp_remove_img_link": {
+    "message": "Remove image link*"
+  },
   "language": {
     "message": "Language*"
   },

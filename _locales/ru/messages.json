@@ -48,6 +48,9 @@
   "exp_italic": {
     "message": "Обнаружить стиль курсивом*"
   },
+  "exp_remove_img_link": {
+    "message": "Удалить ссылку на изображение*"
+  },
   "language": {
     "message": "Язык*"
   },

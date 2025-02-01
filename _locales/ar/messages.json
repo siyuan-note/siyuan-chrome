@@ -48,6 +48,9 @@
   "exp_italic": {
     "message": "اكتشاف النصوص المائلة*"
   },
+  "exp_remove_img_link": {
+    "message": "إزالة رابط الصورة*"
+  },
   "language": {
     "message": "اللغة*"
   },

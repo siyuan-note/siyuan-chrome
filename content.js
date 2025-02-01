@@ -241,7 +241,7 @@ function revertBoldStyles(tempElement) {
     console.log(`revertBoldStyles reverted ${elements.length} <br> elements.`);
 }
 
-// 替换斜体样式为内核可识别<i>标签 https://github.com/siyuan-note/siyuan/issues/13306
+// 替换斜体样式为内核可识别 <i> 标签 https://github.com/siyuan-note/siyuan/issues/13306
 function siyuanProcessItalicStyle(tempElement) {
     // 获取所有元素
     const allElements = tempElement.querySelectorAll('*');
@@ -329,7 +329,20 @@ function simplifyNestedTags(root, tagName) {
     }
 }
 
-// 重构并合并Readability前处理 https://github.com/siyuan-note/siyuan/issues/13306
+// 移除图片链接 https://github.com/siyuan-note/siyuan/issues/13941
+function siyuanRemoveImgLink(tempElement) {
+    const images = tempElement.querySelectorAll('img');
+    images.forEach(image => {
+        const parent = image.parentElement;
+        if (parent.tagName === 'A') {
+            const grandParent = parent.parentElement;
+            grandParent.insertBefore(image, parent);
+            parent.remove();
+        }
+    });
+}
+
+// 重构并合并 Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
 async function siyuanGetCloneNode(tempDoc) {
     let items;
     try {
@@ -338,6 +351,7 @@ async function siyuanGetCloneNode(tempDoc) {
                 expSpan: true,
                 expBold: false,
                 expItalic: false,
+                expRemoveImgLink: false,
             }, (result) => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
@@ -352,18 +366,24 @@ async function siyuanGetCloneNode(tempDoc) {
             expSpan: true,
             expBold: false,
             expItalic: false,
+            expRemoveImgLink: false,
         };
     }
 
-    //前处理，增加可识别样式
+    // 前处理，增加可识别样式
     if (items.expBold) {
-        // 替换粗体样式为内核可识别<b>标签 https://github.com/siyuan-note/siyuan/issues/13306
+        // 替换粗体样式为内核可识别 <b> 标签 https://github.com/siyuan-note/siyuan/issues/13306
         siyuanProcessBoldStyle(tempDoc);
     }
 
     if (items.expItalic) {
-        // 替换斜体样式为内核可识别<i>标签 https://github.com/siyuan-note/siyuan/issues/13306
+        // 替换斜体样式为内核可识别 <i> 标签 https://github.com/siyuan-note/siyuan/issues/13306
         siyuanProcessItalicStyle(tempDoc);
+    }
+
+    if (items.expRemoveImgLink) {
+        // 移除图片链接 https://github.com/siyuan-note/siyuan/issues/13941
+        siyuanRemoveImgLink(tempDoc);
     }
 
     if (items.expSpan) {
@@ -380,7 +400,7 @@ async function siyuanGetCloneNode(tempDoc) {
 
     const clonedDoc = document.cloneNode(true);
 
-    //后处理，还原样式
+    // 后处理，还原样式
     if (items.expBold) {
         // 还原粗体样式
         revertBoldStyles(tempDoc);
@@ -413,6 +433,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         expSpan: true,
         expBold: false,
         expItalic: false,
+        expRemoveImgLink: false,
     }, async function (items) {
         if (!items.token) {
             siyuanShowTipByKey("tip_token_miss")

@@ -48,6 +48,9 @@
   "exp_italic": {
     "message": "識別斜體樣式*"
   },
+  "exp_remove_img_link": {
+    "message": "移除圖片鏈接*"
+  },
   "language": {
     "message": "語言*"
   },

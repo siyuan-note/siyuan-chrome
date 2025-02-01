@@ -48,6 +48,9 @@
   "exp_italic": {
     "message": "גלה סגנון נטוי*"
   },
+  "exp_remove_img_link": {
+    "message": "הסר קישור לתמונה*"
+  },
   "language": {
     "message": "שפה*"
   },

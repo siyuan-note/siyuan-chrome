@@ -48,6 +48,9 @@
   "exp_italic": {
     "message": "Detectar estilo cursiva*"
   },
+  "exp_remove_img_link": {
+    "message": "Eliminar enlace de imagen*"
+  },
   "language": {
     "message": "Idioma*"
   },

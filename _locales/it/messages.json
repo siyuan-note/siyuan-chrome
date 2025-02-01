@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "Copia in SiYuan"
   },
-  
   "show_tip": {
     "message": "Mostra suggerimenti"
   },
@@ -47,6 +46,9 @@
   },
   "exp_italic": {
     "message": "Rileva stile corsivo*"
+  },
+  "exp_remove_img_link": {
+    "message": "Rimuovi il link dell'immagine*"
   },
   "language": {
     "message": "Lingua*"
