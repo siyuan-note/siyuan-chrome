@@ -205,11 +205,31 @@ function siyuanProcessBoldStyle(tempElement) {
 
         // 判断是否具有 font-weight: bold
         if (style.fontWeight === 'bold' || style.fontWeight === '700') { // '700' 是 bold 的常见数值
-            // 获取当前元素的文本内容
-            const innerHTML = element.innerHTML;
-
-            // 将文本内容包裹在 <b> 标签中
-            element.innerHTML = `<b b-added-by-siyuan="true">${innerHTML}</b>`;
+            // 将 element 中的各个元素使用 <b> 标签包裹
+            const children = element.childNodes;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                if (child.nodeType === Node.TEXT_NODE) {
+                    // 如果是文本节点，直接包裹在 <b> 标签中
+                    const text = child.nodeValue;
+                    const textElement = document.createElement('b');
+                    textElement.setAttribute('b-added-by-siyuan', 'true');
+                    textElement.textContent = text;
+                    element.replaceChild(textElement, child);
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    // 如果是元素节点，递归处理
+                    const childElement = child;
+                    const childTagName = childElement.tagName.toLowerCase();
+                    if (childTagName === 'b' || childTagName === 'strong') {
+                        continue; // 如果是 <b> 或 <strong> 标签，跳过
+                    }
+                    if (parentContainsBold(childElement)) {
+                        continue;  // 如果元素的父元素是 B 或 STRONG 标签，跳过
+                    }
+                    // 递归处理
+                    siyuanProcessBoldStyle(childElement);
+                }
+            }
         }
     });
 }
@@ -228,14 +248,10 @@ function parentContainsBold(element) {
 function revertBoldStyles(tempElement) {
     // 获取所有带有 b-added-by-siyuan="true" 的 <b> 标签
     const elements = tempElement.querySelectorAll('b[b-added-by-siyuan="true"]');
-
     elements.forEach(element => {
-        // 获取元素的原始文本内容
-        const innerHTML = element.innerHTML;
-
-        // 将 <b> 标签移除，恢复原本的文本
+        // 将包裹的 <b> 标签移除，恢复原本的元素
         const parent = element.parentNode;
-        parent.innerHTML = parent.innerHTML.replace(element.outerHTML, innerHTML);
+        parent.replaceChild(document.createTextNode(element.textContent), element);
     });
 
     console.log(`revertBoldStyles reverted ${elements.length} <br> elements.`);
@@ -258,11 +274,31 @@ function siyuanProcessItalicStyle(tempElement) {
 
         // 判断是否具有 font-style: italic
         if (style.fontStyle === 'italic') {
-            // 获取当前元素的文本内容
-            const innerHTML = element.innerHTML;
-
-            // 将文本内容包裹在 <i> 标签中
-            element.innerHTML = `<i i-added-by-siyuan="true">${innerHTML}</i>`;
+            // 将 element 中的各个元素使用 <i> 标签包裹
+            const children = element.childNodes;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                if (child.nodeType === Node.TEXT_NODE) {
+                    // 如果是文本节点，直接包裹在 <i> 标签中
+                    const text = child.nodeValue;
+                    const textElement = document.createElement('i');
+                    textElement.setAttribute('i-added-by-siyuan', 'true');
+                    textElement.textContent = text;
+                    element.replaceChild(textElement, child);
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    // 如果是元素节点，递归处理
+                    const childElement = child;
+                    const childTagName = childElement.tagName.toLowerCase();
+                    if (childTagName === 'i' || childTagName === 'em') {
+                        continue; // 如果是 <i> 或 <em> 标签，跳过
+                    }
+                    if (parentContainsItalic(childElement)) {
+                        continue;  // 如果元素的父元素是 I 或 EM 标签，跳过
+                    }
+                    // 递归处理
+                    siyuanProcessItalicStyle(childElement);
+                }
+            }
         }
     });
 }
@@ -270,14 +306,10 @@ function siyuanProcessItalicStyle(tempElement) {
 function revertItalicStyles(tempElement) {
     // 获取所有带有 b-added-by-siyuan="true" 的 <b> 标签
     const elements = tempElement.querySelectorAll('i[i-added-by-siyuan="true"]');
-
     elements.forEach(element => {
-        // 获取元素的原始文本内容
-        const innerHTML = element.innerHTML;
-
-        // 将 <b> 标签移除，恢复原本的文本
+        // 将包裹的 <i> 标签移除，恢复原本的元素
         const parent = element.parentNode;
-        parent.innerHTML = parent.innerHTML.replace(element.outerHTML, innerHTML);
+        parent.replaceChild(document.createTextNode(element.textContent), element);
     });
 
     console.log(`revertItalicStyles reverted ${elements.length} <br> elements.`);
