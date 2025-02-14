@@ -366,8 +366,15 @@ function siyuanRemoveImgLink(tempElement) {
     const images = tempElement.querySelectorAll('img');
     images.forEach(image => {
         const parent = image.parentElement;
+        if (!parent) {
+            return;
+        }
+
         if (parent.tagName === 'A') {
             const grandParent = parent.parentElement;
+            if (!grandParent) {
+                return;
+            }
             grandParent.insertBefore(image, parent);
             parent.remove();
         }
