@@ -437,6 +437,28 @@ async function siyuanGetCloneNode(tempDoc) {
     simplifyNestedTags(tempDoc, 'I');
     simplifyNestedTags(tempDoc, 'EM');
 
+    // 如果行级标签包含了块级标签，则将该行级标签改为 div
+    const inlineTags = ['span', 'strong', 'b', 'i', 'em'];
+    const blockTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'table', 'tr', 'td', 'th', 'blockquote', 'pre', 'code', 'section'];
+    inlineTags.forEach(inlineTag => {
+        const elements = document.querySelectorAll(inlineTag);
+        elements.forEach(element => {
+            let containsBlock = false;
+            blockTags.forEach(blockTag => {
+                if (element.querySelector(blockTag)) {
+                    containsBlock = true;
+                }
+            });
+            if (containsBlock) {
+                const div = document.createElement('div');
+                while (element.firstChild) {
+                    div.appendChild(element.firstChild);
+                }
+                element.parentNode.replaceChild(div, element);
+            }
+        });
+    });
+
     const clonedDoc = document.cloneNode(true);
 
     // 后处理，还原样式
