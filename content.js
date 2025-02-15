@@ -104,7 +104,7 @@ const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
     reader.readAsDataURL(blob)
 })
 
-// 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+// 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
 function isIgnoredElement(element) {
     // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
@@ -135,7 +135,7 @@ function isIgnoredElement(element) {
     return false; // 没找到时返回 false
 }
 
-// 处理会换行的span后添加 <br>，让kernel能识别到换行
+// 处理会换行的 span 后添加 <br>，让内核能识别到换行
 function siyuanSpansAddBr(tempElement) {
     const spans = tempElement.querySelectorAll('span');
     if (!spans || spans.length === 0) {
@@ -177,7 +177,7 @@ function siyuanSpansAddBr(tempElement) {
     }
 };
 
-// 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+// 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 移除由 span_add_br 添加的 <br>，还原原有样式
 function siyuanSpansDelBr(tempElement) {
     const brs = tempElement.querySelectorAll('br[data-added-by-siyuan="true"]');
@@ -426,8 +426,8 @@ async function siyuanGetCloneNode(tempDoc) {
     }
 
     if (items.expSpan) {
-        // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
-        // 处理会换行的span后添加 <br>，让kernel能识别到换行
+        // 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+        // 处理会换行的 span 后添加 <br>，让内核能识别到换行
         siyuanSpansAddBr(tempDoc);
     }
 
@@ -451,8 +451,8 @@ async function siyuanGetCloneNode(tempDoc) {
     }
 
     if (items.expSpan) {
-        // 网页换行用span样式word-break的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
-        // 处理会换行的span后添加 <br>，让kernel能识别到换行
+        // 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
+        // 处理会换行的 span 后添加 <br>，让内核能识别到换行
         siyuanSpansDelBr(tempDoc);
     }
 
