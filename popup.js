@@ -256,7 +256,7 @@ const siyuanGetReadability = async (tabId) => {
             item.classList.add("hljs-cmt")
         })
 
-        // 重构并合并Readability前处理 https://github.com/siyuan-note/siyuan/issues/13306
+        // 重构并合并 Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
         const clonedDoc = await siyuanGetCloneNode(document);
 
         const article = new Readability(clonedDoc, {
@@ -269,6 +269,7 @@ const siyuanGetReadability = async (tabId) => {
         // console.log(article)
         siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
         siyuanClearTip()
+        window.location.reload();
     } catch (e) {
         console.error(e)
         siyuanShowTip(e.message, 7 * 1000)
