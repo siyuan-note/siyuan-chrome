@@ -16,6 +16,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 return
             }
 
+            if ('reload' === request.func) {
+                window.location.reload()
+                return
+            }
+
             if ('copy' !== request.func) {
                 return
             }

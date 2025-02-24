@@ -268,8 +268,6 @@ const siyuanGetReadability = async (tabId) => {
         tempElement.innerHTML = article.content
         // console.log(article)
         siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
-        siyuanClearTip()
-        window.location.reload();
     } catch (e) {
         console.error(e)
         siyuanShowTip(e.message, 7 * 1000)
