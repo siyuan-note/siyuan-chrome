@@ -3,7 +3,7 @@
     "message": "思源(SiYuan)"
   },
   "extension_description": {
-    "message": "思源筆記網頁剪藏"
+    "message": "將網頁一鍵剪藏到思源筆記中，支持圖片自動下載到本地，能夠轉換大部分站點的公式和代碼塊。"
   },
   "copy_to_siyuan": {
     "message": "複製到思源(SiYuan)"

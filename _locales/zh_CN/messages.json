@@ -3,7 +3,7 @@
     "message": "思源(SiYuan)"
   },
   "extension_description": {
-    "message": "思源笔记网页剪藏"
+    "message": "将网页一键剪藏到思源笔记中，支持图片自动下载到本地，能够转换大部分站点的公式和代码块。"
   },
   "copy_to_siyuan": {
     "message": "复制到思源(SiYuan)"

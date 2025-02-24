@@ -3,7 +3,7 @@
     "message": "SiYuan"
   },
   "extension_description": {
-    "message": "Recorte web para SiYuan"
+    "message": "Guarda la página web en SiYuan con un solo clic, admite la descarga automática de imágenes en local y la conversión de fórmulas y bloques de código de la mayoría de los sitios."
   },
   "copy_to_siyuan": {
     "message": "Copiar a SiYuan"

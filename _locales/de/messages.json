@@ -3,7 +3,7 @@
     "message": "SiYuan"
   },
   "extension_description": {
-    "message": "Web-Clipping für SiYuan"
+    "message": "Speichern Sie die Webseite mit einem Klick in SiYuan, unterstützt das automatische Herunterladen von Bildern auf den lokalen Speicher und kann Formeln und Codeblöcke von den meisten Websites konvertieren."
   },
   "copy_to_siyuan": {
     "message": "Nach SiYuan kopieren"
