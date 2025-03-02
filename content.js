@@ -242,7 +242,8 @@ function siyuanProcessBoldStyle(tempElement) {
 function parentContainsBold(element) {
     let parent = element.parentElement;
     while (parent) {
-        if (parent.tagName === 'B' || parent.tagName === 'STRONG') {
+        if (parent.tagName === 'B' || parent.tagName === 'STRONG' ||
+            parent.tagName === 'H1' || parent.tagName === 'H2' || parent.tagName === 'H3' || parent.tagName === 'H4' || parent.tagName === 'H5' || parent.tagName === 'H6') {
             return true;
         }
         parent = parent.parentElement;
