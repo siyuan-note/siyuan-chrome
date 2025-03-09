@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if ('reload' === request.func) {
-                // window.location.reload()
+                window.location.reload()
                 return
             }
 
