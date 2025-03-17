@@ -205,7 +205,7 @@ function siyuanProcessBoldStyle(tempElement) {
         }
 
         if (parentContainsBold(element)) {
-            return;  // 如果元素的父元素是 B 或 STRONG 标签，跳过
+            return;  // 如果元素的父元素是 <b> 或 <strong> 标签，跳过
         }
 
         // 判断是否具有 font-weight: bold
@@ -229,7 +229,7 @@ function siyuanProcessBoldStyle(tempElement) {
                         continue; // 如果是 <b> 或 <strong> 标签，跳过
                     }
                     if (parentContainsBold(childElement)) {
-                        continue;  // 如果元素的父元素是 B 或 STRONG 标签，跳过
+                        continue;  // 如果元素的父元素是 <b> 或 <strong> 标签，跳过
                     }
                     // 递归处理
                     siyuanProcessBoldStyle(childElement);
@@ -503,11 +503,23 @@ async function siyuanGetCloneNode(tempDoc) {
         siyuanSpansAddBr(tempDoc);
     }
 
-    // 合并嵌套的 strong 标签
+    // 合并嵌套的标签
     simplifyNestedTags(tempDoc, 'STRONG');
     simplifyNestedTags(tempDoc, 'B');
     simplifyNestedTags(tempDoc, 'I');
     simplifyNestedTags(tempDoc, 'EM');
+
+    // 如果公式被嵌套包裹，则去掉外层包裹 https://github.com/siyuan-note/siyuan/issues/14382
+    const mathElements = tempDoc.querySelectorAll('.ztext-math');
+    mathElements.forEach(mathElement => {
+        if (mathElement.parentElement.tagName === 'B' || mathElement.parentElement.tagName === 'STRONG' || mathElement.parentElement.tagName === 'I' || mathElement.parentElement.tagName === 'EM') {
+            const parent = mathElement.parentElement;
+            while (parent.firstChild) {
+                parent.parentNode.insertBefore(parent.firstChild, parent);
+            }
+            parent.remove();
+        }
+    });
 
     // 如果行级标签包含了块级标签，则将该行级标签改为 div
     const inlineTags = ['span', 'strong', 'b', 'i', 'em', 'a'];
