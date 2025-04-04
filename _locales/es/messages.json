@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "Eliminar enlace de imagen*"
   },
+  "exp_list_doc_tree": {
+    "message": "Después de recortar una página web, mostrar árbol de documentos*"
+  },
   "language": {
     "message": "Idioma*"
   },

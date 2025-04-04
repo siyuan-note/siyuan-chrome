@@ -122,6 +122,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                     'markdown': markdown,
                     'withMath': response.data.withMath,
                     'clippingHref': requestData.href,
+                    'listDocTree': requestData.listDocTree,
                 }),
             }).then((response) => {
                 return response.json()

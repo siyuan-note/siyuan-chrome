@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "Supprimer le lien de l'image*"
   },
+  "exp_list_doc_tree": {
+    "message": "Après extraction de page web, afficher l'arborescence du document*"
+  },
   "language": {
     "message": "Langue*"
   },

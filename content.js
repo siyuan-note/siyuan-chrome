@@ -456,7 +456,7 @@ async function siyuanGetCloneNode(tempDoc) {
     try {
         items = await new Promise((resolve, reject) => {
             chrome.storage.sync.get({
-                expSpan: true,
+                expSpan: false,
                 expBold: false,
                 expItalic: false,
                 expRemoveImgLink: false,
@@ -471,7 +471,7 @@ async function siyuanGetCloneNode(tempDoc) {
     } catch (error) {
         console.error("获取失败，错误信息：", error);
         items = {
-            expSpan: true,
+            expSpan: false,
             expBold: false,
             expItalic: false,
             expRemoveImgLink: false,
@@ -575,10 +575,11 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         parentHPath: '',
         tags: '',
         assets: true,
-        expSpan: true,
+        expSpan: false,
         expBold: false,
         expItalic: false,
         expRemoveImgLink: false,
+        expListDocTree: false,
     }, async function (items) {
         if (!items.token) {
             siyuanShowTipByKey("tip_token_miss")
@@ -693,6 +694,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
             title: title,
             siteName: siteName,
             excerpt: excerpt,
+            listDocTree: items.expListDocTree,
             href,
             type,
             tabId,

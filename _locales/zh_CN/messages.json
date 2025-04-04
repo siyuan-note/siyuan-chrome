@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "移除图片链接*"
   },
+  "exp_list_doc_tree": {
+    "message": "网页剪藏后，显示文档树*"
+  },
   "language": {
     "message": "语言*"
   },
