@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "הסר קישור לתמונה*"
   },
+  "exp_list_doc_tree": {
+    "message": "לאחר גזירת דף אינטרנט, הצג עץ מסמך*"
+  },
   "language": {
     "message": "שפה*"
   },

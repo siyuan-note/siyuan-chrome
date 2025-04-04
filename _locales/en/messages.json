@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "Remove image link*"
   },
+  "exp_list_doc_tree": {
+    "message": "After clipping a web page, display the document tree*"
+  },
   "language": {
     "message": "Language*"
   },

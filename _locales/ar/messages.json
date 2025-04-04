@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "إزالة رابط الصورة*"
   },
+  "exp_list_doc_tree": {
+    "message": "بعد قص صفحة الويب، قم بإظهار شجرة المستند*"
+  },
   "language": {
     "message": "اللغة*"
   },

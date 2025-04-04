@@ -54,10 +54,13 @@
   "language": {
     "message": "言語*"
   },
-
+  "exp_list_doc_tree": {
+    "message": "ウェブページのクリッピング後、文書ツリーを表示*"
+  },
   "send": {
     "message": "SiYuanに送信"
   },
+
   "tip_first_time": {
     "message": "SiYuan拡張機能を初めてインストールした後、使用する前にページを更新してください"
   },

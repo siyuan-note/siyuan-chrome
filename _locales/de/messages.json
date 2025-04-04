@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "Bildlink entfernen*"
   },
+  "exp_list_doc_tree": {
+    "message": "Nach dem Clipping einer Webseite Dokumentenbaum anzeigen*"
+  },
   "language": {
     "message": "Sprache*"
   },
