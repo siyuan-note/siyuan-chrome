@@ -54,6 +54,9 @@
   "exp_list_doc_tree": {
     "message": "网页剪藏后，显示文档树*"
   },
+  "exp_svg_to_img": {
+    "message": "识别 HTML 中嵌入的 SVG*"
+  },
   "language": {
     "message": "语言*"
   },

@@ -51,6 +51,9 @@
   "exp_remove_img_link": {
     "message": "画像リンクを削除"
   },
+  "exp_svg_to_img": {
+    "message": "HTMLに埋め込まれたSVGの検出*"
+  },
   "language": {
     "message": "言語*"
   },

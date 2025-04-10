@@ -54,6 +54,9 @@
   "exp_list_doc_tree": {
     "message": "לאחר גזירת דף אינטרנט, הצג עץ מסמך*"
   },
+  "exp_svg_to_img": {
+    "message": "זיהוי SVG משובץ ב-HTML*"
+  },
   "language": {
     "message": "שפה*"
   },

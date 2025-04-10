@@ -54,6 +54,9 @@
   "exp_list_doc_tree": {
     "message": "После вырезки веб-страницы отобразить дерево документа*"
   },
+  "exp_svg_to_img": {
+    "message": "Обнаружение SVG, встроенного в HTML*"
+  },
   "language": {
     "message": "Язык*"
   },
