@@ -54,6 +54,9 @@
   "exp_list_doc_tree": {
     "message": "Después de recortar una página web, mostrar árbol de documentos*"
   },
+  "exp_svg_to_img": {
+    "message": "Detectar SVG incrustado en HTML*"
+  },
   "language": {
     "message": "Idioma*"
   },

@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const expItalicElement = document.getElementById('expItalic')
     const expRemoveImgLinkElement = document.getElementById('expRemoveImgLink')
     const expListDocTreeElement = document.getElementById('expListDocTree')
+    const expSvgToImgElement = document.getElementById('expSvgToImg')
     const languageElement = document.getElementById('language')
 
     ipElement.addEventListener('change', () => {
@@ -96,6 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
             expListDocTree: expListDocTreeElement.checked,
         })
     })
+    expSvgToImgElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            expSvgToImg: expSvgToImgElement.checked,
+        })
+    })
     expElement.addEventListener('change', function () {
         if (expElement.checked) {
             expGroupElement.style.display = 'block';
@@ -155,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expItalic: false,
         expRemoveImgLink: false,
         expListDocTree: false,
+        expSvgToImg: false,
     }, async function (items) {
         siyuanLoadLanguageFile(items.langCode, (data) => {
             siyuanTranslateDOM(data); // 在这里使用加载的i18n数据
@@ -174,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expItalicElement.checked = items.expItalic
         expRemoveImgLinkElement.checked = items.expRemoveImgLink
         expListDocTreeElement.checked = items.expListDocTree
+        expSvgToImgElement.checked = items.expSvgToImg
         updateSearch()
     })
 })

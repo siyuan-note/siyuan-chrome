@@ -54,6 +54,9 @@
   "exp_list_doc_tree": {
     "message": "After clipping a web page, display the document tree*"
   },
+  "exp_svg_to_img": {
+    "message": "Detect SVG embedded in HTML*"
+  },
   "language": {
     "message": "Language*"
   },
