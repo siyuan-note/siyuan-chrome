@@ -388,31 +388,39 @@ function siyuanRemoveImgLink(tempElement) {
 }
 
 // 将 SVG 转换为 Base64 编码的 Data URI https://github.com/siyuan-note/siyuan/issues/14523
-function siyuanSvgToBase64(svgNode) {
-    // 序列化 SVG 为字符串
+// 修复网页内嵌SVG包含非Latin字符导致剪藏报错 https://github.com/siyuan-note/siyuan/issues/14669
+async function siyuanSvgToBase64(svgNode) {
     const serializer = new XMLSerializer();
     let svgStr = serializer.serializeToString(svgNode);
 
-    // 添加必要的 XML 声明（部分环境需要）
-    if (!svgStr.includes('<?xml')) {
-      svgStr = '<?xml version="1.0" encoding="UTF-8"?>' + svgStr;
+    if (!svgStr.startsWith('<?xml')) {
+        svgStr = '<?xml version="1.0" encoding="UTF-8"?>' + svgStr;
     }
 
-    // Base64 编码
-    const base64 = btoa(decodeURIComponent(encodeURIComponent(svgStr)));
-    return `data:image/svg+xml;base64,${base64}`;
+    const svgBlob = new Blob([svgStr], { type: 'image/svg+xml' });
+
+    const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(svgBlob);
+    });
+
+    return dataUrl; // 返回 base64 编码的 data URL
 }
 
-function siyuanSvgToImg(tempElement) {
+async function siyuanSvgToImg(tempElement) {
     const svgElements = tempElement.querySelectorAll('svg');
     console.log(`Found ${svgElements.length} SVG elements`);
-    svgElements.forEach(svg => {
+
+    for (const svg of svgElements) {
         const img = document.createElement('img');
-        img.src = siyuanSvgToBase64(svg);
+        img.src = await siyuanSvgToBase64(svg);
         img.style.cssText = window.getComputedStyle(svg).cssText;
         svg.parentNode.replaceChild(img, svg);
-    });
+    }
 }
+
 
 function adaptMSN(tempDoc) {
     if (tempDoc.documentURI.indexOf("msn.cn") !== -1) {
@@ -535,7 +543,7 @@ async function siyuanGetCloneNode(tempDoc) {
     if (items.expSvgToImg) {
         // 将网页内嵌的SVG节点转换成内嵌的IMG节点
         // https://github.com/siyuan-note/siyuan/issues/14523
-        siyuanSvgToImg(tempDoc);
+        await siyuanSvgToImg(tempDoc);
     }
 
     // 合并嵌套的标签
