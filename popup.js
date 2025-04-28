@@ -310,8 +310,7 @@ async function siyuanMergeTranslations(translations, langCode) {
 
     // 如果当前语言不是英语，则加载英语翻译文件
     if (langCode !== defaultLangCode) {
-        const extensionId = chrome.runtime.id;
-        const enTranslationFile = `chrome-extension://${extensionId}/_locales/en/messages.json`;
+        const enTranslationFile = chrome.runtime.getURL(`_locales/${langCode}/messages.json`);
         try {
             // 异步加载英语翻译文件
             const response = await fetch(enTranslationFile);
@@ -340,8 +339,7 @@ async function siyuanLoadLanguageFile(langCode, callback) {
 
     // 先加载当前语言的翻译文件
     try {
-        const extensionId = chrome.runtime.id;
-        const translationFile = `chrome-extension://${extensionId}/_locales/${langCode}/messages.json`;
+        const translationFile = chrome.runtime.getURL(`_locales/${langCode}/messages.json`);
         const response = await fetch(translationFile);
         if (!response.ok) {
             throw new Error('Network response was not ok');
