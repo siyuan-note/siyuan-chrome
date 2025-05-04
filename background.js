@@ -1,20 +1,25 @@
-chrome.contextMenus.removeAll(function () {
-    const title = chrome.i18n.getMessage("copy_to_siyuan");
-    chrome.contextMenus.create({
-        id: 'copy-to-siyuan',
-        title: title,
-        contexts: ['selection', 'image'],
-    })
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.contextMenus.removeAll(function () {
+        const title = chrome.i18n.getMessage("copy_to_siyuan");
+        chrome.contextMenus.create({
+            id: 'copy-to-siyuan',
+            title: title,
+            contexts: ['selection', 'image'],
+        })
+    });
+    setInterval(() => {
+        chrome.runtime.sendMessage({ type: 'keepAlive' });
+    }, 30000);
+});
 
-    chrome.contextMenus.onClicked.addListener(function (info, tab) {
-        if (info.menuItemId === 'copy-to-siyuan') {
-            chrome.tabs.sendMessage(tab.id, {
-                'func': 'copy',
-                'tabId': tab.id,
-                'srcUrl': info.srcUrl,
-            })
-        }
-    })
+chrome.contextMenus.onClicked.addListener(function (info, tab) {
+    if (info.menuItemId === 'copy-to-siyuan') {
+        chrome.tabs.sendMessage(tab.id, {
+            'func': 'copy',
+            'tabId': tab.id,
+            'srcUrl': info.srcUrl,
+        })
+    }
 })
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
