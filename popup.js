@@ -204,10 +204,11 @@ const updateSearch = () => {
         })
     }).then((response) => {
         if (response.status !== 200) {
-            document.getElementById('log').innerHTML = "Authentication failed"
-        } else {
-            document.getElementById('log').innerHTML = ""
+            document.getElementById('log').innerHTML = "Authentication failed, please check API token"
+            return
         }
+
+        document.getElementById('log').innerHTML = ""
         return response.json()
     }).then((response) => {
         if (0 !== response.code) {
