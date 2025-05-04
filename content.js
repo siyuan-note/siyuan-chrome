@@ -742,9 +742,6 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
             type,
             tabId,
         };
-        const jsonStr = JSON.stringify(msgJSON);
-        const jsonBlob = new Blob([jsonStr], {type: "application/json"});
-        const dataURL = URL.createObjectURL(jsonBlob);
-        chrome.runtime.sendMessage({func: 'upload-copy', dataURL: dataURL})
+        chrome.runtime.sendMessage({func: 'upload-copy', data: msgJSON})
     })
 }
