@@ -719,9 +719,11 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
             }
         }
 
-        let title = article && article.title ? article.title : "";
+        let title = article && article.title ? article.title : document.title || "";
         let siteName = article && article.siteName ? article.siteName : "";
         let excerpt = article && article.excerpt ? article.excerpt : "";
+        let url = href || window.location.href;
+
         const msgJSON = {
             fetchFileErr,
             files: files,
@@ -738,10 +740,10 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
             siteName: siteName,
             excerpt: excerpt,
             listDocTree: items.expListDocTree,
-            href,
+            href: url,
             type,
             tabId,
         };
-        chrome.runtime.sendMessage({func: 'upload-copy', data: msgJSON})
+        chrome.runtime.sendMessage({ func: 'upload-copy', data: msgJSON })
     })
 }

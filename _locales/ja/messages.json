@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "SiYuanにコピー"
   },
-  
   "show_tip": {
     "message": "ヒントを表示"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "SiYuanに送信"
   },
-
   "tip_first_time": {
     "message": "SiYuan拡張機能を初めてインストールした後、使用する前にページを更新してください"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "SiYuanを起動し、ネットワーク接続が確立されていることを確認してから再試行してください"
+  },
+  "template_config": {
+    "message": "テンプレート設定"
+  },
+  "template_save": {
+    "message": "保存"
+  },
+  "template_cancel": {
+    "message": "キャンセル"
+  },
+  "template_saved": {
+    "message": "テンプレートが正常に保存されました"
+  },
+  "template_help": {
+    "message": "利用可能な変数：<br>${title} - ページタイトル<br>${url} - ページURL<br>${siteName} - サイト名<br>${date} - 現在の日付 (YYYY-MM-DD)<br>${time} - 現在の時間 (HH:MM)<br>${tags} - タグ<br>${excerpt} - ページの抜粋<br>${content} - ページの内容"
   }
 }

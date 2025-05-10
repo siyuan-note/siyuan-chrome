@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "Copier vers SiYuan"
   },
-  
   "show_tip": {
     "message": "Afficher les astuces"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "Envoyer à SiYuan"
   },
-
   "tip_first_time": {
     "message": "Après avoir installé l'extension SiYuan pour la première fois, veuillez rafraîchir la page avant de l'utiliser"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "Veuillez démarrer SiYuan et vous assurer que la connexion réseau fonctionne avant de réessayer"
+  },
+  "template_config": {
+    "message": "Configuration du modèle de clipping"
+  },
+  "template_save": {
+    "message": "Enregistrer"
+  },
+  "template_cancel": {
+    "message": "Annuler"
+  },
+  "template_saved": {
+    "message": "Modèle enregistré avec succès"
+  },
+  "template_help": {
+    "message": "Variables disponibles:<br>${title} - Titre de la page<br>${url} - URL de la page<br>${siteName} - Nom du site<br>${date} - Date actuelle (AAAA-MM-JJ)<br>${time} - Heure actuelle (HH:MM)<br>${tags} - Tags<br>${excerpt} - Extrait de la page<br>${content} - Contenu de la page"
   }
 }

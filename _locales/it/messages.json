@@ -62,7 +62,6 @@
   "send": {
     "message": "Invia a SiYuan"
   },
-
   "tip_first_time": {
     "message": "Dopo aver installato l'estensione SiYuan per la prima volta, aggiorna la pagina prima di utilizzarla"
   },
@@ -86,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "Avvia SiYuan e assicurati che la connessione di rete funzioni prima di riprovare"
+  },
+  "template_config": {
+    "message": "Configurazione del modello di clipping"
+  },
+  "template_save": {
+    "message": "Salva"
+  },
+  "template_cancel": {
+    "message": "Annulla"
+  },
+  "template_saved": {
+    "message": "Modello salvato con successo"
+  },
+  "template_help": {
+    "message": "Variabili disponibili:<br>${title} - Titolo della pagina<br>${url} - URL della pagina<br>${siteName} - Nome del sito<br>${date} - Data corrente (AAAA-MM-GG)<br>${time} - Ora corrente (HH:MM)<br>${tags} - Tag<br>${excerpt} - Estratto della pagina<br>${content} - Contenuto della pagina"
   }
 }
