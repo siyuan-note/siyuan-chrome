@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "Nach SiYuan kopieren"
   },
-  
   "show_tip": {
     "message": "Tipp anzeigen"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "Nach SiYuan senden"
   },
-
   "tip_first_time": {
     "message": "Bitte laden Sie die Seite nach der ersten Installation der SiYuan-Erweiterung neu, bevor Sie sie verwenden"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "Bitte starten Sie SiYuan und stellen Sie sicher, dass die Netzwerkverbindung funktioniert, bevor Sie es erneut versuchen"
+  },
+  "template_config": {
+    "message": "Clipping-Vorlagenkonfiguration"
+  },
+  "template_save": {
+    "message": "Speichern"
+  },
+  "template_cancel": {
+    "message": "Abbrechen"
+  },
+  "template_saved": {
+    "message": "Vorlage erfolgreich gespeichert"
+  },
+  "template_help": {
+    "message": "Verfügbare Variablen:<br>${title} - Seitentitel<br>${url} - Seiten-URL<br>${siteName} - Website-Name<br>${date} - Aktuelles Datum (JJJJ-MM-TT)<br>${time} - Aktuelle Zeit (HH:MM)<br>${tags} - Tags<br>${excerpt} - Seitenauszug<br>${content} - Seiteninhalt"
   }
 }

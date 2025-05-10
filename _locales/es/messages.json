@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "Copiar a SiYuan"
   },
-  
   "show_tip": {
     "message": "Mostrar consejo"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "Enviar a SiYuan"
   },
-
   "tip_first_time": {
     "message": "Después de instalar la extensión SiYuan por primera vez, actualice la página antes de usarla"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "Inicie SiYuan y asegúrese de que haya conectividad de red antes de intentar nuevamente"
+  },
+  "template_config": {
+    "message": "Configuración de plantilla de recorte"
+  },
+  "template_save": {
+    "message": "Guardar"
+  },
+  "template_cancel": {
+    "message": "Cancelar"
+  },
+  "template_saved": {
+    "message": "Plantilla guardada exitosamente"
+  },
+  "template_help": {
+    "message": "Variables disponibles:<br>${title} - Título de la página<br>${url} - URL de la página<br>${siteName} - Nombre del sitio<br>${date} - Fecha actual (AAAA-MM-DD)<br>${time} - Hora actual (HH:MM)<br>${tags} - Etiquetas<br>${excerpt} - Extracto de la página<br>${content} - Contenido de la página"
   }
 }

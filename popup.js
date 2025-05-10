@@ -67,6 +67,66 @@ document.addEventListener('DOMContentLoaded', () => {
             tags: tagsElement.value,
         })
     })
+
+    // 添加模板配置按钮点击事件
+    const templateConfigBtn = document.getElementById('templateConfig')
+    if (templateConfigBtn) {
+        templateConfigBtn.addEventListener('click', () => {
+            // 打开模板配置弹窗
+            const templateModal = document.getElementById('templateModal')
+            if (templateModal) {
+                templateModal.style.display = 'block'
+            }
+        })
+    }
+
+    // 添加模板保存按钮事件
+    const saveTemplateBtn = document.getElementById('saveTemplate')
+    if (saveTemplateBtn) {
+        saveTemplateBtn.addEventListener('click', () => {
+            const templateText = document.getElementById('templateText').value
+            chrome.storage.sync.set({
+                clipTemplate: templateText,
+            }, () => {
+                const templateModal = document.getElementById('templateModal')
+                if (templateModal) {
+                    templateModal.style.display = 'none'
+
+                    // 显示保存成功提示
+                    const templateSavedMsg = document.getElementById('templateSavedMsg')
+                    if (templateSavedMsg) {
+                        templateSavedMsg.style.display = 'block'
+                        setTimeout(() => {
+                            templateSavedMsg.style.display = 'none'
+                        }, 2000)
+                    }
+                }
+            })
+        })
+    }
+
+    // 添加模板取消按钮事件
+    const cancelTemplateBtn = document.getElementById('cancelTemplate')
+    if (cancelTemplateBtn) {
+        cancelTemplateBtn.addEventListener('click', () => {
+            const templateModal = document.getElementById('templateModal')
+            if (templateModal) {
+                templateModal.style.display = 'none'
+            }
+        })
+    }
+
+    // 添加关闭模板配置弹窗按钮事件
+    const closeTemplateBtn = document.getElementById('closeTemplate')
+    if (closeTemplateBtn) {
+        closeTemplateBtn.addEventListener('click', () => {
+            const templateModal = document.getElementById('templateModal')
+            if (templateModal) {
+                templateModal.style.display = 'none'
+            }
+        })
+    }
+
     assetsElement.addEventListener('change', () => {
         chrome.storage.sync.set({
             assets: assetsElement.checked,
@@ -111,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     languageElement.addEventListener('change', () => {
         const langCode = languageElement.value;
-        console.log("langCode="+langCode);
+        console.log("langCode=" + langCode);
 
         siyuanLoadLanguageFile(langCode, (data) => {
             siyuanTranslateDOM(data);
@@ -134,9 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sendElement = document.getElementById('send')
     sendElement.addEventListener('click', () => {
-        chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
+        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
             chrome.scripting.executeScript({
-                target: {tabId: tabs[0].id},
+                target: { tabId: tabs[0].id },
                 func: siyuanGetReadability,
                 args: [tabs[0].id],
             }, function () {
@@ -162,10 +222,24 @@ document.addEventListener('DOMContentLoaded', () => {
         expRemoveImgLink: false,
         expListDocTree: false,
         expSvgToImg: false,
+        // 添加默认的剪藏模板
+        clipTemplate: '---\n\n-  ${title}\n- [${url}](${url}) \n-  ${date}  ${time}\n- ${excerpt}\n\n---\n\n${content}',
     }, async function (items) {
         siyuanLoadLanguageFile(items.langCode, (data) => {
             siyuanTranslateDOM(data); // 在这里使用加载的i18n数据
             languageElement.value = items.langCode;
+
+            // 更新模板文本框的值
+            const templateText = document.getElementById('templateText')
+            if (templateText) {
+                templateText.value = items.clipTemplate
+
+                // 添加模板变量帮助提示
+                const templateHelp = document.getElementById('templateHelp')
+                if (templateHelp) {
+                    templateHelp.innerHTML = data.template_help ? data.template_help.message : ''
+                }
+            }
         });
         ipElement.value = items.ip || 'http://127.0.0.1:6806'
         tokenElement.value = items.token || ''
@@ -365,17 +439,24 @@ function siyuanTranslateDOM(translations) {
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(element => {
         const key = element.getAttribute('data-i18n');
-        const translation = translations[key].message;
-        if (translation) {
-            if (element.placeholder !== undefined) {
-                // 翻译 placeholder 属性
-                element.placeholder = translation;
-            } else {
-                // 翻译 textContent
-                element.textContent = translation;
-            }
-        } else {
+        if (!translations[key] || !translations[key].message) {
             console.warn(`siyuanTranslateDOM Missing translation for key: ${key}`);
+            return;
+        }
+
+        const translation = translations[key].message;
+        if (element.placeholder !== undefined) {
+            // 翻译 placeholder 属性
+            element.placeholder = translation;
+        } else {
+            // 翻译 textContent
+            element.textContent = translation;
         }
     });
+
+    // 确保模板帮助文本也被更新
+    const templateHelp = document.getElementById('templateHelp');
+    if (templateHelp && translations.template_help) {
+        templateHelp.innerHTML = translations.template_help.message;
+    }
 }

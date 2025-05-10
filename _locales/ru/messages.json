@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "Копировать в SiYuan"
   },
-  
   "show_tip": {
     "message": "Показать подсказку"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "Отправить в SiYuan"
   },
-
   "tip_first_time": {
     "message": "После первого установления расширения SiYuan, пожалуйста, обновите страницу перед использованием"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "Пожалуйста, запустите SiYuan и убедитесь в наличии сетевого соединения перед повторной попыткой"
+  },
+  "template_config": {
+    "message": "Конфигурация шаблона"
+  },
+  "template_save": {
+    "message": "Сохранить"
+  },
+  "template_cancel": {
+    "message": "Отмена"
+  },
+  "template_saved": {
+    "message": "Шаблон успешно сохранен"
+  },
+  "template_help": {
+    "message": "Доступные переменные:<br>${title} - Заголовок страницы<br>${url} - URL страницы<br>${siteName} - Имя сайта<br>${date} - Текущая дата (YYYY-MM-DD)<br>${time} - Текущее время (HH:MM)<br>${tags} - Теги<br>${excerpt} - Извлечение страницы<br>${content} - Содержимое страницы"
   }
 }

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <style>
         :root {
@@ -183,7 +184,8 @@
             mix-blend-mode: multiply;
         }
 
-        .b3-typography .hljs, .protyle-wysiwyg .hljs {
+        .b3-typography .hljs,
+        .protyle-wysiwyg .hljs {
             padding: 0.2em 0.4em;
             margin: 0;
             font-size: 85%;
@@ -279,7 +281,8 @@
             border-color: var(--b3-theme-primary);
         }
 
-        .b3-switch:checked:before, .b3-switch:checked:after {
+        .b3-switch:checked:before,
+        .b3-switch:checked:after {
             transform: translateX(19px);
             transition: transform .6s cubic-bezier(.2, .85, .32, 1.2), opacity .3s;
         }
@@ -289,7 +292,8 @@
             cursor: not-allowed;
         }
 
-        .b3-switch:hover:not(:disabled):before, .b3-switch:focus:not(:disabled):before {
+        .b3-switch:hover:not(:disabled):before,
+        .b3-switch:focus:not(:disabled):before {
             display: inline-block;
         }
 
@@ -375,91 +379,210 @@
             color: var(--b3-theme-on-surface);
             cursor: pointer;
         }
+
+        /* 添加模板弹窗样式 */
+        .template-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .template-modal-content {
+            background-color: var(--b3-theme-background);
+            margin: 10% auto;
+            padding: 16px;
+            border-radius: var(--b3-border-radius);
+            width: 80%;
+            max-width: 500px;
+            box-shadow: var(--b3-dialog-shadow);
+            position: relative;
+        }
+
+        .template-close {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            color: var(--b3-theme-on-surface);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .template-header {
+            font-weight: bold;
+            margin-bottom: 16px;
+            font-size: 16px;
+            color: var(--b3-theme-on-background);
+        }
+
+        .template-textarea {
+            width: 100%;
+            height: 150px;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+            border-radius: var(--b3-border-radius);
+            border: 1px solid var(--b3-border-color);
+            resize: vertical;
+            font-family: var(--b3-font-family-code);
+        }
+
+        .template-help {
+            margin-bottom: 16px;
+            color: var(--b3-theme-on-surface);
+            font-size: 13px;
+        }
+
+        .template-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .template-saved-msg {
+            display: none;
+            color: var(--b3-theme-success);
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* 添加配置按钮样式 */
+        .config-button {
+            width: 24px;
+            height: 24px;
+            margin-left: 8px;
+            cursor: pointer;
+            color: var(--b3-theme-on-surface);
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
+
 <body>
-<div style="max-width: 256px">
-    <div id="log" style="color: #d23f31;margin-bottom: 16px"></div>
-    <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-        <div style="flex: 1" data-i18n="show_tip">Show Tip</div>
-        <input class="b3-switch" id="showTip" checked type="checkbox">
-    </label>
-    <div class="b3-label" data-i18n="siyuan_url">SiYuan URL</div>
-    <input id="ip" class="b3-text-field">
-    <div class="fn__hr"></div>
-    <div class="b3-label" data-i18n="api_token">API token</div>
-    <div style="position: relative">
-        <input id="token" type="password" class="b3-text-field" style="padding-left: 28px">
-        <svg class="b3-icon" viewBox="0 0 32 32">
-            <path d="M16 22.182q2.582 0 4.382-1.8t1.8-4.382-1.8-4.382-4.382-1.8-4.382 1.8-1.8 4.382 1.8 4.382 4.382 1.8zM16 20.073q-1.709 0-2.891-1.182t-1.182-2.891 1.182-2.891 2.891-1.182 2.891 1.182 1.182 2.891-1.182 2.891-2.891 1.182zM16 26.909q-5.309 0-9.6-3.018t-6.4-7.891q2.109-4.873 6.4-7.891t9.6-3.018 9.6 3.018 6.4 7.891q-2.109 4.873-6.4 7.891t-9.6 3.018zM16 24.727q4.4 0 8.091-2.382t5.618-6.345q-1.927-3.964-5.618-6.345t-8.091-2.382-8.091 2.382-5.655 6.345q1.964 3.964 5.655 6.345t8.091 2.382z"></path>
-        </svg>
+    <div style="max-width: 256px">
+        <div id="log" style="color: #d23f31;margin-bottom: 16px"></div>
+        <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+            <div style="flex: 1" data-i18n="show_tip">Show Tip</div>
+            <input class="b3-switch" id="showTip" checked type="checkbox">
+        </label>
+        <div class="b3-label" data-i18n="siyuan_url">SiYuan URL</div>
+        <input id="ip" class="b3-text-field">
+        <div class="fn__hr"></div>
+        <div class="b3-label" data-i18n="api_token">API token</div>
+        <div style="position: relative">
+            <input id="token" type="password" class="b3-text-field" style="padding-left: 28px">
+            <svg class="b3-icon" viewBox="0 0 32 32">
+                <path
+                    d="M16 22.182q2.582 0 4.382-1.8t1.8-4.382-1.8-4.382-4.382-1.8-4.382 1.8-1.8 4.382 1.8 4.382 4.382 1.8zM16 20.073q-1.709 0-2.891-1.182t-1.182-2.891 1.182-2.891 2.891-1.182 2.891 1.182 1.182 2.891-1.182 2.891-2.891 1.182zM16 26.909q-5.309 0-9.6-3.018t-6.4-7.891q2.109-4.873 6.4-7.891t9.6-3.018 9.6 3.018 6.4 7.891q-2.109 4.873-6.4 7.891t-9.6 3.018zM16 24.727q4.4 0 8.091-2.382t5.618-6.345q-1.927-3.964-5.618-6.345t-8.091-2.382-8.091 2.382-5.655 6.345q1.964 3.964 5.655 6.345t8.091 2.382z">
+                </path>
+            </svg>
+        </div>
+        <div class="fn__hr"></div>
+        <div class="b3-label" data-i18n="save_path">Save path</div>
+        <input class="b3-text-field" id="searchDoc" data-i18n="save_path_placeholder"
+            placeholder="Input the keyword then Enter to search" />
+        <div class="fn__hr"></div>
+        <select class="b3-select" id="parentDoc"></select>
+        <div class="fn__hr"></div>
+        <div class="b3-label" data-i18n="tags">Tags</div>
+        <input class="b3-text-field" id="tags" data-i18n="tags_placeholder"
+            placeholder="Use commas to separate multiple tags" />
+        <div class="fn__hr"></div>
+        <div class="fn__hr"></div>
+        <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+            <div style="flex: 1" data-i18n="assets">Download assets</div>
+            <input class="b3-switch" id="assets" checked type="checkbox">
+        </label>
+        <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+            <div class="b3-label" style="flex: 1" data-i18n="exp">Show experimental features</div>
+            <input class="b3-switch" id="exp" type="checkbox">
+        </label>
+        <div id="expGroup" style="display: none;">
+            <div class="b3-label" style="font-size: 14px; color: red;" data-i18n="exp_tips">*: Experimental features may
+                be unstable. If there is a problem with clipping, consider switching it.</div>
+            <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+                <div style="flex: 1" data-i18n="exp_span">Detect span text newlines*</div>
+                <input class="b3-switch" id="expSpan" type="checkbox">
+            </label>
+            <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+                <div style="flex: 1" data-i18n="exp_bold">Detect bold style*</div>
+                <input class="b3-switch" id="expBold" type="checkbox">
+            </label>
+            <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+                <div style="flex: 1" data-i18n="exp_italic">Detect italic style*</div>
+                <input class="b3-switch" id="expItalic" type="checkbox">
+            </label>
+            <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+                <div style="flex: 1" data-i18n="exp_remove_img_link">Remove img link*</div>
+                <input class="b3-switch" id="expRemoveImgLink" type="checkbox">
+            </label>
+            <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+                <div style="flex: 1" data-i18n="exp_list_doc_tree">After clipping a web page, display the document tree*
+                </div>
+                <input class="b3-switch" id="expListDocTree" type="checkbox">
+            </label>
+            <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+                <div style="flex: 1" data-i18n="exp_svg_to_img">Detect SVG embedded in HTML*</div>
+                <input class="b3-switch" id="expSvgToImg" type="checkbox">
+            </label>
+            <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
+                <div style="flex: 1" data-i18n="language">Language*</div>
+                <select style="flex: 1" class="b3-select" id="language">
+                    <option value="ar">العربية</option>
+                    <option value="de">Deutsch</option>
+                    <option value="en" selected>English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="he">עברית</option>
+                    <option value="it">Italiano</option>
+                    <option value="ja">日本語</option>
+                    <option value="pl">Polski</option>
+                    <option value="ru">Русский</option>
+                    <option value="zh_TW">繁體中文</option>
+                    <option value="zh_CN">简体中文</option>
+                </select>
+            </label>
+        </div>
+        <div class="fn__hr"></div>
+        <div class="fn__hr"></div>
+        <div class="button-group">
+            <button class="b3-button" id="send" data-i18n="send">Send to SiYuan</button>
+            <svg class="config-button" id="templateConfig" viewBox="0 0 24 24">
+                <path
+                    d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+            </svg>
+        </div>
     </div>
-    <div class="fn__hr"></div>
-    <div class="b3-label" data-i18n="save_path">Save path</div>
-    <input class="b3-text-field" id="searchDoc" data-i18n="save_path_placeholder" placeholder="Input the keyword then Enter to search"/>
-    <div class="fn__hr"></div>
-    <select class="b3-select" id="parentDoc"></select>
-    <div class="fn__hr"></div>
-    <div class="b3-label" data-i18n="tags">Tags</div>
-    <input class="b3-text-field" id="tags" data-i18n="tags_placeholder" placeholder="Use commas to separate multiple tags" />
-    <div class="fn__hr"></div>
-    <div class="fn__hr"></div>
-    <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-        <div style="flex: 1" data-i18n="assets">Download assets</div>
-        <input class="b3-switch" id="assets" checked type="checkbox">
-    </label>
-    <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-        <div class="b3-label" style="flex: 1" data-i18n="exp">Show experimental features</div>
-        <input class="b3-switch" id="exp" type="checkbox">
-    </label>
-    <div id="expGroup" style="display: none;">
-      <div class="b3-label" style="font-size: 14px; color: red;" data-i18n="exp_tips">*: Experimental features may be unstable. If there is a problem with clipping, consider switching it.</div>
-      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1" data-i18n="exp_span">Detect span text newlines*</div>
-          <input class="b3-switch" id="expSpan" type="checkbox">
-      </label>
-      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1" data-i18n="exp_bold">Detect bold style*</div>
-          <input class="b3-switch" id="expBold" type="checkbox">
-      </label>
-      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1" data-i18n="exp_italic">Detect italic style*</div>
-          <input class="b3-switch" id="expItalic" type="checkbox">
-      </label>
-      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1" data-i18n="exp_remove_img_link">Remove img link*</div>
-          <input class="b3-switch" id="expRemoveImgLink" type="checkbox">
-      </label>
-      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1" data-i18n="exp_list_doc_tree">After clipping a web page, display the document tree*</div>
-          <input class="b3-switch" id="expListDocTree" type="checkbox">
-      </label>
-      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1" data-i18n="exp_svg_to_img">Detect SVG embedded in HTML*</div>
-          <input class="b3-switch" id="expSvgToImg" type="checkbox">
-      </label>
-      <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
-          <div style="flex: 1" data-i18n="language">Language*</div>
-          <select style="flex: 1" class="b3-select" id="language">
-            <option value="ar">العربية</option>
-            <option value="de">Deutsch</option>
-            <option value="en" selected>English</option>
-            <option value="es">Español</option>
-            <option value="fr">Français</option>
-            <option value="he">עברית</option>
-            <option value="it">Italiano</option>
-            <option value="ja">日本語</option>
-            <option value="pl">Polski</option>
-            <option value="ru">Русский</option>
-            <option value="zh_TW">繁體中文</option>
-            <option value="zh_CN">简体中文</option>
-          </select>
-      </label>
+
+    <!-- 添加模板配置弹窗 -->
+    <div id="templateModal" class="template-modal">
+        <div class="template-modal-content">
+            <span id="closeTemplate" class="template-close">&times;</span>
+            <div class="template-header" data-i18n="template_config">Clipping Template Configuration</div>
+            <textarea id="templateText" class="template-textarea"></textarea>
+            <div id="templateHelp" class="template-help">
+                <!-- 这里将由JS填充模板变量的帮助信息 -->
+            </div>
+            <div class="template-buttons">
+                <button id="cancelTemplate" class="b3-button"
+                    style="background-color: #e0e0e0; color: #333; width: auto;"
+                    data-i18n="template_cancel">Cancel</button>
+                <button id="saveTemplate" class="b3-button" style="width: auto;" data-i18n="template_save">Save</button>
+            </div>
+            <div id="templateSavedMsg" class="template-saved-msg" data-i18n="template_saved">Template saved successfully
+            </div>
+        </div>
     </div>
-    <div class="fn__hr"></div>
-    <div class="fn__hr"></div>
-    <button class="b3-button" id="send" data-i18n="send">Send to SiYuan</button>
-</div>
-<script src="popup.js"></script>
+
+    <script src="popup.js"></script>
 </body>
+
 </html>

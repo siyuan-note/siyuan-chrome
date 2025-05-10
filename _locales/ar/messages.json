@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "نسخ إلى سييوان"
   },
-  
   "show_tip": {
     "message": "إظهار النصائح"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "إرسال إلى سييوان"
   },
-
   "tip_first_time": {
     "message": "بعد تثبيت الإضافة لأول مرة، يُرجى تحديث الصفحة قبل استخدامها"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "يرجى تشغيل سييوان والتأكد من الاتصال بالشبكة قبل المحاولة مرة أخرى"
+  },
+  "template_config": {
+    "message": "إعداد قالب القص"
+  },
+  "template_save": {
+    "message": "حفظ"
+  },
+  "template_cancel": {
+    "message": "إلغاء"
+  },
+  "template_saved": {
+    "message": "تم حفظ القالب بنجاح"
+  },
+  "template_help": {
+    "message": "المتغيرات المتاحة:<br>${title} - عنوان الصفحة<br>${url} - رابط الصفحة<br>${siteName} - اسم الموقع<br>${date} - التاريخ الحالي (YYYY-MM-DD)<br>${time} - الوقت الحالي (HH:MM)<br>${tags} - العلامات<br>${excerpt} - مقتطف من الصفحة<br>${content} - محتوى الصفحة"
   }
 }

@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "複製到思源(SiYuan)"
   },
-  
   "show_tip": {
     "message": "顯示提示"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "發送到思源(SiYuan)"
   },
-
   "tip_first_time": {
     "message": "首次安裝思源擴展後，請刷新頁面後再使用"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "請啟動思源並確保網路連通後再試"
+  },
+  "template_config": {
+    "message": "剪藏模板配置"
+  },
+  "template_save": {
+    "message": "保存"
+  },
+  "template_cancel": {
+    "message": "取消"
+  },
+  "template_saved": {
+    "message": "模板保存成功"
+  },
+  "template_help": {
+    "message": "可用變數：<br>${title} - 頁面標題<br>${url} - 頁面URL<br>${siteName} - 網站名稱<br>${date} - 當前日期 (YYYY-MM-DD)<br>${time} - 當前時間 (HH:MM)<br>${tags} - 標籤<br>${excerpt} - 頁面摘要<br>${content} - 頁面內容"
   }
 }
