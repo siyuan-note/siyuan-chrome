@@ -54,7 +54,7 @@
     "message": "HTMLに埋め込まれたSVGの検出*"
   },
   "language": {
-    "message": "言語*"
+    "message": "インターフェース言語"
   },
   "exp_list_doc_tree": {
     "message": "ウェブページのクリッピング後、文書ツリーを表示*"

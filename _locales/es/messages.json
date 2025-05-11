@@ -57,7 +57,7 @@
     "message": "Detectar SVG incrustado en HTML*"
   },
   "language": {
-    "message": "Idioma*"
+    "message": "Idioma de la interfaz"
   },
   "send": {
     "message": "Enviar a SiYuan"

@@ -57,7 +57,7 @@
     "message": "Détecter SVG intégré dans HTML*"
   },
   "language": {
-    "message": "Langue*"
+    "message": "Langue de l'interface"
   },
   "send": {
     "message": "Envoyer à SiYuan"

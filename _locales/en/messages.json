@@ -57,7 +57,7 @@
     "message": "Detect SVG embedded in HTML*"
   },
   "language": {
-    "message": "Language*"
+    "message": "Interface language"
   },
   "send": {
     "message": "Send to SiYuan"

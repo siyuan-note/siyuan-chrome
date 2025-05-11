@@ -57,7 +57,7 @@
     "message": "Обнаружение SVG, встроенного в HTML*"
   },
   "language": {
-    "message": "Язык*"
+    "message": "Язык интерфейса"
   },
   "send": {
     "message": "Отправить в SiYuan"

@@ -57,7 +57,7 @@
     "message": "识别 HTML 中嵌入的 SVG*"
   },
   "language": {
-    "message": "语言*"
+    "message": "界面语言"
   },
   "send": {
     "message": "发送到思源(SiYuan)"
