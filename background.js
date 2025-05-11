@@ -217,7 +217,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                                     },
                                     body: JSON.stringify(dbInput),
                                 })
-                            }, 1000); // 延迟 0.5 秒, 否则无法添加到数据库成功
+                            }, 1000); // 延迟 1 秒, 否则无法添加到数据库成功
 
                         }
                         chrome.tabs.sendMessage(requestData.tabId, {
