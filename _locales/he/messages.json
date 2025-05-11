@@ -8,7 +8,6 @@
   "copy_to_siyuan": {
     "message": "העתק ל-SiYuan"
   },
-  
   "show_tip": {
     "message": "הצג טיפים"
   },
@@ -63,7 +62,6 @@
   "send": {
     "message": "שלח ל-SiYuan"
   },
-
   "tip_first_time": {
     "message": "לאחר התקנת תוסף SiYuan לראשונה, אנא רענן את הדף לפני השימוש"
   },
@@ -87,5 +85,20 @@
   },
   "tip_siyuan_kernel_unavailable": {
     "message": "אנא הפעל את SiYuan וודא שהחיבור לרשת פעיל לפני שתנסה שוב"
+  },
+  "template_config": {
+    "message": "הגדרת תבנית חיתוך"
+  },
+  "template_save": {
+    "message": "שמור"
+  },
+  "template_cancel": {
+    "message": "ביטול"
+  },
+  "template_saved": {
+    "message": "התבנית נשמרה בהצלחה"
+  },
+  "template_help": {
+    "message": "משתנים זמינים:<br>${title} - כותרת הדף<br>${url} - כתובת URL של הדף<br>${siteName} - שם האתר<br>${date} - תאריך נוכחי (YYYY-MM-DD)<br>${time} - שעה נוכחית (HH:MM)<br>${tags} - תגים<br>${excerpt} - תקציר הדף<br>${content} - תוכן הדף"
   }
 }
