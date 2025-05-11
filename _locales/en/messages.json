@@ -87,7 +87,7 @@
     "message": "Please start SiYuan and ensure network connectivity before trying again"
   },
   "template_config": {
-    "message": "Clipping Template Configuration"
+    "message": "Clipping template"
   },
   "template_save": {
     "message": "Save"
@@ -99,6 +99,6 @@
     "message": "Template saved successfully"
   },
   "template_help": {
-    "message": "Available variables:<br>${title} - Page title<br>${url} - Page URL<br>${siteName} - Site name<br>${date} - Current date (YYYY-MM-DD)<br>${time} - Current time (HH:MM)<br>${tags} - Tags<br>${excerpt} - Page excerpt<br>${content} - Page content"
+    "message": "Available variables:<br>${title} - Page title<br>${url} - Page URL<br>${siteName} - Site name<br>${date} - Current date (yyyy-MM-dd)<br>${time} - Current time (HH:mm)<br>${tags} - Tags<br>${excerpt} - Page excerpt<br>${content} - Page content"
   }
 }

@@ -99,6 +99,6 @@
     "message": "模板保存成功"
   },
   "template_help": {
-    "message": "可用變數：<br>${title} - 頁面標題<br>${url} - 頁面URL<br>${siteName} - 網站名稱<br>${date} - 當前日期 (YYYY-MM-DD)<br>${time} - 當前時間 (HH:MM)<br>${tags} - 標籤<br>${excerpt} - 頁面摘要<br>${content} - 頁面內容"
+    "message": "可用變數：<br>${title} - 頁面標題<br>${url} - 頁面URL<br>${siteName} - 網站名稱<br>${date} - 當前日期 (yyyy-MM-dd)<br>${time} - 當前時間 (HH:mm)<br>${tags} - 標籤<br>${excerpt} - 頁面摘要<br>${content} - 頁面內容"
   }
 }

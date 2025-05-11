@@ -99,6 +99,6 @@
     "message": "Шаблон успешно сохранен"
   },
   "template_help": {
-    "message": "Доступные переменные:<br>${title} - Заголовок страницы<br>${url} - URL страницы<br>${siteName} - Имя сайта<br>${date} - Текущая дата (YYYY-MM-DD)<br>${time} - Текущее время (HH:MM)<br>${tags} - Теги<br>${excerpt} - Извлечение страницы<br>${content} - Содержимое страницы"
+    "message": "Доступные переменные:<br>${title} - Заголовок страницы<br>${url} - URL страницы<br>${siteName} - Имя сайта<br>${date} - Текущая дата (yyyy-MM-dd)<br>${time} - Текущее время (HH:mm)<br>${tags} - Теги<br>${excerpt} - Извлечение страницы<br>${content} - Содержимое страницы"
   }
 }

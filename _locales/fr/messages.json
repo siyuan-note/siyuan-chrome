@@ -99,6 +99,6 @@
     "message": "Modèle enregistré avec succès"
   },
   "template_help": {
-    "message": "Variables disponibles:<br>${title} - Titre de la page<br>${url} - URL de la page<br>${siteName} - Nom du site<br>${date} - Date actuelle (AAAA-MM-JJ)<br>${time} - Heure actuelle (HH:MM)<br>${tags} - Tags<br>${excerpt} - Extrait de la page<br>${content} - Contenu de la page"
+    "message": "Variables disponibles:<br>${title} - Titre de la page<br>${url} - URL de la page<br>${siteName} - Nom du site<br>${date} - Date actuelle (yyyy-MM-dd)<br>${time} - Heure actuelle (HH:mm)<br>${tags} - Tags<br>${excerpt} - Extrait de la page<br>${content} - Contenu de la page"
   }
 }

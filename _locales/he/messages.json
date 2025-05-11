@@ -99,6 +99,6 @@
     "message": "התבנית נשמרה בהצלחה"
   },
   "template_help": {
-    "message": "משתנים זמינים:<br>${title} - כותרת הדף<br>${url} - כתובת URL של הדף<br>${siteName} - שם האתר<br>${date} - תאריך נוכחי (YYYY-MM-DD)<br>${time} - שעה נוכחית (HH:MM)<br>${tags} - תגים<br>${excerpt} - תקציר הדף<br>${content} - תוכן הדף"
+    "message": "משתנים זמינים:<br>${title} - כותרת הדף<br>${url} - כתובת URL של הדף<br>${siteName} - שם האתר<br>${date} - תאריך נוכחי (yyyy-MM-dd)<br>${time} - שעה נוכחית (HH:mm)<br>${tags} - תגים<br>${excerpt} - תקציר הדף<br>${content} - תוכן הדף"
   }
 }

@@ -99,6 +99,6 @@
     "message": "Szablon został pomyślnie zapisany"
   },
   "template_help": {
-    "message": "Zmienne dostępne:<br>${title} - Tytuł strony<br>${url} - URL strony<br>${siteName} - Nazwa witryny<br>${date} - Bieżąca data (YYYY-MM-DD)<br>${time} - Bieżący czas (HH:MM)<br>${tags} - Tagi<br>${excerpt} - Fragment strony<br>${content} - Zawartość strony"
+    "message": "Zmienne dostępne:<br>${title} - Tytuł strony<br>${url} - URL strony<br>${siteName} - Nazwa witryny<br>${date} - Bieżąca data (yyyy-MM-dd)<br>${time} - Bieżący czas (HH:mm)<br>${tags} - Tagi<br>${excerpt} - Fragment strony<br>${content} - Zawartość strony"
   }
 }

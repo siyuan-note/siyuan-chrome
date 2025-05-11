@@ -140,17 +140,23 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         if (requestData.type === 'article') {
             let title = requestData.title ? requestData.title : 'Untitled'
             title = title.replaceAll("/", "")
-
-            // 获取模板数据
             chrome.storage.sync.get({
-                clipTemplate: '---\n\n-  ${title}\n- [${url}](${url}) \n-  ${date}  ${time}\n- ${excerpt}\n\n---\n\n${content}',
+                clipTemplate: '---\n\n- ${title} - {siteName}\n- [${url}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
             }, (items) => {
-                // 准备模板数据
+                let excerpt = requestData.excerpt.trim()
+                if ("" !== excerpt) {
+                    // 将连续的三个换行符替换为两个换行符
+                    excerpt = excerpt.replace(/\n{3,}/g, "\n\n")
+                    // 从第二行开始，每行前面加两个空格 https://github.com/siyuan-note/siyuan/issues/11315
+                    excerpt = excerpt.replace(/\n/g, "\n  ")
+                    excerpt = excerpt.trim()
+                }
+
                 const { date, time } = getSimpleDateTime();
                 const templateData = {
                     title: requestData.title || 'Untitled',
                     siteName: requestData.siteName || '',
-                    excerpt: requestData.excerpt || '',
+                    excerpt: excerpt || '',
                     url: requestData.href,
                     date,
                     time,

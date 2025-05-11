@@ -222,8 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expRemoveImgLink: false,
         expListDocTree: false,
         expSvgToImg: false,
-        // 添加默认的剪藏模板
-        clipTemplate: '---\n\n-  ${title}\n- [${url}](${url}) \n-  ${date}  ${time}\n- ${excerpt}\n\n---\n\n${content}',
+        clipTemplate: '---\n\n- ${title} - {siteName}\n- [${url}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
     }, async function (items) {
         siyuanLoadLanguageFile(items.langCode, (data) => {
             siyuanTranslateDOM(data); // 在这里使用加载的i18n数据

@@ -99,6 +99,6 @@
     "message": "Plantilla guardada exitosamente"
   },
   "template_help": {
-    "message": "Variables disponibles:<br>${title} - Título de la página<br>${url} - URL de la página<br>${siteName} - Nombre del sitio<br>${date} - Fecha actual (AAAA-MM-DD)<br>${time} - Hora actual (HH:MM)<br>${tags} - Etiquetas<br>${excerpt} - Extracto de la página<br>${content} - Contenido de la página"
+    "message": "Variables disponibles:<br>${title} - Título de la página<br>${url} - URL de la página<br>${siteName} - Nombre del sitio<br>${date} - Fecha actual (yyyy-MM-dd)<br>${time} - Hora actual (HH:mm)<br>${tags} - Etiquetas<br>${excerpt} - Extracto de la página<br>${content} - Contenido de la página"
   }
 }

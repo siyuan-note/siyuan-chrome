@@ -99,6 +99,6 @@
     "message": "模板保存成功"
   },
   "template_help": {
-    "message": "可用变量：<br>${title} - 页面标题<br>${url} - 页面URL<br>${siteName} - 网站名称<br>${date} - 当前日期 (YYYY-MM-DD)<br>${time} - 当前时间 (HH:MM)<br>${tags} - 标签<br>${excerpt} - 页面摘要<br>${content} - 页面内容"
+    "message": "可用变量：<br>${title} - 页面标题<br>${url} - 页面URL<br>${siteName} - 网站名称<br>${date} - 当前日期 (yyyy-MM-dd)<br>${time} - 当前时间 (HH:mm)<br>${tags} - 标签<br>${excerpt} - 页面摘要<br>${content} - 页面内容"
   }
 }

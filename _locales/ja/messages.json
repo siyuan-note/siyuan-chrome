@@ -99,6 +99,6 @@
     "message": "テンプレートが正常に保存されました"
   },
   "template_help": {
-    "message": "利用可能な変数：<br>${title} - ページタイトル<br>${url} - ページURL<br>${siteName} - サイト名<br>${date} - 現在の日付 (YYYY-MM-DD)<br>${time} - 現在の時間 (HH:MM)<br>${tags} - タグ<br>${excerpt} - ページの抜粋<br>${content} - ページの内容"
+    "message": "利用可能な変数：<br>${title} - ページタイトル<br>${url} - ページURL<br>${siteName} - サイト名<br>${date} - 現在の日付 (yyyy-MM-dd)<br>${time} - 現在の時間 (HH:mm)<br>${tags} - タグ<br>${excerpt} - ページの抜粋<br>${content} - ページの内容"
   }
 }

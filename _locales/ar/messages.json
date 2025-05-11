@@ -99,6 +99,6 @@
     "message": "تم حفظ القالب بنجاح"
   },
   "template_help": {
-    "message": "المتغيرات المتاحة:<br>${title} - عنوان الصفحة<br>${url} - رابط الصفحة<br>${siteName} - اسم الموقع<br>${date} - التاريخ الحالي (YYYY-MM-DD)<br>${time} - الوقت الحالي (HH:MM)<br>${tags} - العلامات<br>${excerpt} - مقتطف من الصفحة<br>${content} - محتوى الصفحة"
+    "message": "المتغيرات المتاحة:<br>${title} - عنوان الصفحة<br>${url} - رابط الصفحة<br>${siteName} - اسم الموقع<br>${date} - التاريخ الحالي (yyyy-MM-dd)<br>${time} - الوقت الحالي (HH:mm)<br>${tags} - العلامات<br>${excerpt} - مقتطف من الصفحة<br>${content} - محتوى الصفحة"
   }
 }
