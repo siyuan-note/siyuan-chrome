@@ -100,5 +100,11 @@
   },
   "template_help": {
     "message": "Variables disponibles:<br>${title} - Título de la página<br>${url} - URL de la página<br>${siteName} - Nombre del sitio<br>${date} - Fecha actual (yyyy-MM-dd)<br>${time} - Hora actual (HH:mm)<br>${tags} - Etiquetas<br>${excerpt} - Extracto de la página<br>${content} - Contenido de la página"
+  },
+  "database_label": {
+    "message": "Agregar a la base de datos"
+  },
+  "database_search_placeholder": {
+    "message": "Ingrese palabra clave para buscar base de datos"
   }
 }

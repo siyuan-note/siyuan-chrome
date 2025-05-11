@@ -100,5 +100,11 @@
   },
   "template_help": {
     "message": "משתנים זמינים:<br>${title} - כותרת הדף<br>${url} - כתובת URL של הדף<br>${siteName} - שם האתר<br>${date} - תאריך נוכחי (yyyy-MM-dd)<br>${time} - שעה נוכחית (HH:mm)<br>${tags} - תגים<br>${excerpt} - תקציר הדף<br>${content} - תוכן הדף"
+  },
+  "database_label": {
+    "message": "הוסף למסד נתונים"
+  },
+  "database_search_placeholder": {
+    "message": "הזן מילת מפתח לחיפוש במסד הנתונים"
   }
 }
