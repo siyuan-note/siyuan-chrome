@@ -200,26 +200,26 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                     if (0 === response.code) {
 
                         // 添加到数据库
-                        // if (requestData.selectedDatabaseID != "") {
-                        const docId = response.data;
-                        const dbInput = {
-                            avID: requestData.selectedDatabaseID,
-                            srcs: [{
-                                id: docId,
-                                isDetached: false,
-                            }]
-                        };
-                        setTimeout(() => {
-                            fetch(requestData.api + '/api/av/addAttributeViewBlocks', {
-                                method: 'POST',
-                                headers: {
-                                    'Authorization': 'Token ' + requestData.token,
-                                },
-                                body: JSON.stringify(dbInput),
-                            })
-                        }, 1000); // 延迟 0.5 秒, 否则无法添加到数据库成功
+                        if (requestData.selectedDatabaseID) {
+                            const docId = response.data;
+                            const dbInput = {
+                                avID: requestData.selectedDatabaseID,
+                                srcs: [{
+                                    id: docId,
+                                    isDetached: false,
+                                }]
+                            };
+                            setTimeout(() => {
+                                fetch(requestData.api + '/api/av/addAttributeViewBlocks', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': 'Token ' + requestData.token,
+                                    },
+                                    body: JSON.stringify(dbInput),
+                                })
+                            }, 1000); // 延迟 0.5 秒, 否则无法添加到数据库成功
 
-                        // }
+                        }
                         chrome.tabs.sendMessage(requestData.tabId, {
                             'func': 'tipKey',
                             'msg': "tip_clip_ok",
