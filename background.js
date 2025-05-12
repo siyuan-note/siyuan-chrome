@@ -25,19 +25,44 @@ chrome.contextMenus.onClicked.addListener(function (info, tab) {
 // 添加模板渲染函数
 function renderTemplate(template, data) {
     return template.replace(/\${([^}]+)}/g, function (match, key) {
-        // 支持简单的条件表达式，如 ${siteName ? "- " + siteName : ""}
-        if (key.indexOf('?') > -1) {
-            try {
-                return new Function('data', 'with(data) { return ' + key + '; }')(data);
-            } catch (e) {
-                console.error('Error evaluating template expression:', key, e);
-                return '';
-            }
-        }
+        // 检查是否为条件表达式
+        const conditionalMatch = key.match(/(.+?)\s*\?\s*(.*?)\s*:\s*(.*)/);
+        if (conditionalMatch) {
+            const conditionKey = conditionalMatch[1].trim();
+            const trueValueString = conditionalMatch[2].trim();
+            const falseValueString = conditionalMatch[3].trim();
 
-        // 普通变量替换
-        const value = key.split('.').reduce((obj, prop) => obj && obj[prop], data);
-        return value !== undefined ? value : '';
+            const condition = conditionKey.split('.').reduce((obj, prop) => obj && obj[prop], data);
+
+            // 辅助函数，用于解析值中的变量或字符串
+            const getValue = (valueStr) => {
+                if ((valueStr.startsWith("'") && valueStr.endsWith("'")) || (valueStr.startsWith('"') && valueStr.endsWith('"'))) {
+                    return valueStr.slice(1, -1); // 字符串字面量
+                }
+                // 尝试解析为变量
+                const parts = valueStr.split('+').map(part => part.trim());
+                let result = "";
+                for (const part of parts) {
+                    if ((part.startsWith("'") && part.endsWith("'")) || (part.startsWith('"') && part.endsWith('"'))) {
+                        result += part.slice(1, -1);
+                    } else {
+                        const variableValue = part.split('.').reduce((obj, prop) => obj && obj[prop], data);
+                        result += (variableValue !== undefined ? variableValue : '');
+                    }
+                }
+                return result;
+            };
+
+            if (condition) {
+                return getValue(trueValueString);
+            } else {
+                return getValue(falseValueString);
+            }
+        } else {
+            // 普通变量替换
+            const value = key.split('.').reduce((obj, prop) => obj && obj[prop], data);
+            return value !== undefined ? value : '';
+        }
     });
 }
 
