@@ -166,7 +166,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             let title = requestData.title ? requestData.title : 'Untitled'
             title = title.replaceAll("/", "")
             chrome.storage.sync.get({
-                clipTemplate: '---\n\n- ${title} - ${siteName}\n- [${url}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
+                clipTemplate: '---\n\n- ${title} - ${siteName}\n- [${urlDecoded}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
             }, (items) => {
                 let excerpt = requestData.excerpt.trim()
                 if ("" !== excerpt) {
@@ -176,6 +176,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                     excerpt = excerpt.replace(/\n/g, "\n  ")
                     excerpt = excerpt.trim()
                 }
+                let urlDecoded = requestData.href
+                try {
+                    urlDecoded = decodeURIComponent(urlDecoded)
+                } catch (e) {
+                    console.warn(e)
+                }
 
                 const { date, time } = getSimpleDateTime();
                 const templateData = {
@@ -183,6 +189,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                     siteName: requestData.siteName || '',
                     excerpt: excerpt || '',
                     url: requestData.href,
+                    urlDecoded: urlDecoded,
                     date,
                     time,
                     tags: requestData.tags,
