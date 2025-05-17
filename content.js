@@ -140,6 +140,52 @@ function isIgnoredElement(element) {
     return false; // 没找到时返回 false
 }
 
+// span元素的换行处理优化：https://github.com/siyuan-note/siyuan/issues/14775
+// 规范：https://developer.mozilla.org/zh-CN/docs/Web/CSS/white-space
+function siyuanProcessTextByWhiteSpace(element) {
+  const text = element.textContent;
+  const whiteSpace = getComputedStyle(element).whiteSpace;
+  const brTag = '<br>';
+
+  switch (whiteSpace) {
+    case 'normal':
+    case 'nowrap':
+      // 合并所有空白字符为一个空格；换行为 <br>；去除行末空格
+      return text
+        .replace(/[ \t\r\f\v]+/g, ' ')         // 合并空格和制表符
+        .replace(/[ \t]+\n/g, '\n')            // 去除行末空格
+        .replace(/\n+/g, brTag)               // 合并换行并转为 <br>
+        .trim();
+    case 'pre':
+      // 保留所有空白和换行，换行转为 <br>
+      return text
+        .replace(/\n/g, brTag);
+    case 'pre-wrap':
+      // 保留空白字符，换行转为 <br>，不处理行末空格（挂起）
+      return text
+        .replace(/\n+/g, brTag);
+    case 'pre-line':
+      // 合并空格，保留换行符，换行转为 <br>，移除行末空格
+      return text
+        .replace(/[ \t\r\f\v]+/g, ' ')
+        .replace(/[ \t]+\n/g, '\n')
+        .replace(/\n+/g, brTag)
+        .trim();
+    case 'break-spaces':
+      // 保留所有空白字符和换行符，换行为 <br>
+      return text
+        .replace(/\n/g, brTag);
+    default:
+      // 默认处理和 normal 相同
+      return text
+        .replace(/[ \t\r\f\v]+/g, ' ')
+        .replace(/[ \t]+\n/g, '\n')
+        .replace(/\n+/g, brTag)
+        .trim();
+  }
+}
+
+
 // 处理会换行的 span 后添加 <br>，让内核能识别到换行
 function siyuanSpansAddBr(tempElement) {
     const spans = tempElement.querySelectorAll('span');
@@ -165,9 +211,7 @@ function siyuanSpansAddBr(tempElement) {
                 return; // 如果父元素是 pre、code 或 span 或者数学公式，跳过该 span
             }
 
-            const br = document.createElement('br'); // 修正为从 document 创建元素
-            br.setAttribute('data-added-by-siyuan', 'true');
-            span.parentNode.insertBefore(br, span.nextSibling);
+            span.innerHTML = siyuanProcessTextByWhiteSpace(span);
 
             // 添加到符合条件的数组中
             matchedSpans.push(span);
@@ -180,17 +224,6 @@ function siyuanSpansAddBr(tempElement) {
     } else {
         console.log('No span elements matched the criteria.');
     }
-};
-
-// 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
-// 移除由 span_add_br 添加的 <br>，还原原有样式
-function siyuanSpansDelBr(tempElement) {
-    const brs = tempElement.querySelectorAll('br[data-added-by-siyuan="true"]');
-    if (!brs || brs.length === 0) {
-        return;
-    }
-    brs.forEach((br) => br.parentNode.removeChild(br));
-    console.log(`siyuanSpansDelBr Removed ${brs.length} <br> elements.`);
 };
 
 // 替换粗体样式为内核可识别<b>标签 https://github.com/siyuan-note/siyuan/issues/13306
@@ -597,12 +630,6 @@ async function siyuanGetCloneNode(tempDoc) {
     if (items.expItalic) {
         // 还原斜体样式
         revertItalicStyles(tempDoc);
-    }
-
-    if (items.expSpan) {
-        // 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
-        // 处理会换行的 span 后添加 <br>，让内核能识别到换行
-        siyuanSpansDelBr(tempDoc);
     }
 
     return clonedDoc;
