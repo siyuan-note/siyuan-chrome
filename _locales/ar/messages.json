@@ -100,5 +100,11 @@
   },
   "template_help": {
     "message": "المتغيرات المتاحة:<br>${title} - عنوان الصفحة<br>${url} - رابط الصفحة<br>${siteName} - اسم الموقع<br>${date} - التاريخ الحالي (yyyy-MM-dd)<br>${time} - الوقت الحالي (HH:mm)<br>${tags} - العلامات<br>${excerpt} - مقتطف من الصفحة<br>${content} - محتوى الصفحة"
+  },
+  "database_label": {
+    "message": "إضافة إلى قاعدة البيانات"
+  },
+  "database_search_placeholder": {
+    "message": "أدخل كلمة مفتاحية للبحث في قاعدة البيانات"
   }
 }
