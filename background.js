@@ -232,6 +232,17 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                             'tip': requestData.tip,
                         })
 
+                        // 检查是否需要打开文档
+                        chrome.storage.sync.get({
+                            expOpenAfterClip: false,
+                        }, (items) => {
+                            if (items.expOpenAfterClip && response.data) {
+                                // 使用 SiYuan 协议在桌面应用中打开文档
+                                const documentUrl = `siyuan://blocks/${response.data}`;
+                                chrome.tabs.create({ url: documentUrl });
+                            }
+                        });
+
                         if (fetchFileErr) {
                             // 可能因为跨域问题导致下载图片失败，这里调用内核接口 `网络图片转换为本地图片` https://github.com/siyuan-note/siyuan/issues/7224
                             fetch(requestData.api + '/api/format/netImg2LocalAssets', {
