@@ -53,6 +53,9 @@
   "exp_list_doc_tree": {
     "message": "網頁剪藏後，顯示文件樹*"
   },
+  "exp_open_after_clip": {
+    "message": "網頁剪藏後，打開文件*"
+  },
   "exp_svg_to_img": {
     "message": "識別 HTML 中嵌入的 SVG*"
   },

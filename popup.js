@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const parentDocElement = document.getElementById('parentDoc')
     const tagsElement = document.getElementById('tags')
     const assetsElement = document.getElementById('assets')
+    const expOpenAfterClipElement = document.getElementById('expOpenAfterClip')
     const expElement = document.getElementById('exp')
     const expGroupElement = document.getElementById('expGroup')
     const expSpanElement = document.getElementById('expSpan')
@@ -132,6 +133,11 @@ document.addEventListener('DOMContentLoaded', () => {
             assets: assetsElement.checked,
         })
     })
+    expOpenAfterClipElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            expOpenAfterClip: expOpenAfterClipElement.checked,
+        })
+    })
     expSpanElement.addEventListener('change', () => {
         chrome.storage.sync.set({
             expSpan: expSpanElement.checked,
@@ -216,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         parentHPath: '',
         tags: '',
         assets: true,
+        expOpenAfterClip: false,
         expSpan: false,
         expBold: false,
         expItalic: false,
@@ -249,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         parentDocElement.setAttribute("data-parenthpath", items.parentHPath)
         tagsElement.value = items.tags || ''
         assetsElement.checked = items.assets
+        expOpenAfterClipElement.checked = items.expOpenAfterClip
         expSpanElement.checked = items.expSpan
         expBoldElement.checked = items.expBold
         expItalicElement.checked = items.expItalic

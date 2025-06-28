@@ -53,6 +53,9 @@
   "exp_list_doc_tree": {
     "message": "بعد قص صفحة الويب، قم بإظهار شجرة المستند*"
   },
+  "exp_open_after_clip": {
+    "message": "بعد قص صفحة الويب، افتح المستند*"
+  },
   "exp_svg_to_img": {
     "message": "الكشف عن SVG المضمن في HTML*"
   },

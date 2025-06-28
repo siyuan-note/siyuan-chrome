@@ -53,6 +53,9 @@
   "exp_list_doc_tree": {
     "message": "Après extraction de page web, afficher l'arborescence du document*"
   },
+  "exp_open_after_clip": {
+    "message": "Après extraction de page web, ouvrir le document*"
+  },
   "exp_svg_to_img": {
     "message": "Détecter SVG intégré dans HTML*"
   },
