@@ -165,7 +165,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
         if (requestData.type === 'article') {
             let title = requestData.title ? requestData.title : 'Untitled'
-            title = title.replaceAll("/", "")
+            title = title.replaceAll("/", "／")
             chrome.storage.sync.get({
                 clipTemplate: '---\n\n- ${title}${siteName ? " - " + siteName : ""}\n- [${urlDecoded}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
             }, (items) => {
