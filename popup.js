@@ -229,7 +229,16 @@ document.addEventListener('DOMContentLoaded', () => {
         expRemoveImgLink: false,
         expListDocTree: false,
         expSvgToImg: false,
-        clipTemplate: '---\n\n- ${title}${siteName ? " - " + siteName : ""}\n- [${urlDecoded}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
+        clipTemplate: '---\n' +
+            '\n' +
+            '- ${title}${siteName ? " - " + siteName : ""}\n' +
+            '- [${urlDecoded}](${url}) \n' +
+            '${excerpt ? "- " + excerpt : ""}\n' +
+            '- ${date} ${time}\n' +
+            '\n' +
+            '---\n' +
+            '\n' +
+            '${content}',
     }, async function (items) {
         siyuanLoadLanguageFile(items.langCode, (data) => {
             siyuanTranslateDOM(data); // 在这里使用加载的i18n数据
