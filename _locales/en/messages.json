@@ -30,7 +30,7 @@
     "message": "Use commas to separate multiple tags"
   },
   "assets": {
-    "message": "Download resources"
+    "message": "Download assets"
   },
   "exp": {
     "message": "Show experimental features"
@@ -42,10 +42,10 @@
     "message": "Preserve line breaks in span elements*"
   },
   "exp_bold": {
-    "message": "Preserve bold formatting*"
+    "message": "Detect span text newlines*"
   },
   "exp_italic": {
-    "message": "Preserve italic formatting*"
+    "message": "Detect italic style*"
   },
   "exp_remove_img_link": {
     "message": "Remove image links*"
@@ -69,7 +69,7 @@
     "message": "After installing the SiYuan extension for the first time, refresh the page before using it."
   },
   "tip_clipping": {
-    "message": "Clipping... Please wait."
+    "message": "Clipping, please wait a moment..."
   },
   "tip_clip_img": {
     "message": "Clipping images..."
