@@ -1,3 +1,17 @@
+// 默认剪藏模板（用于首次加载与恢复默认）
+function getDefaultTemplate() {
+    return '---\n' +
+        '\n' +
+        '- ${title}${siteName ? " - " + siteName : ""}\n' +
+        '- [${urlDecoded}](${url}) \n' +
+        '${excerpt ? "- " + excerpt : ""}\n' +
+        '- ${date} ${time}\n' +
+        '\n' +
+        '---\n' +
+        '\n' +
+        '${content}';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const ipElement = document.getElementById('ip')
     const tokenElement = document.getElementById('token')
@@ -76,6 +90,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // 打开模板配置弹窗
             const templateModal = document.getElementById('templateModal')
             if (templateModal) {
+                // 打开时预填充当前模板（无则回退默认）
+                const templateTextArea = document.getElementById('templateText')
+                if (templateTextArea) {
+                    chrome.storage.sync.get({
+                        clipTemplate: getDefaultTemplate(),
+                    }, (t) => {
+                        templateTextArea.value = t.clipTemplate || getDefaultTemplate()
+                    })
+                }
                 templateModal.style.display = 'block'
             }
         })
@@ -101,6 +124,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             templateSavedMsg.style.display = 'none'
                         }, 2000)
                     }
+                }
+            })
+        })
+    }
+
+    // 添加模板恢复默认按钮事件
+    const restoreTemplateBtn = document.getElementById('restoreTemplate')
+    if (restoreTemplateBtn) {
+        restoreTemplateBtn.addEventListener('click', () => {
+            const templateTextArea = document.getElementById('templateText')
+            const def = getDefaultTemplate()
+            if (templateTextArea) templateTextArea.value = def
+            chrome.storage.sync.set({ clipTemplate: def }, () => {
+                const templateSavedMsg = document.getElementById('templateSavedMsg')
+                if (templateSavedMsg) {
+                    templateSavedMsg.style.display = 'block'
+                    setTimeout(() => { templateSavedMsg.style.display = 'none' }, 2000)
                 }
             })
         })
@@ -229,16 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expRemoveImgLink: false,
         expListDocTree: false,
         expSvgToImg: false,
-        clipTemplate: '---\n' +
-            '\n' +
-            '- ${title}${siteName ? " - " + siteName : ""}\n' +
-            '- [${urlDecoded}](${url}) \n' +
-            '${excerpt ? "- " + excerpt : ""}\n' +
-            '- ${date} ${time}\n' +
-            '\n' +
-            '---\n' +
-            '\n' +
-            '${content}',
+        clipTemplate: getDefaultTemplate(),
     }, async function (items) {
         siyuanLoadLanguageFile(items.langCode, (data) => {
             siyuanTranslateDOM(data); // 在这里使用加载的i18n数据
