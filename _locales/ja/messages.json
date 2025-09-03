@@ -103,5 +103,11 @@
   },
   "template_help": {
     "message": "利用可能な変数：<br>${title} - ページタイトル<br>${url} - ページURL<br>${siteName} - サイト名<br>${date} - 現在の日付 (yyyy-MM-dd)<br>${time} - 現在の時間 (HH:mm)<br>${tags} - タグ<br>${excerpt} - ページの抜粋<br>${content} - ページの内容"
+  },
+  "database_label": {
+    "message": "データベースに追加"
+  },
+  "database_search_placeholder": {
+    "message": "キーワードを入力してデータベースを検索"
   }
 }

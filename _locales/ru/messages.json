@@ -103,5 +103,11 @@
   },
   "template_help": {
     "message": "Доступные переменные:<br>${title} - Заголовок страницы<br>${url} - URL страницы<br>${siteName} - Имя сайта<br>${date} - Текущая дата (yyyy-MM-dd)<br>${time} - Текущее время (HH:mm)<br>${tags} - Теги<br>${excerpt} - Извлечение страницы<br>${content} - Содержимое страницы"
+  },
+  "database_label": {
+    "message": "Добавить в базу данных"
+  },
+  "database_search_placeholder": {
+    "message": "Введите ключевое слово для поиска базы данных"
   }
 }

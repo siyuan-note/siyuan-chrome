@@ -103,5 +103,11 @@
   },
   "template_help": {
     "message": "Zmienne dostępne:<br>${title} - Tytuł strony<br>${url} - URL strony<br>${siteName} - Nazwa witryny<br>${date} - Bieżąca data (yyyy-MM-dd)<br>${time} - Bieżący czas (HH:mm)<br>${tags} - Tagi<br>${excerpt} - Fragment strony<br>${content} - Zawartość strony"
+  },
+  "database_label": {
+    "message": "Dodaj do bazy danych"
+  },
+  "database_search_placeholder": {
+    "message": "Wpisz słowo kluczowe, aby wyszukać bazę danych"
   }
 }
