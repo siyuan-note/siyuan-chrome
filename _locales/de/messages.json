@@ -103,5 +103,11 @@
   },
   "template_help": {
     "message": "Verfügbare Variablen:<br>${title} - Seitentitel<br>${url} - Seiten-URL<br>${siteName} - Website-Name<br>${date} - Aktuelles Datum (yyyy-MM-dd)<br>${time} - Aktuelle Zeit (HH:mm)<br>${tags} - Tags<br>${excerpt} - Seitenauszug<br>${content} - Seiteninhalt"
+  },
+  "database_label": {
+    "message": "Zur Datenbank hinzufügen"
+  },
+  "database_search_placeholder": {
+    "message": "Suchbegriff für Datenbank eingeben"
   }
 }

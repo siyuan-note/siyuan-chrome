@@ -106,6 +106,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         return
     }
 
+
     const requestData = request.data
     const fetchFileErr = requestData.fetchFileErr
     const dom = requestData.dom
@@ -234,12 +235,39 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                 }).then((response) => {
                     return response.json()
                 }).then((response) => {
+
+
+
+
                     if (0 === response.code) {
+
+                        // 添加到数据库
+                        if (requestData.selectedDatabaseID) {
+                            const docId = response.data;
+                            const dbInput = {
+                                avID: requestData.selectedDatabaseID,
+                                srcs: [{
+                                    id: docId,
+                                    isDetached: false,
+                                }]
+                            };
+                            setTimeout(() => {
+                                fetch(requestData.api + '/api/av/addAttributeViewBlocks', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': 'Token ' + requestData.token,
+                                    },
+                                    body: JSON.stringify(dbInput),
+                                })
+                            }, 1000); // 延迟 1 秒, 否则无法添加到数据库成功
+
+                        }
                         chrome.tabs.sendMessage(requestData.tabId, {
                             'func': 'tipKey',
                             'msg': "tip_clip_ok",
                             'tip': requestData.tip,
                         })
+
 
                         // 检查是否需要打开文档
                         chrome.storage.sync.get({
@@ -260,11 +288,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                                     'Authorization': 'Token ' + requestData.token,
                                 },
                                 body: JSON.stringify({
-                                    'id': response.data,
+                                    'id': docId,
                                     'url': requestData.href, // 改进浏览器剪藏扩展转换本地图片成功率 https://github.com/siyuan-note/siyuan/issues/7464
                                 }),
                             })
                         }
+
 
                         chrome.tabs.sendMessage(requestData.tabId, {
                             'func': 'reload',
