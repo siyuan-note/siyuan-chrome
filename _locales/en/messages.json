@@ -39,10 +39,10 @@
     "message": "*: Experimental features may be unstable. If clipping has issues, try toggling the relevant option."
   },
   "exp_span": {
-    "message": "Preserve line breaks in span elements*"
+    "message": "Detect span text newlines*"
   },
   "exp_bold": {
-    "message": "Detect span text newlines*"
+    "message": "Detect bold style*"
   },
   "exp_italic": {
     "message": "Detect italic style*"
