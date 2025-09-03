@@ -645,6 +645,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         parentHPath: '',
         tags: '',
         assets: true,
+        expOpenAfterClip: false,
         expSpan: false,
         expBold: false,
         expItalic: false,

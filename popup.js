@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const parentDocElement = document.getElementById('parentDoc')
     const tagsElement = document.getElementById('tags')
     const assetsElement = document.getElementById('assets')
+    const expOpenAfterClipElement = document.getElementById('expOpenAfterClip')
     const searchDatabaseElement = document.getElementById('searchDatabase')
     const databaseSelectElement = document.getElementById('databaseSelect')
     const expElement = document.getElementById('exp')
@@ -151,6 +152,11 @@ document.addEventListener('DOMContentLoaded', () => {
             assets: assetsElement.checked,
         })
     })
+    expOpenAfterClipElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            expOpenAfterClip: expOpenAfterClipElement.checked,
+        })
+    })
     expSpanElement.addEventListener('change', () => {
         chrome.storage.sync.set({
             expSpan: expSpanElement.checked,
@@ -238,13 +244,23 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedDatabaseID: '',
         selectedDatabaseName: '',
         assets: true,
+        expOpenAfterClip: false,
         expSpan: false,
         expBold: false,
         expItalic: false,
         expRemoveImgLink: false,
         expListDocTree: false,
         expSvgToImg: false,
-        clipTemplate: '---\n\n- ${title} - ${siteName}\n- [${urlDecoded}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
+        clipTemplate: '---\n' +
+            '\n' +
+            '- ${title}${siteName ? " - " + siteName : ""}\n' +
+            '- [${urlDecoded}](${url}) \n' +
+            '${excerpt ? "- " + excerpt : ""}\n' +
+            '- ${date} ${time}\n' +
+            '\n' +
+            '---\n' +
+            '\n' +
+            '${content}',
     }, async function (items) {
         siyuanLoadLanguageFile(items.langCode, (data) => {
             siyuanTranslateDOM(data); // 在这里使用加载的i18n数据
@@ -273,6 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         assetsElement.checked = items.assets
         searchDatabaseElement.value = items.searchDatabaseKey || ''
         databaseSelectElement.setAttribute("data-selected-id", items.selectedDatabaseID)
+        expOpenAfterClipElement.checked = items.expOpenAfterClip
         expSpanElement.checked = items.expSpan
         expBoldElement.checked = items.expBold
         expItalicElement.checked = items.expItalic

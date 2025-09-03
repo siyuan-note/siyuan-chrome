@@ -124,6 +124,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     formData.append("parentHPath", requestData.parentHPath)
     formData.append("href", requestData.href)
     formData.append("tags", requestData.tags)
+    formData.append("clipType", requestData.type)
 
     fetch(requestData.api + '/api/extension/copy', {
         method: 'POST',
@@ -165,9 +166,18 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
         if (requestData.type === 'article') {
             let title = requestData.title ? requestData.title : 'Untitled'
-            title = title.replaceAll("/", "")
+            title = title.replaceAll("/", "／")
             chrome.storage.sync.get({
-                clipTemplate: '---\n\n- ${title} - ${siteName}\n- [${urlDecoded}](${url}) \n- ${excerpt}\n- ${date} ${time}\n\n---\n\n${content}',
+                clipTemplate: '---\n' +
+                    '\n' +
+                    '- ${title}${siteName ? " - " + siteName : ""}\n' +
+                    '- [${urlDecoded}](${url}) \n' +
+                    '${excerpt ? "- " + excerpt : ""}\n' +
+                    '- ${date} ${time}\n' +
+                    '\n' +
+                    '---\n' +
+                    '\n' +
+                    '${content}',
             }, (items) => {
                 let excerpt = requestData.excerpt.trim()
                 if ("" !== excerpt) {
@@ -257,6 +267,19 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                             'msg': "tip_clip_ok",
                             'tip': requestData.tip,
                         })
+
+
+                        // 检查是否需要打开文档
+                        chrome.storage.sync.get({
+                            expOpenAfterClip: false,
+                        }, (items) => {
+                            if (items.expOpenAfterClip && response.data) {
+                                // 使用 SiYuan 协议在桌面应用中打开文档
+                                const documentUrl = `siyuan://blocks/${response.data}`;
+                                chrome.tabs.create({ url: documentUrl });
+                            }
+                        });
+
                         if (fetchFileErr) {
                             // 可能因为跨域问题导致下载图片失败，这里调用内核接口 `网络图片转换为本地图片` https://github.com/siyuan-note/siyuan/issues/7224
                             fetch(requestData.api + '/api/format/netImg2LocalAssets', {

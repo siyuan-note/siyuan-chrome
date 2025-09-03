@@ -59,6 +59,9 @@
   "exp_list_doc_tree": {
     "message": "ウェブページのクリッピング後、文書ツリーを表示*"
   },
+  "exp_open_after_clip": {
+    "message": "ウェブページのクリッピング後、ドキュメントを開く*"
+  },
   "send": {
     "message": "SiYuanに送信"
   },

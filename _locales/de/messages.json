@@ -53,6 +53,9 @@
   "exp_list_doc_tree": {
     "message": "Nach dem Clipping einer Webseite Dokumentenbaum anzeigen*"
   },
+  "exp_open_after_clip": {
+    "message": "Nach dem Clipping einer Webseite Dokument öffnen*"
+  },
   "exp_svg_to_img": {
     "message": "SVG in HTML eingebettet erkennen*"
   },

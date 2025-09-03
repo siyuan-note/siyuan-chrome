@@ -53,6 +53,9 @@
   "exp_list_doc_tree": {
     "message": "Po wycinaniu strony internetowej wyświetl drzewo dokumentu*"
   },
+  "exp_open_after_clip": {
+    "message": "Po wycinaniu strony internetowej otwórz dokument*"
+  },
   "exp_svg_to_img": {
     "message": "Wykryj SVG osadzone w HTML*"
   },
