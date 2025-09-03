@@ -571,7 +571,8 @@
         <div class="custom-dropdown" id="savePathDropdown">
             <div class="dropdown-display" id="savePathDisplay" data-i18n="save_path_none">None</div>
             <div class="dropdown-menu" id="savePathMenu">
-                <input type="text" class="dropdown-input" id="savePathInput" placeholder="Enter a keyword and press Enter to search" />
+                <input type="text" class="dropdown-input" id="savePathInput" data-i18n="save_path_placeholder"
+                    placeholder="Enter a keyword to search" />
                 <ul class="dropdown-options" id="savePathOptions"></ul>
             </div>
         </div>
@@ -584,7 +585,8 @@
         <div class="custom-dropdown" id="databaseDropdown">
             <div class="dropdown-display" id="databaseDisplay" data-i18n="database_none">无</div>
             <div class="dropdown-menu" id="databaseMenu">
-                <input type="text" class="dropdown-input" id="databaseInput" placeholder="Input keyword to search database" />
+                <input type="text" class="dropdown-input" id="databaseInput" data-i18n="database_search_placeholder"
+                    placeholder="Enter a keyword to search database" />
                 <ul class="dropdown-options" id="databaseOptions"></ul>
             </div>
         </div>
@@ -599,7 +601,8 @@
             <input class="b3-switch" id="exp" type="checkbox">
         </label>
         <div id="expGroup" style="display: none;">
-            <div class="b3-label" style="font-size: 14px; color: red;" data-i18n="exp_tips">*: Experimental features may be unstable. If there is a problem with clipping, consider switching it.</div>
+            <div class="b3-label" style="font-size: 14px; color: red;" data-i18n="exp_tips">*: Experimental features may
+                be unstable. If there is a problem with clipping, consider switching it.</div>
             <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
                 <div style="flex: 1" data-i18n="exp_span">Detect span text newlines*</div>
                 <input class="b3-switch" id="expSpan" type="checkbox">
