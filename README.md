@@ -4,7 +4,7 @@
 
 ### 💡 Introduction
 
-SiYuan Note browser extension for Chrome.
+SiYuan browser extension for Chrome.
 
 ### 🛠️ Installation
 
@@ -14,11 +14,11 @@ SiYuan Note browser extension for Chrome.
 
 ### ✨ Usage
 
-1. Install the extension, then configure the API token in the extension options (you can view the token in SiYuan Settings → About).
-2. On a web page, select the content you want to clip, then choose "Copy to SiYuan" from the context menu.
-3. Paste in SiYuan.
+1. Install the extension, then configure the API token in the extension options (you can view the token in SiYuan Settings - About)
+2. On a web page, select the content you want to clip, then choose "Copy to SiYuan" from the context menu
+3. Paste in SiYuan
 
 ### 🔒 Privacy Policy
 
-* All data is stored on a device fully controlled by the user.
-* No usage data is collected.
+* All data is stored on a device fully controlled by the user
+* No usage data is collected
