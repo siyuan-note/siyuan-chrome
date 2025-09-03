@@ -110,6 +110,9 @@
   "template_restore_default": {
     "message": "Restore default"
   },
+  "template_restore_default": {
+    "message": "Restore default"
+  },
   "database_label": {
     "message": "Add to database"
   },
