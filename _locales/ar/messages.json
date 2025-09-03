@@ -109,5 +109,11 @@
   },
   "database_search_placeholder": {
     "message": "أدخل كلمة مفتاحية للبحث في قاعدة البيانات"
+  },
+  "save_path_none": {
+    "message": "بدون"
+  },
+  "database_none": {
+    "message": "بدون"
   }
 }

@@ -110,5 +110,11 @@
   },
   "database_search_placeholder": {
     "message": "輸入關鍵字搜尋資料庫"
+  },
+  "save_path_none": {
+    "message": "無"
+  },
+  "database_none": {
+    "message": "無"
   }
 }

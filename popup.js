@@ -2,13 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const ipElement = document.getElementById('ip')
     const tokenElement = document.getElementById('token')
     const showTipElement = document.getElementById('showTip')
-    const searchDocElement = document.getElementById('searchDoc')
-    const parentDocElement = document.getElementById('parentDoc')
     const tagsElement = document.getElementById('tags')
     const assetsElement = document.getElementById('assets')
     const expOpenAfterClipElement = document.getElementById('expOpenAfterClip')
-    const searchDatabaseElement = document.getElementById('searchDatabase')
-    const databaseSelectElement = document.getElementById('databaseSelect')
     const expElement = document.getElementById('exp')
     const expGroupElement = document.getElementById('expGroup')
     const expSpanElement = document.getElementById('expSpan')
@@ -18,6 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const expListDocTreeElement = document.getElementById('expListDocTree')
     const expSvgToImgElement = document.getElementById('expSvgToImg')
     const languageElement = document.getElementById('language')
+
+    // 新增下拉菜单元素
+    const savePathDisplay = document.getElementById('savePathDisplay')
+    const savePathInput = document.getElementById('savePathInput')
+    const savePathOptions = document.getElementById('savePathOptions')
+    const databaseDisplay = document.getElementById('databaseDisplay')
+    const databaseInput = document.getElementById('databaseInput')
+    const databaseOptions = document.getElementById('databaseOptions')
 
     ipElement.addEventListener('change', () => {
         let ip = ipElement.value;
@@ -46,24 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
             showTip: showTipElement.checked,
         })
     })
-    searchDocElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            searchKey: searchDocElement.value,
-        })
-        updateSearch()
-    })
-    parentDocElement.addEventListener('change', () => {
-        const selectElement = document.getElementById('parentDoc');
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-        const notebook = selectedOption.getAttribute('data-notebook');
-        const parentDoc = selectedOption.getAttribute('data-parent');
-
-        chrome.storage.sync.set({
-            notebook: notebook,
-            parentDoc: parentDoc,
-            parentHPath: selectedOption.innerText,
-        })
-    })
     tagsElement.addEventListener('change', () => {
         tagsElement.value = tagsElement.value.replace(/#/g, '')
         chrome.storage.sync.set({
@@ -71,21 +57,77 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    searchDatabaseElement.addEventListener('change', () => {
+    // 保存路径下拉菜单事件
+    savePathDisplay.addEventListener('click', () => {
+        const menu = document.getElementById('savePathMenu')
+        const isOpen = menu.classList.contains('open')
+        closeAllDropdowns()
+        if (!isOpen) {
+            menu.classList.add('open')
+            savePathInput.focus()
+        }
+    })
+
+    savePathInput.addEventListener('input', () => {
         chrome.storage.sync.set({
-            searchDatabaseKey: searchDatabaseElement.value,
+            searchKey: savePathInput.value,
+        })
+        updateSearch()
+    })
+
+    savePathOptions.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            const notebook = e.target.getAttribute('data-notebook')
+            const parentDoc = e.target.getAttribute('data-parent')
+            const hPath = e.target.textContent
+
+            savePathDisplay.textContent = hPath
+            chrome.storage.sync.set({
+                notebook: notebook,
+                parentDoc: parentDoc,
+                parentHPath: hPath,
+            })
+            document.getElementById('savePathMenu').classList.remove('open')
+        }
+    })
+
+    // 数据库下拉菜单事件
+    databaseDisplay.addEventListener('click', () => {
+        const menu = document.getElementById('databaseMenu')
+        const isOpen = menu.classList.contains('open')
+        closeAllDropdowns()
+        if (!isOpen) {
+            menu.classList.add('open')
+            databaseInput.focus()
+        }
+    })
+
+    databaseInput.addEventListener('input', () => {
+        chrome.storage.sync.set({
+            searchDatabaseKey: databaseInput.value,
         })
         updateDatabaseSearch()
     })
 
-    databaseSelectElement.addEventListener('change', () => {
-        const selectedOption = databaseSelectElement.options[databaseSelectElement.selectedIndex];
-        const selectedDatabaseID = selectedOption.value;
-        const selectedDatabaseName = selectedOption.innerText;
-        chrome.storage.sync.set({
-            selectedDatabaseID: selectedDatabaseID,
-            selectedDatabaseName: selectedDatabaseName,
-        })
+    databaseOptions.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            const dbID = e.target.getAttribute('data-id')
+            const dbName = e.target.textContent
+
+            databaseDisplay.textContent = dbName
+            chrome.storage.sync.set({
+                selectedDatabaseID: dbID,
+                selectedDatabaseName: dbName,
+            })
+            document.getElementById('databaseMenu').classList.remove('open')
+        }
+    })
+
+    // 点击其他地方关闭下拉菜单
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.custom-dropdown')) {
+            closeAllDropdowns()
+        }
     })
 
     // 添加模板配置按钮点击事件
@@ -281,14 +323,20 @@ document.addEventListener('DOMContentLoaded', () => {
         ipElement.value = items.ip || 'http://127.0.0.1:6806'
         tokenElement.value = items.token || ''
         showTipElement.checked = items.showTip
-        searchDocElement.value = items.searchKey || ''
-        parentDocElement.setAttribute("data-notebook", items.notebook)
-        parentDocElement.setAttribute("data-parent", items.parentDoc)
-        parentDocElement.setAttribute("data-parenthpath", items.parentHPath)
+        savePathInput.value = items.searchKey || ''
+        savePathDisplay.dataset.notebook = items.notebook
+        savePathDisplay.dataset.parent = items.parentDoc
+        savePathDisplay.dataset.parenthpath = items.parentHPath
+        if (items.parentHPath) {
+            savePathDisplay.textContent = items.parentHPath
+        }
         tagsElement.value = items.tags || ''
         assetsElement.checked = items.assets
-        searchDatabaseElement.value = items.searchDatabaseKey || ''
-        databaseSelectElement.setAttribute("data-selected-id", items.selectedDatabaseID)
+        databaseInput.value = items.searchDatabaseKey || ''
+        databaseDisplay.dataset.selectedId = items.selectedDatabaseID
+        if (items.selectedDatabaseName) {
+            databaseDisplay.textContent = items.selectedDatabaseName
+        }
         expOpenAfterClipElement.checked = items.expOpenAfterClip
         expSpanElement.checked = items.expSpan
         expBoldElement.checked = items.expBold
@@ -304,8 +352,9 @@ document.addEventListener('DOMContentLoaded', () => {
 const updateSearch = () => {
     const ipElement = document.getElementById('ip')
     const tokenElement = document.getElementById('token')
-    const searchDocElement = document.getElementById('searchDoc')
-    const parentDocElement = document.getElementById('parentDoc')
+    const savePathInput = document.getElementById('savePathInput')
+    const savePathOptions = document.getElementById('savePathOptions')
+    const savePathDisplay = document.getElementById('savePathDisplay')
 
     fetch(ipElement.value + '/api/filetree/searchDocs', {
         method: 'POST',
@@ -314,7 +363,7 @@ const updateSearch = () => {
             'Authorization': 'Token ' + tokenElement.value,
         },
         body: JSON.stringify({
-            "k": searchDocElement.value,
+            "k": savePathInput.value,
             "flashcard": false
         })
     }).then((response) => {
@@ -332,33 +381,25 @@ const updateSearch = () => {
         }
 
         let optionsHTML = ''
+        if (!savePathInput.value.trim()) {
+            optionsHTML = '<li data-notebook="" data-parent="">无</li>' // Default empty option when no search term
+        }
+        let selectedHPath = ''
         response.data.forEach(doc => {
             const parentDoc = doc.path.substring(doc.path.toString().lastIndexOf('/') + 1).replace(".sy", '')
-            let selected = ""
-            if (parentDocElement.dataset.notebook === doc.box && parentDocElement.dataset.parent === parentDoc &&
-                parentDocElement.dataset.parenthpath === doc.hPath) {
-                selected = "selected";
+            let selectedClass = ""
+            if (savePathDisplay.dataset.notebook === doc.box && savePathDisplay.dataset.parent === parentDoc &&
+                savePathDisplay.dataset.parenthpath === doc.hPath) {
+                selectedClass = "selected";
+                selectedHPath = doc.hPath
             }
-            optionsHTML += `<option ${selected} data-notebook="${doc.box}" data-parent="${parentDoc}">${escapeHtml(doc.hPath)}</option>`
+            optionsHTML += `<li ${selectedClass} data-notebook="${doc.box}" data-parent="${parentDoc}">${escapeHtml(doc.hPath)}</li>`
         })
-        parentDocElement.innerHTML = optionsHTML
+        savePathOptions.innerHTML = optionsHTML
 
-        if (parentDocElement.selectedOptions && parentDocElement.selectedOptions.length > 0) {
-            let selected = parentDocElement.querySelector('option[selected]')
-            if (!selected) {
-                selected = parentDocElement.selectedOptions[0]
-                chrome.storage.sync.set({
-                    notebook: selected.getAttribute("data-notebook"),
-                    parentDoc: selected.getAttribute("data-parent"),
-                    parentHPath: selected.innerText,
-                })
-            }
-        } else {
-            chrome.storage.sync.set({
-                notebook: '',
-                parentDoc: '',
-                parentHPath: ''
-            })
+        // 如果有选中的，更新显示
+        if (selectedHPath) {
+            savePathDisplay.textContent = selectedHPath
         }
     })
 }
@@ -366,13 +407,9 @@ const updateSearch = () => {
 const updateDatabaseSearch = () => {
     const ipElement = document.getElementById('ip')
     const tokenElement = document.getElementById('token')
-    const searchDatabaseElement = document.getElementById('searchDatabase')
-    const databaseSelectElement = document.getElementById('databaseSelect')
-
-    // if (!ipElement.value || !tokenElement.value) {
-    //     databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_token_miss") || 'Configure API token first'}</option>`
-    //     return
-    // }
+    const databaseInput = document.getElementById('databaseInput')
+    const databaseOptions = document.getElementById('databaseOptions')
+    const databaseDisplay = document.getElementById('databaseDisplay')
 
     fetch(ipElement.value + '/api/av/searchAttributeView', {
         method: 'POST',
@@ -382,12 +419,11 @@ const updateDatabaseSearch = () => {
         },
         body: JSON.stringify({
             avID: "", // Search in all AVs
-            keyword: searchDatabaseElement.value,
+            keyword: databaseInput.value,
         })
     }).then((response) => {
         if (response.status !== 200) {
             document.getElementById('log').innerHTML = "Database search: Authentication failed or API error."
-            databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_siyuan_kernel_unavailable") || 'Error searching databases'}</option>`
             return null
         }
         document.getElementById('log').innerHTML = ""
@@ -399,64 +435,33 @@ const updateDatabaseSearch = () => {
             } else {
                 document.getElementById('log').innerHTML = "Database search failed."
             }
-            databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_siyuan_kernel_unavailable") || 'Error searching databases'}</option>`
             return
         }
 
-        let optionsHTML = '<option value="">-- Select Database --</option>' // Default empty option
+        let optionsHTML = ''
+        if (!databaseInput.value.trim()) {
+            optionsHTML = '<li data-id="">无</li>' // Default empty option when no search term
+        }
+        let selectedName = '-- Select Database --'
         if (response.data && response.data.results) {
             response.data.results.forEach(db => {
-                let selected = ""
-                if (databaseSelectElement.dataset.selectedId === db.avID) {
-                    selected = "selected";
+                let selectedClass = ""
+                if (databaseDisplay.dataset.selectedId === db.avID) {
+                    selectedClass = "selected";
+                    selectedName = db.avName
                 }
-                optionsHTML += `<option value="${db.avID}" ${selected}>${escapeHtml(db.avName)}</option>`
+                optionsHTML += `<li ${selectedClass} data-id="${db.avID}">${escapeHtml(db.avName)}</li>`
             })
         }
-        databaseSelectElement.innerHTML = optionsHTML
+        databaseOptions.innerHTML = optionsHTML
 
-        // Reselect or select first if nothing was pre-selected
-        const previouslySelectedID = databaseSelectElement.dataset.selectedId;
-        let foundPrevious = false;
-        if (previouslySelectedID) {
-            for (let i = 0; i < databaseSelectElement.options.length; i++) {
-                if (databaseSelectElement.options[i].value === previouslySelectedID) {
-                    databaseSelectElement.selectedIndex = i;
-                    foundPrevious = true;
-                    break;
-                }
-            }
+        // 如果有选中的，更新显示
+        if (selectedName !== '-- Select Database --') {
+            databaseDisplay.textContent = selectedName
         }
-
-        if (!foundPrevious && databaseSelectElement.options.length > 1 && !previouslySelectedID) { // More than the default "-- Select --"
-            // No auto-selection, let user choose.
-        } else if (!foundPrevious && !previouslySelectedID) {
-            // No results or only default, clear stored selection
-            chrome.storage.sync.set({
-                selectedDatabaseID: '',
-                selectedDatabaseName: '',
-            })
-        } else {
-            // If a selection is made (either pre-selected or first item if only one result)
-            const selectedOption = databaseSelectElement.options[databaseSelectElement.selectedIndex];
-            if (selectedOption && selectedOption.value) {
-                chrome.storage.sync.set({
-                    selectedDatabaseID: selectedOption.value,
-                    selectedDatabaseName: selectedOption.innerText,
-                })
-            } else {
-                chrome.storage.sync.set({ // Clear if default is selected
-                    selectedDatabaseID: '',
-                    selectedDatabaseName: '',
-                })
-            }
-        }
-
-
     }).catch(e => {
         console.error("Database search fetch error:", e)
         document.getElementById('log').innerHTML = "Database search: Network error or Siyuan not available."
-        databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_siyuan_kernel_unavailable") || 'Error searching databases'}</option>`
     })
 }
 
@@ -597,4 +602,11 @@ function siyuanTranslateDOM(translations) {
     if (templateHelp && translations.template_help) {
         templateHelp.innerHTML = translations.template_help.message;
     }
+}
+
+// 关闭所有下拉菜单
+function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.remove('open')
+    })
 }
