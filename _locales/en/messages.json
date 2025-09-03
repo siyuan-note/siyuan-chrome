@@ -3,13 +3,13 @@
     "message": "SiYuan"
   },
   "extension_description": {
-    "message": "Save the web page to SiYuan with one click"
+    "message": "Clip web pages to SiYuan in one click"
   },
   "copy_to_siyuan": {
     "message": "Copy to SiYuan"
   },
   "show_tip": {
-    "message": "Show Tip"
+    "message": "Show tips"
   },
   "siyuan_url": {
     "message": "SiYuan URL"
@@ -21,7 +21,7 @@
     "message": "Save path"
   },
   "save_path_placeholder": {
-    "message": "Input the keyword then Enter to search"
+    "message": "Enter a keyword and press Enter to search"
   },
   "tags": {
     "message": "Tags"
@@ -30,34 +30,34 @@
     "message": "Use commas to separate multiple tags"
   },
   "assets": {
-    "message": "Download assets"
+    "message": "Download resources"
   },
   "exp": {
     "message": "Show experimental features"
   },
   "exp_tips": {
-    "message": "*: Experimental features may be unstable. If there is a problem with clipping, consider switching it."
+    "message": "*: Experimental features may be unstable. If clipping has issues, try toggling the relevant option."
   },
   "exp_span": {
-    "message": "Detect span text newlines*"
+    "message": "Preserve line breaks in span elements*"
   },
   "exp_bold": {
-    "message": "Detect bold style*"
+    "message": "Preserve bold formatting*"
   },
   "exp_italic": {
-    "message": "Detect italic style*"
+    "message": "Preserve italic formatting*"
   },
   "exp_remove_img_link": {
-    "message": "Remove image link*"
+    "message": "Remove image links*"
   },
   "exp_list_doc_tree": {
-    "message": "After clipping a web page, display the document tree*"
+    "message": "Show the document tree after clipping*"
   },
   "exp_open_after_clip": {
-    "message": "After clipping a web page, open document*"
+    "message": "Open the document after clipping*"
   },
   "exp_svg_to_img": {
-    "message": "Detect SVG embedded in HTML*"
+    "message": "Detect SVGs embedded in HTML*"
   },
   "language": {
     "message": "Interface language"
@@ -66,31 +66,31 @@
     "message": "Send to SiYuan"
   },
   "tip_first_time": {
-    "message": "After installing the SiYuan extension for the first time, please refresh the page before using it"
+    "message": "After installing the SiYuan extension for the first time, refresh the page before using it."
   },
   "tip_clipping": {
-    "message": "Clipping, please wait a moment..."
+    "message": "Clipping... Please wait."
   },
   "tip_clip_img": {
-    "message": "Clipping images"
+    "message": "Clipping images..."
   },
   "tip_clip_ok": {
-    "message": "Clipping successfully"
+    "message": "Clipped successfully"
   },
   "tip_token_miss": {
-    "message": "Please config API token before clipping content"
+    "message": "Please configure the API token before clipping content"
   },
   "tip_token_invalid": {
     "message": "Invalid API token"
   },
   "tip_save_path_miss": {
-    "message": "Please select save path before clipping content"
+    "message": "Please select a save path before clipping content"
   },
   "tip_siyuan_kernel_unavailable": {
-    "message": "Please start SiYuan and ensure network connectivity before trying again"
+    "message": "Please start SiYuan and ensure network connectivity before trying again."
   },
   "template_config": {
-    "message": "Clipping template"
+    "message": "Clipping template settings"
   },
   "template_save": {
     "message": "Save"
