@@ -103,5 +103,8 @@
   },
   "template_help": {
     "message": "Available variables:<br>${title} - Page title<br>${url} - Page URL<br>${siteName} - Site name<br>${date} - Current date (yyyy-MM-dd)<br>${time} - Current time (HH:mm)<br>${tags} - Tags<br>${excerpt} - Page excerpt<br>${content} - Page content"
+  },
+  "template_restore_default": {
+    "message": "Restore default"
   }
 }
