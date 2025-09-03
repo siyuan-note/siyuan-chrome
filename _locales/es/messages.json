@@ -109,5 +109,11 @@
   },
   "database_search_placeholder": {
     "message": "Ingrese palabra clave para buscar base de datos"
+  },
+  "save_path_none": {
+    "message": "Ninguno"
+  },
+  "database_none": {
+    "message": "Ninguno"
   }
 }

@@ -458,6 +458,92 @@
             cursor: pointer;
             color: var(--b3-theme-on-surface);
         }
+
+        /* 自定义下拉菜单样式 */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+        }
+
+        .dropdown-display {
+            border: 0;
+            border-radius: var(--b3-border-radius);
+            padding: 4px 26px 4px 8px;
+            box-sizing: border-box;
+            line-height: 20px;
+            color: var(--b3-theme-on-background);
+            transition: box-shadow 120ms 0ms cubic-bezier(0, 0, 0.2, 1), background-color .2s cubic-bezier(0, 0, .2, 1) 0ms;
+            height: 28px;
+            font-size: 14px;
+            box-shadow: inset 0 0 0 .6px var(--b3-theme-on-surface);
+            background: var(--b3-select-background);
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-display:hover {
+            box-shadow: inset 0 0 0 .6px var(--b3-theme-on-background);
+            background-color: var(--b3-theme-surface);
+        }
+
+        .dropdown-display:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 1px var(--b3-theme-primary), 0 0 0 3px var(--b3-theme-primary-lightest);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--b3-theme-background);
+            border: 1px solid var(--b3-border-color);
+            border-radius: var(--b3-border-radius);
+            box-shadow: var(--b3-dialog-shadow);
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .dropdown-menu.open {
+            display: block;
+        }
+
+        .dropdown-input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: none;
+            border-bottom: 1px solid var(--b3-border-color);
+            outline: none;
+            font-size: 14px;
+        }
+
+        .dropdown-options {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .dropdown-options li {
+            padding: 8px;
+            cursor: pointer;
+            color: var(--b3-theme-on-background);
+        }
+
+        .dropdown-options li:hover {
+            background-color: var(--b3-list-hover);
+        }
+
+        .dropdown-options li.selected {
+            background-color: var(--b3-theme-primary-lightest);
+            color: var(--b3-theme-primary);
+        }
     </style>
 </head>
 
@@ -482,20 +568,26 @@
         </div>
         <div class="fn__hr"></div>
         <div class="b3-label" data-i18n="save_path">Save path</div>
-        <input class="b3-text-field" id="searchDoc" data-i18n="save_path_placeholder"
-            placeholder="Input the keyword then Enter to search" />
-        <div class="fn__hr"></div>
-        <select class="b3-select" id="parentDoc"></select>
+        <div class="custom-dropdown" id="savePathDropdown">
+            <div class="dropdown-display" id="savePathDisplay" data-i18n="save_path_none">无</div>
+            <div class="dropdown-menu" id="savePathMenu">
+                <input type="text" class="dropdown-input" id="savePathInput" placeholder="Input the keyword then Enter to search" />
+                <ul class="dropdown-options" id="savePathOptions"></ul>
+            </div>
+        </div>
         <div class="fn__hr"></div>
         <div class="b3-label" data-i18n="tags">Tags</div>
         <input class="b3-text-field" id="tags" data-i18n="tags_placeholder"
             placeholder="Use commas to separate multiple tags" />
         <div class="fn__hr"></div>
         <div class="b3-label" data-i18n="database_label">Database</div>
-        <input class="b3-text-field" id="searchDatabase" data-i18n="database_search_placeholder"
-            placeholder="Input keyword to search database" />
-        <div class="fn__hr"></div>
-        <select class="b3-select" id="databaseSelect"></select>
+        <div class="custom-dropdown" id="databaseDropdown">
+            <div class="dropdown-display" id="databaseDisplay" data-i18n="database_none">无</div>
+            <div class="dropdown-menu" id="databaseMenu">
+                <input type="text" class="dropdown-input" id="databaseInput" placeholder="Input keyword to search database" />
+                <ul class="dropdown-options" id="databaseOptions"></ul>
+            </div>
+        </div>
         <div class="fn__hr"></div>
         <div class="fn__hr"></div>
         <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">

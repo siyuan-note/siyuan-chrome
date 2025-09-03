@@ -109,5 +109,11 @@
   },
   "database_search_placeholder": {
     "message": "Inserisci parola chiave per cercare nel database"
+  },
+  "save_path_none": {
+    "message": "Nessuno"
+  },
+  "database_none": {
+    "message": "Nessuno"
   }
 }
