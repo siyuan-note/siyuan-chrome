@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tagsElement = document.getElementById('tags')
     const assetsElement = document.getElementById('assets')
     const expOpenAfterClipElement = document.getElementById('expOpenAfterClip')
+    const searchDatabaseElement = document.getElementById('searchDatabase')
+    const databaseSelectElement = document.getElementById('databaseSelect')
     const expElement = document.getElementById('exp')
     const expGroupElement = document.getElementById('expGroup')
     const expSpanElement = document.getElementById('expSpan')
@@ -128,6 +130,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!e.target.closest('.custom-dropdown')) {
             closeAllDropdowns()
         }
+    })
+
+    searchDatabaseElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            searchDatabaseKey: searchDatabaseElement.value,
+        })
+        updateDatabaseSearch()
+    })
+
+    databaseSelectElement.addEventListener('change', () => {
+        const selectedOption = databaseSelectElement.options[databaseSelectElement.selectedIndex];
+        const selectedDatabaseID = selectedOption.value;
+        const selectedDatabaseName = selectedOption.innerText;
+        chrome.storage.sync.set({
+            selectedDatabaseID: selectedDatabaseID,
+            selectedDatabaseName: selectedDatabaseName,
+        })
     })
 
     // 添加模板配置按钮点击事件
@@ -462,6 +481,103 @@ const updateDatabaseSearch = () => {
     }).catch(e => {
         console.error("Database search fetch error:", e)
         document.getElementById('log').innerHTML = "Database search: Network error or Siyuan not available."
+    })
+}
+
+const updateDatabaseSearch = () => {
+    const ipElement = document.getElementById('ip')
+    const tokenElement = document.getElementById('token')
+    const searchDatabaseElement = document.getElementById('searchDatabase')
+    const databaseSelectElement = document.getElementById('databaseSelect')
+
+    // if (!ipElement.value || !tokenElement.value) {
+    //     databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_token_miss") || 'Configure API token first'}</option>`
+    //     return
+    // }
+
+    fetch(ipElement.value + '/api/av/searchAttributeView', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Token ' + tokenElement.value,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            avID: "", // Search in all AVs
+            keyword: searchDatabaseElement.value,
+        })
+    }).then((response) => {
+        if (response.status !== 200) {
+            document.getElementById('log').innerHTML = "Database search: Authentication failed or API error."
+            databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_siyuan_kernel_unavailable") || 'Error searching databases'}</option>`
+            return null
+        }
+        document.getElementById('log').innerHTML = ""
+        return response.json()
+    }).then((response) => {
+        if (!response || response.code !== 0) {
+            if (response && response.msg) {
+                document.getElementById('log').innerHTML = "Database search: " + response.msg
+            } else {
+                document.getElementById('log').innerHTML = "Database search failed."
+            }
+            databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_siyuan_kernel_unavailable") || 'Error searching databases'}</option>`
+            return
+        }
+
+        let optionsHTML = '<option value="">-- Select Database --</option>' // Default empty option
+        if (response.data && response.data.results) {
+            response.data.results.forEach(db => {
+                let selected = ""
+                if (databaseSelectElement.dataset.selectedId === db.avID) {
+                    selected = "selected";
+                }
+                optionsHTML += `<option value="${db.avID}" ${selected}>${escapeHtml(db.avName)}</option>`
+            })
+        }
+        databaseSelectElement.innerHTML = optionsHTML
+
+        // Reselect or select first if nothing was pre-selected
+        const previouslySelectedID = databaseSelectElement.dataset.selectedId;
+        let foundPrevious = false;
+        if (previouslySelectedID) {
+            for (let i = 0; i < databaseSelectElement.options.length; i++) {
+                if (databaseSelectElement.options[i].value === previouslySelectedID) {
+                    databaseSelectElement.selectedIndex = i;
+                    foundPrevious = true;
+                    break;
+                }
+            }
+        }
+
+        if (!foundPrevious && databaseSelectElement.options.length > 1 && !previouslySelectedID) { // More than the default "-- Select --"
+            // No auto-selection, let user choose.
+        } else if (!foundPrevious && !previouslySelectedID) {
+            // No results or only default, clear stored selection
+            chrome.storage.sync.set({
+                selectedDatabaseID: '',
+                selectedDatabaseName: '',
+            })
+        } else {
+            // If a selection is made (either pre-selected or first item if only one result)
+            const selectedOption = databaseSelectElement.options[databaseSelectElement.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                chrome.storage.sync.set({
+                    selectedDatabaseID: selectedOption.value,
+                    selectedDatabaseName: selectedOption.innerText,
+                })
+            } else {
+                chrome.storage.sync.set({ // Clear if default is selected
+                    selectedDatabaseID: '',
+                    selectedDatabaseName: '',
+                })
+            }
+        }
+
+
+    }).catch(e => {
+        console.error("Database search fetch error:", e)
+        document.getElementById('log').innerHTML = "Database search: Network error or Siyuan not available."
+        databaseSelectElement.innerHTML = `<option value="">${chrome.i18n.getMessage("tip_siyuan_kernel_unavailable") || 'Error searching databases'}</option>`
     })
 }
 
