@@ -113,6 +113,9 @@
   "template_restore_default": {
     "message": "恢复默认"
   },
+  "template_restore_default": {
+    "message": "恢复默认"
+  },
   "database_label": {
     "message": "添加到数据库"
   },
