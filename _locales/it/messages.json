@@ -21,7 +21,7 @@
     "message": "Percorso di salvataggio"
   },
   "save_path_placeholder": {
-    "message": "Inserisci la parola chiave e premi Invio per cercare"
+    "message": "Inserisci una parola chiave per cercare il percorso di salvataggio"
   },
   "tags": {
     "message": "Tag"
@@ -108,7 +108,7 @@
     "message": "Aggiungi al database"
   },
   "database_search_placeholder": {
-    "message": "Inserisci parola chiave per cercare nel database"
+    "message": "Inserisci una parola chiave per cercare nel database"
   },
   "save_path_none": {
     "message": "Nessuno"

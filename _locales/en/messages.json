@@ -21,7 +21,7 @@
     "message": "Save path"
   },
   "save_path_placeholder": {
-    "message": "Input the keyword then Enter to search"
+    "message": "Enter a keyword to search for the save path"
   },
   "tags": {
     "message": "Tags"
@@ -108,7 +108,7 @@
     "message": "Add to database"
   },
   "database_search_placeholder": {
-    "message": "Input the keyword then Enter to search"
+    "message": "Enter a keyword to search the database"
   },
   "save_path_none": {
     "message": "None"

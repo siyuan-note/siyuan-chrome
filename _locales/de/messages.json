@@ -21,7 +21,7 @@
     "message": "Speicherort"
   },
   "save_path_placeholder": {
-    "message": "Geben Sie das Schlüsselwort ein und drücken Sie Enter, um zu suchen"
+    "message": "Geben Sie ein Stichwort ein, um den Speicherpfad zu suchen"
   },
   "tags": {
     "message": "Tags"
@@ -108,7 +108,7 @@
     "message": "Zur Datenbank hinzufügen"
   },
   "database_search_placeholder": {
-    "message": "Suchbegriff für Datenbank eingeben"
+    "message": "Geben Sie ein Stichwort ein, um in der Datenbank zu suchen"
   },
   "save_path_none": {
     "message": "Keine"

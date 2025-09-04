@@ -21,7 +21,7 @@
     "message": "保存先"
   },
   "save_path_placeholder": {
-    "message": "キーワードを入力し、Enterキーを押して検索"
+    "message": "保存先パスを検索するキーワードを入力"
   },
   "tags": {
     "message": "タグ"
@@ -108,7 +108,7 @@
     "message": "データベースに追加"
   },
   "database_search_placeholder": {
-    "message": "キーワードを入力してデータベースを検索"
+    "message": "データベースを検索するキーワードを入力"
   },
   "save_path_none": {
     "message": "なし"

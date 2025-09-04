@@ -21,7 +21,7 @@
     "message": "Chemin de sauvegarde"
   },
   "save_path_placeholder": {
-    "message": "Entrez le mot-clé puis appuyez sur Entrée pour rechercher"
+    "message": "Entrez un mot-clé pour rechercher le chemin d’enregistrement"
   },
   "tags": {
     "message": "Tags"
@@ -108,7 +108,7 @@
     "message": "Ajouter à la base de données"
   },
   "database_search_placeholder": {
-    "message": "Saisir un mot-clé pour rechercher dans la base de données"
+    "message": "Entrez un mot-clé pour rechercher dans la base de données"
   },
   "save_path_none": {
     "message": "Aucun"

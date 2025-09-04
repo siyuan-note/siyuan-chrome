@@ -21,7 +21,7 @@
     "message": "Ruta de guardado"
   },
   "save_path_placeholder": {
-    "message": "Introduce la palabra clave y presiona Enter para buscar"
+    "message": "Ingrese una palabra clave para buscar la ruta de guardado"
   },
   "tags": {
     "message": "Etiquetas"
@@ -108,7 +108,7 @@
     "message": "Agregar a la base de datos"
   },
   "database_search_placeholder": {
-    "message": "Ingrese palabra clave para buscar base de datos"
+    "message": "Ingrese una palabra clave para buscar en la base de datos"
   },
   "save_path_none": {
     "message": "Ninguno"

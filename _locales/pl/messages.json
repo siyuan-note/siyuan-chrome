@@ -21,7 +21,7 @@
     "message": "Ścieżka zapisu"
   },
   "save_path_placeholder": {
-    "message": "Wprowadź słowo kluczowe i naciśnij Enter, aby wyszukać"
+    "message": "Wpisz słowo kluczowe, aby wyszukać ścieżkę zapisu"
   },
   "tags": {
     "message": "Tagi"
@@ -108,7 +108,7 @@
     "message": "Dodaj do bazy danych"
   },
   "database_search_placeholder": {
-    "message": "Wpisz słowo kluczowe, aby wyszukać bazę danych"
+    "message": "Wpisz słowo kluczowe, aby wyszukać w bazie danych"
   },
   "save_path_none": {
     "message": "Brak"
