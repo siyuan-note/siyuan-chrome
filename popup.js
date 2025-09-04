@@ -382,7 +382,7 @@ const updateSearch = () => {
 
         let optionsHTML = ''
         if (!savePathInput.value.trim()) {
-            optionsHTML = '<li data-notebook="" data-parent="">无</li>' // Default empty option when no search term
+            optionsHTML = `<li data-notebook="" data-parent="">${chrome.i18n.getMessage("save_path_none")}</li>`
         }
         let selectedHPath = ''
         response.data.forEach(doc => {
@@ -440,11 +440,15 @@ const updateDatabaseSearch = () => {
 
         let optionsHTML = ''
         if (!databaseInput.value.trim()) {
-            optionsHTML = '<li data-id="">无</li>' // Default empty option when no search term
+            optionsHTML = `<li data-id="">${chrome.i18n.getMessage("database_none")}</li>`
         }
         let selectedName = '-- Select Database --'
         if (response.data && response.data.results) {
             response.data.results.forEach(db => {
+                if (!db.avName) {
+                    return;
+                }
+
                 let selectedClass = ""
                 if (databaseDisplay.dataset.selectedId === db.avID) {
                     selectedClass = "selected";
