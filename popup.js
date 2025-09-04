@@ -394,6 +394,13 @@ const updateSearch = async () => {
         return
     }
 
+    // Validate token
+    if (!tokenElement.value || tokenElement.value.trim() === '') {
+        const msg = chrome.i18n.getMessage('tip_token_miss') || 'Please configure the API token before clipping content'
+        document.getElementById('log').innerHTML = msg
+        return
+    }
+
     // Normalize base URL
     let base = (ipElement.value || '').trim()
     if (!base) base = 'http://127.0.0.1:6806'
@@ -454,6 +461,24 @@ const updateSearch = async () => {
         // 如果有选中的，更新显示
         if (selectedHPath) {
             savePathDisplay.textContent = selectedHPath
+        }
+
+        if (parentDocElement.selectedOptions && parentDocElement.selectedOptions.length > 0) {
+            let selectedOpt = parentDocElement.querySelector('option[selected]')
+            if (!selectedOpt) {
+                selectedOpt = parentDocElement.selectedOptions[0]
+                chrome.storage.sync.set({
+                    notebook: selectedOpt.getAttribute('data-notebook'),
+                    parentDoc: selectedOpt.getAttribute('data-parent'),
+                    parentHPath: selectedOpt.innerText,
+                })
+            }
+        } else {
+            chrome.storage.sync.set({
+                notebook: '',
+                parentDoc: '',
+                parentHPath: ''
+            })
         }
     } catch (e) {
         const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
