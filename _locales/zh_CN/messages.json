@@ -109,5 +109,11 @@
   },
   "database_search_placeholder": {
     "message": "输入关键字搜索数据库"
+  },
+  "save_path_none": {
+    "message": "无"
+  },
+  "database_none": {
+    "message": "无"
   }
 }

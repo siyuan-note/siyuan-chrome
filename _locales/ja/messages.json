@@ -109,5 +109,11 @@
   },
   "database_search_placeholder": {
     "message": "キーワードを入力してデータベースを検索"
+  },
+  "save_path_none": {
+    "message": "なし"
+  },
+  "database_none": {
+    "message": "なし"
   }
 }

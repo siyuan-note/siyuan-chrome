@@ -109,5 +109,11 @@
   },
   "database_search_placeholder": {
     "message": "Введите ключевое слово для поиска базы данных"
+  },
+  "save_path_none": {
+    "message": "Нет"
+  },
+  "database_none": {
+    "message": "Нет"
   }
 }
