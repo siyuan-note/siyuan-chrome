@@ -104,6 +104,9 @@
   "template_help": {
     "message": "المتغيرات المتاحة:<br>${title} - عنوان الصفحة<br>${url} - رابط الصفحة<br>${siteName} - اسم الموقع<br>${date} - التاريخ الحالي (yyyy-MM-dd)<br>${time} - الوقت الحالي (HH:mm)<br>${tags} - العلامات<br>${excerpt} - مقتطف من الصفحة<br>${content} - محتوى الصفحة"
   },
+  "template_restore_default": {
+    "message": "استعادة الافتراضي"
+  },
   "database_label": {
     "message": "إضافة إلى قاعدة البيانات"
   },

@@ -103,7 +103,10 @@
   },
   "template_help": {
     "message": "Variabili disponibili:<br>${title} - Titolo della pagina<br>${url} - URL della pagina<br>${siteName} - Nome del sito<br>${date} - Data corrente (yyyy-MM-dd)<br>${time} - Ora corrente (HH:mm)<br>${tags} - Tag<br>${excerpt} - Estratto della pagina<br>${content} - Contenuto della pagina"
-  },  
+  },
+  "template_restore_default": {
+    "message": "Ripristina predefinito"
+  },
   "database_label": {
     "message": "Aggiungi al database"
   },

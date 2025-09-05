@@ -104,6 +104,9 @@
   "template_help": {
     "message": "משתנים זמינים:<br>${title} - כותרת הדף<br>${url} - כתובת URL של הדף<br>${siteName} - שם האתר<br>${date} - תאריך נוכחי (yyyy-MM-dd)<br>${time} - שעה נוכחית (HH:mm)<br>${tags} - תגים<br>${excerpt} - תקציר הדף<br>${content} - תוכן הדף"
   },
+  "template_restore_default": {
+    "message": "שחזר לברירת מחדל"
+  },
   "database_label": {
     "message": "הוסף למסד נתונים"
   },

@@ -104,6 +104,9 @@
   "template_help": {
     "message": "Variables disponibles:<br>${title} - Titre de la page<br>${url} - URL de la page<br>${siteName} - Nom du site<br>${date} - Date actuelle (yyyy-MM-dd)<br>${time} - Heure actuelle (HH:mm)<br>${tags} - Tags<br>${excerpt} - Extrait de la page<br>${content} - Contenu de la page"
   },
+  "template_restore_default": {
+    "message": "Restaurer par défaut"
+  },
   "database_label": {
     "message": "Ajouter à la base de données"
   },
