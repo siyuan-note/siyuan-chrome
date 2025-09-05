@@ -7,16 +7,25 @@ chrome.runtime.onInstalled.addListener(() => {
             contexts: ['selection', 'image'],
         })
     });
-    setInterval(() => {
-        chrome.runtime.sendMessage({ type: 'keepAlive' });
-    }, 30000);
+    // Removed periodic keepAlive broadcast to avoid sending messages without receivers
 });
+
+function safeTabsSendMessage(tabId, message) {
+    if (!tabId) return;
+    try {
+        chrome.tabs.sendMessage(tabId, message, () => {
+            void chrome.runtime.lastError;
+        });
+    } catch (e) {
+        // ignore
+    }
+}
 
 chrome.contextMenus.onClicked.addListener(function (info, tab) {
     if (info.menuItemId === 'copy-to-siyuan') {
-        chrome.tabs.sendMessage(tab.id, {
+        safeTabsSendMessage(tab && tab.id, {
             'func': 'copy',
-            'tabId': tab.id,
+            'tabId': tab && tab.id,
             'srcUrl': info.srcUrl,
         })
     }
@@ -106,7 +115,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         return
     }
 
-
     const requestData = request.data
     const fetchFileErr = requestData.fetchFileErr
     const dom = requestData.dom
@@ -134,7 +142,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         body: formData,
     }).then((response) => {
         if (response.redirected) {
-            chrome.tabs.sendMessage(requestData.tabId, {
+            safeTabsSendMessage(requestData.tabId, {
                 'func': 'tipKey',
                 'msg': 'tip_token_invalid',
                 'tip': 'tip',
@@ -143,7 +151,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         return response.json()
     }).then((response) => {
         if (response.code < 0) {
-            chrome.tabs.sendMessage(requestData.tabId, {
+            safeTabsSendMessage(requestData.tabId, {
                 'func': 'tip',
                 'msg': response.msg,
                 'tip': requestData.tip,
@@ -151,13 +159,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             return
         }
 
-        chrome.tabs.sendMessage(requestData.tabId, {
+        safeTabsSendMessage(requestData.tabId, {
             'func': 'copy2Clipboard',
             'data': response.data.md,
         })
 
         if ('' !== response.msg && requestData.type !== 'article') {
-            chrome.tabs.sendMessage(requestData.tabId, {
+            safeTabsSendMessage(requestData.tabId, {
                 'func': 'tip',
                 'msg': response.msg,
                 'tip': requestData.tip,
@@ -235,47 +243,12 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                 }).then((response) => {
                     return response.json()
                 }).then((response) => {
-
-
-
-
                     if (0 === response.code) {
-
-                        // 添加到数据库
-                        if (requestData.selectedDatabaseID) {
-                            const docId = response.data;
-
-                            // 先刷新 SQL 数据库
-                            fetch(requestData.api + '/api/sqlite/flushTransaction', {
-                                method: 'POST',
-                                headers: {
-                                    'Authorization': 'Token ' + requestData.token,
-                                },
-                                body: JSON.stringify({}),
-                            }).then(() => {
-                                // 刷新完成后再添加到数据库
-                                const dbInput = {
-                                    avID: requestData.selectedDatabaseID,
-                                    srcs: [{
-                                        id: docId,
-                                        isDetached: false,
-                                    }]
-                                };
-                                fetch(requestData.api + '/api/av/addAttributeViewBlocks', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Authorization': 'Token ' + requestData.token,
-                                    },
-                                    body: JSON.stringify(dbInput),
-                                })
-                            });
-                        }
-                        chrome.tabs.sendMessage(requestData.tabId, {
+                        safeTabsSendMessage(requestData.tabId, {
                             'func': 'tipKey',
                             'msg': "tip_clip_ok",
                             'tip': requestData.tip,
                         })
-
 
                         // 检查是否需要打开文档
                         chrome.storage.sync.get({
@@ -296,18 +269,17 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                                     'Authorization': 'Token ' + requestData.token,
                                 },
                                 body: JSON.stringify({
-                                    'id': docId,
+                                    'id': response.data,
                                     'url': requestData.href, // 改进浏览器剪藏扩展转换本地图片成功率 https://github.com/siyuan-note/siyuan/issues/7464
                                 }),
                             })
                         }
 
-
-                        chrome.tabs.sendMessage(requestData.tabId, {
+                        safeTabsSendMessage(requestData.tabId, {
                             'func': 'reload',
                         })
                     } else {
-                        chrome.tabs.sendMessage(requestData.tabId, {
+                        safeTabsSendMessage(requestData.tabId, {
                             'func': 'tip',
                             'msg': response.msg,
                             'tip': requestData.tip,
@@ -318,7 +290,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         }
     }).catch((e) => {
         console.error(e)
-        chrome.tabs.sendMessage(requestData.tabId, {
+        safeTabsSendMessage(requestData.tabId, {
             'func': 'tipKey',
             'msg': "tip_siyuan_kernel_unavailable",
             'tip': "tip",
