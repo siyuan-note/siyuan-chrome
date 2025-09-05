@@ -7,7 +7,6 @@ chrome.runtime.onInstalled.addListener(() => {
             contexts: ['selection', 'image'],
         })
     });
-    // Removed periodic keepAlive broadcast to avoid sending messages without receivers
 });
 
 function safeTabsSendMessage(tabId, message) {
