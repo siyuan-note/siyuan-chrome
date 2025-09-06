@@ -462,24 +462,6 @@ const updateSearch = async () => {
         if (selectedHPath) {
             savePathDisplay.textContent = selectedHPath
         }
-
-        if (parentDocElement.selectedOptions && parentDocElement.selectedOptions.length > 0) {
-            let selectedOpt = parentDocElement.querySelector('option[selected]')
-            if (!selectedOpt) {
-                selectedOpt = parentDocElement.selectedOptions[0]
-                chrome.storage.sync.set({
-                    notebook: selectedOpt.getAttribute('data-notebook'),
-                    parentDoc: selectedOpt.getAttribute('data-parent'),
-                    parentHPath: selectedOpt.innerText,
-                })
-            }
-        } else {
-            chrome.storage.sync.set({
-                notebook: '',
-                parentDoc: '',
-                parentHPath: ''
-            })
-        }
     } catch (e) {
         const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
         document.getElementById('log').innerHTML = msg
