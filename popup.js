@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.tagName === 'LI') {
             const dbID = e.target.getAttribute('data-id')
             const dbName = e.target.textContent
-
+            
             databaseDisplay.textContent = dbName
             chrome.storage.sync.set({
                 selectedDatabaseID: dbID,
@@ -367,6 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
         databaseDisplay.dataset.selectedId = items.selectedDatabaseID
         if (items.selectedDatabaseName) {
             databaseDisplay.textContent = items.selectedDatabaseName
+        }else{
+            databaseDisplay.textContent = siyuanLangData.database_none.message
         }
         expOpenAfterClipElement.checked = items.expOpenAfterClip
         expSpanElement.checked = items.expSpan
@@ -442,9 +444,6 @@ const updateSearch = async () => {
             return
         }
         let optionsHTML = ''
-        if (!savePathInput.value.trim()) {
-            optionsHTML = `<li data-notebook="" data-parent="">${chrome.i18n.getMessage("save_path_none")}</li>`
-        }
         let selectedHPath = ''
         data.data.forEach(doc => {
             const parentDoc = String(doc.path).substring(String(doc.path).lastIndexOf('/') + 1).replace('.sy', '')
@@ -504,7 +503,7 @@ const updateDatabaseSearch = () => {
 
         let optionsHTML = ''
         if (!databaseInput.value.trim()) {
-            optionsHTML = `<li data-id="">${chrome.i18n.getMessage("database_none")}</li>`
+            optionsHTML = `<li data-id="">${siyuanLangData.database_none.message}</li>`
         }
         let selectedName = '-- Select Database --'
         if (response.data && response.data.results) {
