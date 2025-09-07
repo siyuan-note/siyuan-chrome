@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (items.selectedDatabaseName) {
             databaseDisplay.textContent = items.selectedDatabaseName
         }else{
-            databaseDisplay.textContent = siyuanLangData.database_none.message
+            databaseDisplay.textContent = chrome.i18n.getMessage('database_none') || 'None'
         }
         expOpenAfterClipElement.checked = items.expOpenAfterClip
         expSpanElement.checked = items.expSpan
