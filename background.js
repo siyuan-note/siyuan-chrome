@@ -243,6 +243,36 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                     return response.json()
                 }).then((response) => {
                     if (0 === response.code) {
+                        // 添加到数据库
+                        if (requestData.selectedDatabaseID) {
+                            const docId = response.data;
+
+                            // 先刷新 SQL 数据库
+                            fetch(requestData.api + '/api/sqlite/flushTransaction', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': 'Token ' + requestData.token,
+                                },
+                                body: JSON.stringify({}),
+                            }).then(() => {
+                                // 刷新完成后再添加到数据库
+                                const dbInput = {
+                                    avID: requestData.selectedDatabaseID,
+                                    srcs: [{
+                                        id: docId,
+                                        isDetached: false,
+                                    }]
+                                };
+                                fetch(requestData.api + '/api/av/addAttributeViewBlocks', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': 'Token ' + requestData.token,
+                                    },
+                                    body: JSON.stringify(dbInput),
+                                })
+                            });
+                        }
+
                         safeTabsSendMessage(requestData.tabId, {
                             'func': 'tipKey',
                             'msg': "tip_clip_ok",
