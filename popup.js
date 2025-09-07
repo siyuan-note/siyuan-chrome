@@ -603,7 +603,7 @@ function siyuanResolveLocale(lang) {
 }
 
 function siyuanGetDefaultLangCode() {
-    const raw = navigator.language || navigator.userLanguage || chrome.runtime.getManifest().default_locale || 'en';
+    const raw = chrome.i18n.getUILanguage() || navigator.language || navigator.userLanguage || 'en';
     return siyuanResolveLocale(raw);
 }
 
