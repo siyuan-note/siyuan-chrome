@@ -528,7 +528,7 @@ const updateDatabaseSearch = () => {
         }
     }).catch(e => {
         console.error("Database search fetch error:", e)
-        document.getElementById('log').innerHTML = "Database search: Network error or Siyuan not available."
+        document.getElementById('log').innerHTML = "Database search: Network error or SiYuan not available."
     })
 }
 
