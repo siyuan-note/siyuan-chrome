@@ -32,6 +32,9 @@
   "assets": {
     "message": "Scarica risorse"
   },
+  "dirsFirst": {
+      "message": "Cartelle prima in ricerca"
+  },
   "exp": {
     "message": "Mostra funzionalità sperimentali"
   },

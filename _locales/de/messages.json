@@ -32,6 +32,9 @@
   "assets": {
     "message": "Assets herunterladen"
   },
+  "dirsFirst": {
+      "message": "Verzeichnisse zuerst bei der Suche"
+  },
   "exp": {
     "message": "Experimentelle Funktionen anzeigen"
   },
