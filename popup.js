@@ -394,7 +394,7 @@ const sortSearchResults = (data, keyword) => {
     if (!keyword || !data || !Array.isArray(data) || data.length === 0) {
         return data;
     }
-    // 为开启目录优先则返回原始数据
+    // 未开启目录优先则返回原始数据
     const dirsFirstElement = document.getElementById('dirsFirst');
     if(!dirsFirstElement.checked) return data;
     // 拆分关键词并转小写
