@@ -33,7 +33,7 @@
     "message": "リソースをダウンロード"
   },
   "dirsFirst": {
-      "message": "検索でフォルダを優先"
+      "message": "パス検索でフォルダを優先表示"
   },
   "exp": {
     "message": "実験的な機能を表示"

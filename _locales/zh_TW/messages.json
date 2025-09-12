@@ -33,7 +33,7 @@
     "message": "下載資源"
   },
   "dirsFirst": {
-      "message": "搜尋時資料夾優先顯示"
+      "message": "路徑搜尋時目錄優先顯示"
   },
   "exp": {
     "message": "顯示實驗性特性"
