@@ -32,6 +32,9 @@
   "assets": {
     "message": "Descargar recursos"
   },
+  "dirsFirst": {
+    "message": "Carpetas primero en búsqueda de rutas"
+  },
   "exp": {
     "message": "Mostrar características experimentales"
   },

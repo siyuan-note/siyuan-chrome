@@ -32,6 +32,9 @@
   "assets": {
     "message": "Download assets"
   },
+  "dirsFirst": {
+      "message": "Show directories first in path search"
+  },
   "exp": {
     "message": "Show experimental features"
   },

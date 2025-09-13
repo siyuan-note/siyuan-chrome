@@ -32,6 +32,9 @@
   "assets": {
     "message": "下載資源"
   },
+  "dirsFirst": {
+      "message": "路徑搜尋時目錄優先顯示"
+  },
   "exp": {
     "message": "顯示實驗性特性"
   },
