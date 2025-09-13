@@ -405,19 +405,26 @@ const sortSearchResults = (data, keyword) => {
     if (keywords.length === 0) {
         return data;
     }
-    // 构建目标后缀：/js, /php 等（全部转小写用于比较）
+    // 【1】构建单个词的 suffix：/js, /php 等（全部转小写用于比较）
     const targetSuffixes = keywords.map(kw => `/${kw.replace(/^\/+/, '')}`);
+    // 【2】构建整体关键词的 suffix：/js php （注意保留空格）
+    const fullKeywordNormalized = keyword.trim().toLowerCase();
+    const fullSuffix = fullKeywordNormalized.startsWith('/')
+        ? fullKeywordNormalized
+        : '/' + fullKeywordNormalized;
     const front = [];  // 存放 hPath 以 /keyword 结尾的
     const rest = [];   // 其他保留原序
     for (const item of data) {
         const hPath = item.hPath.trim();
         const lowerHPath = hPath.toLowerCase();
-        // 判断是否以 /js、/run 这样的形式结尾（注意是路径段结尾）
-        const endsWithTarget = targetSuffixes.some(suffix =>
-            lowerHPath === suffix ||              // 完全等于 /js
-            lowerHPath.endsWith(suffix)           // 正常情况：结尾是 /js
+        // 判断是否满足以下任一条件：
+        //   a. 以某个拆分词结尾（如 /js, /php）
+        //   b. 以整体关键词结尾（如 /js php）
+        const matchesSingle = targetSuffixes.some(suffix =>
+            lowerHPath === suffix || lowerHPath.endsWith(suffix) // 完全等于 /js 或 结尾是 /js
         );
-        if (endsWithTarget) {
+        const matchesFull = lowerHPath === fullSuffix || lowerHPath.endsWith(fullSuffix);
+        if (matchesSingle || matchesFull) {
             front.push(item);
         } else {
             rest.push(item);
