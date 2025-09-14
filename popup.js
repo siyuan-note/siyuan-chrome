@@ -428,7 +428,7 @@ const sortSearchResults = (data, keyword) => {
     for (const item of data) {
         const hPath = item.hPath.trim();
         const lowerHPath = hPath.toLowerCase();
-        if(paths.has(lowerHPath)) {
+        if(paths.has(lowerHPath.replace(/^\//, ''))) {
             front.push(item);
         } else {
             rest.push(item);
