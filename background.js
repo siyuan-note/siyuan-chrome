@@ -106,7 +106,7 @@ function getSimpleDateTime() {
     const now = new Date();
     const date = now.toISOString().slice(0, 10);
     const time = now.toTimeString().slice(0, 5);
-    return { date, time };
+    return {date, time};
 }
 
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
@@ -201,7 +201,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                     console.warn(e)
                 }
 
-                const { date, time } = getSimpleDateTime();
+                const {date, time} = getSimpleDateTime();
                 const templateData = {
                     title: requestData.title || 'Untitled',
                     siteName: requestData.siteName || '',
@@ -284,9 +284,11 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                             expOpenAfterClip: false,
                         }, (items) => {
                             if (items.expOpenAfterClip && response.data) {
-                                // 使用 SiYuan 协议在桌面应用中打开文档
-                                const documentUrl = `siyuan://blocks/${response.data}`;
-                                chrome.tabs.create({ url: documentUrl });
+                                let documentUrl = requestData.api + "?id=" + response.data;
+                                if (requestData.api.startsWith("http://localhost:") || requestData.api.startsWith("http://127.0.0.1:")) {
+                                    documentUrl = `siyuan://blocks/${response.data}`;
+                                }
+                                chrome.tabs.create({url: documentUrl});
                             }
                         });
 
