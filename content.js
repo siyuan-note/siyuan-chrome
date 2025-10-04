@@ -21,6 +21,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 return
             }
 
+            if ('siyuanGetReadability' === request.func) {
+                siyuanGetReadability(request.tabId)
+                return
+            }
+
             if ('copy' !== request.func) {
                 return
             }
@@ -35,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part")
             }
         })
+
     const copyToClipboard = async (textToCopy) => {
         // 修复无焦点的未捕获异常：https://github.com/siyuan-note/siyuan/issues/13208
         await new Promise(resolve => requestAnimationFrame(resolve));
@@ -143,46 +149,46 @@ function isIgnoredElement(element) {
 // span元素的换行处理优化：https://github.com/siyuan-note/siyuan/issues/14775
 // 规范：https://developer.mozilla.org/zh-CN/docs/Web/CSS/white-space
 function siyuanProcessTextByWhiteSpace(element) {
-  const text = element.textContent;
-  const whiteSpace = getComputedStyle(element).whiteSpace;
-  const brTag = '<br>';
+    const text = element.textContent;
+    const whiteSpace = getComputedStyle(element).whiteSpace;
+    const brTag = '<br>';
 
-  switch (whiteSpace) {
-    case 'normal':
-    case 'nowrap':
-      // 合并所有空白字符为一个空格；换行为 <br>；去除行末空格
-      return text
-        .replace(/[ \t\r\f\v]+/g, ' ')         // 合并空格和制表符
-        .replace(/[ \t]+\n/g, '\n')            // 去除行末空格
-        .replace(/\n+/g, brTag)               // 合并换行并转为 <br>
-        .trim();
-    case 'pre':
-      // 保留所有空白和换行，换行转为 <br>
-      return text
-        .replace(/\n/g, brTag);
-    case 'pre-wrap':
-      // 保留空白字符，换行转为 <br>，不处理行末空格（挂起）
-      return text
-        .replace(/\n+/g, brTag);
-    case 'pre-line':
-      // 合并空格，保留换行符，换行转为 <br>，移除行末空格
-      return text
-        .replace(/[ \t\r\f\v]+/g, ' ')
-        .replace(/[ \t]+\n/g, '\n')
-        .replace(/\n+/g, brTag)
-        .trim();
-    case 'break-spaces':
-      // 保留所有空白字符和换行符，换行为 <br>
-      return text
-        .replace(/\n/g, brTag);
-    default:
-      // 默认处理和 normal 相同
-      return text
-        .replace(/[ \t\r\f\v]+/g, ' ')
-        .replace(/[ \t]+\n/g, '\n')
-        .replace(/\n+/g, brTag)
-        .trim();
-  }
+    switch (whiteSpace) {
+        case 'normal':
+        case 'nowrap':
+            // 合并所有空白字符为一个空格；换行为 <br>；去除行末空格
+            return text
+                .replace(/[ \t\r\f\v]+/g, ' ')         // 合并空格和制表符
+                .replace(/[ \t]+\n/g, '\n')            // 去除行末空格
+                .replace(/\n+/g, brTag)               // 合并换行并转为 <br>
+                .trim();
+        case 'pre':
+            // 保留所有空白和换行，换行转为 <br>
+            return text
+                .replace(/\n/g, brTag);
+        case 'pre-wrap':
+            // 保留空白字符，换行转为 <br>，不处理行末空格（挂起）
+            return text
+                .replace(/\n+/g, brTag);
+        case 'pre-line':
+            // 合并空格，保留换行符，换行转为 <br>，移除行末空格
+            return text
+                .replace(/[ \t\r\f\v]+/g, ' ')
+                .replace(/[ \t]+\n/g, '\n')
+                .replace(/\n+/g, brTag)
+                .trim();
+        case 'break-spaces':
+            // 保留所有空白字符和换行符，换行为 <br>
+            return text
+                .replace(/\n/g, brTag);
+        default:
+            // 默认处理和 normal 相同
+            return text
+                .replace(/[ \t\r\f\v]+/g, ' ')
+                .replace(/[ \t]+\n/g, '\n')
+                .replace(/\n+/g, brTag)
+                .trim();
+    }
 }
 
 
@@ -430,7 +436,7 @@ async function siyuanSvgToBase64(svgNode) {
         svgStr = '<?xml version="1.0" encoding="UTF-8"?>' + svgStr;
     }
 
-    const svgBlob = new Blob([svgStr], { type: 'image/svg+xml' });
+    const svgBlob = new Blob([svgStr], {type: 'image/svg+xml'});
 
     const dataUrl = await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -774,6 +780,40 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
             tabId,
             selectedDatabaseID: items.selectedDatabaseID,
         };
-        chrome.runtime.sendMessage({ func: 'upload-copy', data: msgJSON })
+        chrome.runtime.sendMessage({func: 'upload-copy', data: msgJSON})
     })
+}
+
+const siyuanGetReadability = async (tabId) => {
+    try {
+        siyuanShowTipByKey("tip_clipping", 60 * 1000)
+    } catch (e) {
+        alert(chrome.i18n.getMessage("tip_first_time"));
+        window.location.reload();
+        return;
+    }
+
+    try {
+        // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
+        document.querySelectorAll(".hljs-comment").forEach(item => {
+            item.classList.remove("hljs-comment")
+            item.classList.add("hljs-cmt")
+        })
+
+        // 重构并合并 Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
+        const clonedDoc = await siyuanGetCloneNode(document);
+
+        const article = new Readability(clonedDoc, {
+            keepClasses: true,
+            charThreshold: 16,
+            debug: true
+        }).parse()
+        const tempElement = document.createElement('div')
+        tempElement.innerHTML = article.content
+        // console.log(article)
+        siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
+    } catch (e) {
+        console.error(e)
+        siyuanShowTip(e.message, 7 * 1000)
+    }
 }

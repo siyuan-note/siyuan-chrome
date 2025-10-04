@@ -1,13 +1,33 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.removeAll(function () {
-        const title = chrome.i18n.getMessage("copy_to_siyuan");
         chrome.contextMenus.create({
             id: 'copy-to-siyuan',
-            title: title,
+            title: chrome.i18n.getMessage("copy_to_siyuan"),
             contexts: ['selection', 'image'],
-        })
+        });
+
+        chrome.contextMenus.create({
+            id: 'send',
+            title: chrome.i18n.getMessage("send"),
+            contexts: ['page'],
+        });
     });
 });
+
+chrome.contextMenus.onClicked.addListener(function (info, tab) {
+    if (info.menuItemId === 'copy-to-siyuan') {
+        safeTabsSendMessage(tab && tab.id, {
+            'func': 'copy',
+            'tabId': tab && tab.id,
+            'srcUrl': info.srcUrl,
+        })
+    } else if (info.menuItemId === 'send') {
+        safeTabsSendMessage(tab && tab.id, {
+            'func': 'siyuanGetReadability',
+            'tabId': tab && tab.id,
+        });
+    }
+})
 
 function safeTabsSendMessage(tabId, message) {
     if (!tabId) return;
@@ -19,16 +39,6 @@ function safeTabsSendMessage(tabId, message) {
         // ignore
     }
 }
-
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
-    if (info.menuItemId === 'copy-to-siyuan') {
-        safeTabsSendMessage(tab && tab.id, {
-            'func': 'copy',
-            'tabId': tab && tab.id,
-            'srcUrl': info.srcUrl,
-        })
-    }
-})
 
 // 添加模板渲染函数
 function renderTemplate(template, data) {

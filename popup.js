@@ -128,7 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.tagName === 'LI') {
             const dbID = e.target.getAttribute('data-id')
             const dbName = e.target.textContent
-            
             databaseDisplay.textContent = dbName
             chrome.storage.sync.set({
                 selectedDatabaseID: dbID,
@@ -198,11 +197,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const templateTextArea = document.getElementById('templateText')
             const def = getDefaultTemplate()
             if (templateTextArea) templateTextArea.value = def
-            chrome.storage.sync.set({ clipTemplate: def }, () => {
+            chrome.storage.sync.set({clipTemplate: def}, () => {
                 const templateSavedMsg = document.getElementById('templateSavedMsg')
                 if (templateSavedMsg) {
                     templateSavedMsg.style.display = 'block'
-                    setTimeout(() => { templateSavedMsg.style.display = 'none' }, 2000)
+                    setTimeout(() => {
+                        templateSavedMsg.style.display = 'none'
+                    }, 2000)
                 }
             })
         })
@@ -307,14 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const sendElement = document.getElementById('send')
     sendElement.addEventListener('click', () => {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-            chrome.scripting.executeScript({
-                target: { tabId: tabs[0].id },
-                func: siyuanGetReadability,
-                args: [tabs[0].id],
-            }, function () {
-                window.close();
-            })
+        chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {func: "siyuanGetReadability", tabId: tabs[0].id});
         });
     })
 
@@ -375,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
         databaseDisplay.dataset.selectedId = items.selectedDatabaseID
         if (items.selectedDatabaseName) {
             databaseDisplay.textContent = items.selectedDatabaseName
-        }else{
+        } else {
             databaseDisplay.textContent = chrome.i18n.getMessage('database_none') || 'None'
         }
         expOpenAfterClipElement.checked = items.expOpenAfterClip
@@ -396,7 +391,7 @@ const sortSearchResults = (data, keyword) => {
     }
     // 未开启目录优先则返回原始数据
     const dirsFirstElement = document.getElementById('dirsFirst');
-    if(!dirsFirstElement.checked) return data;
+    if (!dirsFirstElement.checked) return data;
     // 拆分关键词并转小写
     const keywords = keyword.split(/\s+/).map(k => k.trim().toLowerCase()).filter(Boolean);
     if (keywords.length === 0) return data;
@@ -428,7 +423,7 @@ const sortSearchResults = (data, keyword) => {
     for (const item of data) {
         const hPath = item.hPath.trim();
         const lowerHPath = hPath.toLowerCase();
-        if(paths.has(lowerHPath.replace(/^\//, ''))) {
+        if (paths.has(lowerHPath.replace(/^\//, ''))) {
             front.push(item);
         } else {
             rest.push(item);
@@ -601,47 +596,13 @@ const escapeHtml = (unsafe) => {
         .replace(/'/g, "&#039;");
 }
 
-const siyuanGetReadability = async (tabId) => {
-    try {
-        siyuanShowTipByKey("tip_clipping", 60 * 1000)
-    } catch (e) {
-        alert(chrome.i18n.getMessage("tip_first_time"));
-        window.location.reload();
-        return;
-    }
-
-    try {
-        // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
-        document.querySelectorAll(".hljs-comment").forEach(item => {
-            item.classList.remove("hljs-comment")
-            item.classList.add("hljs-cmt")
-        })
-
-        // 重构并合并 Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
-        const clonedDoc = await siyuanGetCloneNode(document);
-
-        const article = new Readability(clonedDoc, {
-            keepClasses: true,
-            charThreshold: 16,
-            debug: true
-        }).parse()
-        const tempElement = document.createElement('div')
-        tempElement.innerHTML = article.content
-        // console.log(article)
-        siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
-    } catch (e) {
-        console.error(e)
-        siyuanShowTip(e.message, 7 * 1000)
-    }
-}
-
 // Add i18n support https://github.com/siyuan-note/siyuan/issues/13559
 let siyuanLangData = null;
 let siyuanLangCode = null;
 
 function siyuanResolveLocale(lang) {
     try {
-        const available = ['ar','de','en','es','fr','he','it','ja','pl','ru','zh_CN','zh_TW'];
+        const available = ['ar', 'de', 'en', 'es', 'fr', 'he', 'it', 'ja', 'pl', 'ru', 'zh_CN', 'zh_TW'];
         if (!lang) return 'en';
         let code = String(lang).replace('-', '_');
         if (code.toLowerCase().startsWith('zh')) {
@@ -689,7 +650,7 @@ async function siyuanMergeTranslations(translations, langCode) {
     }
 
     // 合并当前语言翻译和英语翻译，缺失的字段使用英语翻译
-    const merged = { ...defaultTranslations, ...translations };
+    const merged = {...defaultTranslations, ...translations};
     return merged;
 }
 
