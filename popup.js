@@ -460,6 +460,9 @@ const sortSearchResults = async (data) => {
     if (!data || !Array.isArray(data) || data.length === 0) {
         return data;
     }
+    // 未开启目录优先则返回原始数据
+    const dirsFirstElement = document.getElementById('dirsFirst');
+    if (!dirsFirstElement.checked) return data;
     // 获取所有文档path
     const paths = data.map(item => item.path.replace('.sy', ''));
     // 获取path子文档数映射
