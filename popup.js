@@ -456,7 +456,7 @@ const getSubDocNumByPaths = async (paths) => {
 // 算法 复杂度O(n)
 // 1 获取sql查询所有path和子文档的映射，格式化成 {"<box>": {"<path>": <num>}} 格式
 // 2 将api结果中的path和映射对比，如果path子文档数>0则是目录，前置
-const sortSearchResults = async (data, keyword) => {
+const sortSearchResults = async (data) => {
     if (!data || !Array.isArray(data) || data.length === 0) {
         return data;
     }
