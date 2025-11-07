@@ -293,6 +293,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                         chrome.storage.sync.get({
                             expOpenAfterClip: false,
                         }, (items) => {
+                            safeTabsSendMessage(requestData.tabId, {
+                                'func': 'copy2Clipboard',
+                                'data': `((${response.data} '${requestData.title}'))`,
+                            });
                             if (items.expOpenAfterClip && response.data) {
                                 let documentUrl = requestData.api + "?id=" + response.data;
                                 if (requestData.api.startsWith("http://localhost:") || requestData.api.startsWith("http://127.0.0.1:")) {
