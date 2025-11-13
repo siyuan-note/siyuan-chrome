@@ -257,7 +257,6 @@ function siyuanProcessBoldStyle(tempElement) {
                     // 如果是文本节点，直接包裹在 <b> 标签中
                     const text = child.nodeValue;
                     const textElement = document.createElement('b');
-                    textElement.setAttribute('b-added-by-siyuan', 'true');
                     textElement.textContent = text;
                     element.replaceChild(textElement, child);
                 } else if (child.nodeType === Node.ELEMENT_NODE) {
@@ -290,18 +289,6 @@ function parentContainsBold(element) {
     return false;
 }
 
-function revertBoldStyles(tempElement) {
-    // 获取所有带有 b-added-by-siyuan="true" 的 <b> 标签
-    const elements = tempElement.querySelectorAll('b[b-added-by-siyuan="true"]');
-    elements.forEach(element => {
-        // 将包裹的 <b> 标签移除，恢复原本的元素
-        const parent = element.parentNode;
-        parent.replaceChild(document.createTextNode(element.textContent), element);
-    });
-
-    console.log(`revertBoldStyles reverted ${elements.length} <br> elements.`);
-}
-
 // 替换斜体样式为内核可识别 <i> 标签 https://github.com/siyuan-note/siyuan/issues/13306
 function siyuanProcessItalicStyle(tempElement) {
     // 获取所有元素
@@ -327,7 +314,6 @@ function siyuanProcessItalicStyle(tempElement) {
                     // 如果是文本节点，直接包裹在 <i> 标签中
                     const text = child.nodeValue;
                     const textElement = document.createElement('i');
-                    textElement.setAttribute('i-added-by-siyuan', 'true');
                     textElement.textContent = text;
                     element.replaceChild(textElement, child);
                 } else if (child.nodeType === Node.ELEMENT_NODE) {
@@ -346,18 +332,6 @@ function siyuanProcessItalicStyle(tempElement) {
             }
         }
     });
-}
-
-function revertItalicStyles(tempElement) {
-    // 获取所有带有 b-added-by-siyuan="true" 的 <b> 标签
-    const elements = tempElement.querySelectorAll('i[i-added-by-siyuan="true"]');
-    elements.forEach(element => {
-        // 将包裹的 <i> 标签移除，恢复原本的元素
-        const parent = element.parentNode;
-        parent.replaceChild(document.createTextNode(element.textContent), element);
-    });
-
-    console.log(`revertItalicStyles reverted ${elements.length} <br> elements.`);
 }
 
 function parentContainsItalic(element) {
@@ -395,7 +369,6 @@ function siyuanProcessUnderlineStyle(tempElement) {
                     // 如果是文本节点，直接包裹在 <u> 标签中
                     const text = child.nodeValue;
                     const textElement = document.createElement('u');
-                    textElement.setAttribute('u-added-by-siyuan', 'true');
                     textElement.textContent = text;
                     element.replaceChild(textElement, child);
                 } else if (child.nodeType === Node.ELEMENT_NODE) {
@@ -688,18 +661,6 @@ async function siyuanGetCloneNode(tempDoc) {
     });
 
     const clonedDoc = document.cloneNode(true);
-
-    // 后处理，还原样式
-    if (items.expBold) {
-        // 还原粗体样式
-        revertBoldStyles(tempDoc);
-    }
-
-    if (items.expItalic) {
-        // 还原斜体样式
-        revertItalicStyles(tempDoc);
-    }
-
     return clonedDoc;
 }
 
