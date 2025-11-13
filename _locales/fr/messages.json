@@ -33,7 +33,7 @@
     "message": "Télécharger les ressources"
   },
   "dirsFirst": {
-      "message": "Dossiers d'abord dans la recherche de chemin"
+    "message": "Dossiers d'abord dans la recherche de chemin"
   },
   "exp": {
     "message": "Afficher les fonctionnalités expérimentales"
@@ -49,6 +49,9 @@
   },
   "exp_italic": {
     "message": "Détecter le style italique*"
+  },
+  "exp_underline": {
+    "message": "Détecter le style souligné*"
   },
   "exp_remove_img_link": {
     "message": "Supprimer le lien de l'image*"

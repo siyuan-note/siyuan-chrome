@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const expSpanElement = document.getElementById('expSpan')
     const expBoldElement = document.getElementById('expBold')
     const expItalicElement = document.getElementById('expItalic')
+    const expUnderlineElement = document.getElementById('expUnderline')
     const expRemoveImgLinkElement = document.getElementById('expRemoveImgLink')
     const expListDocTreeElement = document.getElementById('expListDocTree')
     const expSvgToImgElement = document.getElementById('expSvgToImg')
@@ -261,6 +262,11 @@ document.addEventListener('DOMContentLoaded', () => {
             expItalic: expItalicElement.checked,
         })
     })
+    expUnderlineElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            expUnderline: expUnderlineElement.checked,
+        })
+    })
     expRemoveImgLinkElement.addEventListener('change', () => {
         chrome.storage.sync.set({
             expRemoveImgLink: expRemoveImgLinkElement.checked,
@@ -332,6 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expSpan: false,
         expBold: false,
         expItalic: false,
+        expUnderline: false,
         expRemoveImgLink: false,
         expListDocTree: false,
         expSvgToImg: false,
@@ -377,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expSpanElement.checked = items.expSpan
         expBoldElement.checked = items.expBold
         expItalicElement.checked = items.expItalic
+        expUnderlineElement.checked = items.expUnderline
         expRemoveImgLinkElement.checked = items.expRemoveImgLink
         expListDocTreeElement.checked = items.expListDocTree
         expSvgToImgElement.checked = items.expSvgToImg
@@ -399,7 +407,7 @@ const querySql = async (sql) => {
                 'Authorization': 'Token ' + tokenElement.value,
                 'Content-Type': 'application/json; charset=UTF-8',
             },
-            body: JSON.stringify({ "stmt": sql || '' })
+            body: JSON.stringify({"stmt": sql || ''})
         })
         if (response.status === 401 || response.status === 403) {
             const msg = chrome.i18n.getMessage('tip_token_invalid') || 'Invalid API token'
@@ -447,7 +455,7 @@ const getSubDocNumByPaths = async (paths) => {
     const res = await querySql(sql);
     const result = {};
     for (const row of res) {
-        const { box, ...counts } = row;
+        const {box, ...counts} = row;
         result[box] = counts;
     }
     return result;
@@ -472,7 +480,7 @@ const sortSearchResults = async (data) => {
     const rest = [];   // 其他保留原序
     for (const item of data) {
         const path = item.path.trim();
-        if ((pathMap[item?.box]?.[path]||0) > 0) {
+        if ((pathMap[item?.box]?.[path] || 0) > 0) {
             front.push(item);
         } else {
             rest.push(item);

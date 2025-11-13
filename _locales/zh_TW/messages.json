@@ -33,7 +33,7 @@
     "message": "下載資源"
   },
   "dirsFirst": {
-      "message": "路徑搜尋時目錄優先顯示"
+    "message": "路徑搜尋時目錄優先顯示"
   },
   "exp": {
     "message": "顯示實驗性特性"
@@ -49,6 +49,9 @@
   },
   "exp_italic": {
     "message": "識別斜體樣式*"
+  },
+  "exp_underline": {
+    "message": "識別下劃線樣式*"
   },
   "exp_remove_img_link": {
     "message": "移除圖片鏈接*"

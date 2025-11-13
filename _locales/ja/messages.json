@@ -33,7 +33,7 @@
     "message": "リソースをダウンロード"
   },
   "dirsFirst": {
-      "message": "パス検索でフォルダを優先表示"
+    "message": "パス検索でフォルダを優先表示"
   },
   "exp": {
     "message": "実験的な機能を表示"
@@ -49,6 +49,9 @@
   },
   "exp_italic": {
     "message": "斜体スタイルを検出*"
+  },
+  "exp_underline": {
+    "message": "下線スタイルを検出*"
   },
   "exp_remove_img_link": {
     "message": "画像リンクを削除"

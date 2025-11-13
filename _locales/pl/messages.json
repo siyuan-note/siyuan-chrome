@@ -33,7 +33,7 @@
     "message": "Pobierz zasoby"
   },
   "dirsFirst": {
-      "message": "Foldery najpierw w wyszukiwaniu ścieżki"
+    "message": "Foldery najpierw w wyszukiwaniu ścieżki"
   },
   "exp": {
     "message": "Pokaż funkcje eksperymentalne"
@@ -49,6 +49,9 @@
   },
   "exp_italic": {
     "message": "Wykryj styl kursywy*"
+  },
+  "exp_underline": {
+    "message": "Wykryj styl podkreślony*"
   },
   "exp_remove_img_link": {
     "message": "Usuń link do obrazu*"

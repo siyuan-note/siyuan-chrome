@@ -50,6 +50,9 @@
   "exp_italic": {
     "message": "Detectar estilo cursiva*"
   },
+  "exp_underline": {
+    "message": "Detectar estilo subrayado*"
+  },
   "exp_remove_img_link": {
     "message": "Eliminar enlace de imagen*"
   },

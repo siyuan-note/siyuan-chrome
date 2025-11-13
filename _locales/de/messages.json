@@ -33,7 +33,7 @@
     "message": "Assets herunterladen"
   },
   "dirsFirst": {
-      "message": "Ordner zuerst bei der Pfadsuche"
+    "message": "Ordner zuerst bei der Pfadsuche"
   },
   "exp": {
     "message": "Experimentelle Funktionen anzeigen"
@@ -49,6 +49,9 @@
   },
   "exp_italic": {
     "message": "Kursiv-Stil erkennen*"
+  },
+  "exp_underline": {
+    "message": "Unterstrichen-Stil erkennen*"
   },
   "exp_remove_img_link": {
     "message": "Bildlink entfernen*"

@@ -50,6 +50,9 @@
   "exp_italic": {
     "message": "识别斜体样式*"
   },
+  "exp_underline": {
+    "message": "识别下划线样式*"
+  },
   "exp_remove_img_link": {
     "message": "移除图片链接*"
   },

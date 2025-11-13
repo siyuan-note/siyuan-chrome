@@ -33,7 +33,7 @@
     "message": "Download assets"
   },
   "dirsFirst": {
-      "message": "Show directories first in path search"
+    "message": "Show directories first in path search"
   },
   "exp": {
     "message": "Show experimental features"
@@ -49,6 +49,9 @@
   },
   "exp_italic": {
     "message": "Detect italic style*"
+  },
+  "exp_underline": {
+    "message": "Detect underline style*"
   },
   "exp_remove_img_link": {
     "message": "Remove image link*"

@@ -371,6 +371,62 @@ function parentContainsItalic(element) {
     return false;
 }
 
+function siyuanProcessUnderlineStyle(tempElement) {
+    // 获取所有元素
+    const allElements = tempElement.querySelectorAll('*');
+
+    allElements.forEach(element => {
+        const style = window.getComputedStyle(element);
+        if (element.tagName === 'U') {
+            return; // 如果元素本身是 <u> 标签，跳过
+        }
+
+        if (parentContainsUnderline(element)) {
+            return;  // 如果元素的父元素是 U 标签，跳过
+        }
+
+        // 判断是否具有 text-decoration: underline
+        if (style.textDecorationLine.includes('underline')) {
+            // 将 element 中的各个元素使用 <u> 标签包裹
+            const children = element.childNodes;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                if (child.nodeType === Node.TEXT_NODE) {
+                    // 如果是文本节点，直接包裹在 <u> 标签中
+                    const text = child.nodeValue;
+                    const textElement = document.createElement('u');
+                    textElement.setAttribute('u-added-by-siyuan', 'true');
+                    textElement.textContent = text;
+                    element.replaceChild(textElement, child);
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    // 如果是元素节点，递归处理
+                    const childElement = child;
+                    const childTagName = childElement.tagName.toLowerCase();
+                    if (childTagName === 'u') {
+                        continue; // 如果是 <u> 标签，跳过
+                    }
+                    if (parentContainsUnderline(childElement)) {
+                        continue;  // 如果元素的父元素是 U 标签，跳过
+                    }
+                    // 递归处理
+                    siyuanProcessUnderlineStyle(childElement);
+                }
+            }
+        }
+    });
+
+    function parentContainsUnderline(element) {
+        let parent = element.parentElement;
+        while (parent) {
+            if (parent.tagName === 'U') {
+                return true;
+            }
+            parent = parent.parentElement;
+        }
+        return false;
+    }
+}
+
 function simplifyNestedTags(root, tagName) {
     let elements = root.querySelectorAll(tagName);
     let hasNested = true;
@@ -533,6 +589,7 @@ async function siyuanGetCloneNode(tempDoc) {
                 expSpan: false,
                 expBold: false,
                 expItalic: false,
+                expUnderline: false,
                 expRemoveImgLink: false,
                 expSvgToImg: false,
             }, (result) => {
@@ -549,6 +606,7 @@ async function siyuanGetCloneNode(tempDoc) {
             expSpan: false,
             expBold: false,
             expItalic: false,
+            expUnderline: false,
             expRemoveImgLink: false,
             expSvgToImg: false,
         };
@@ -557,7 +615,6 @@ async function siyuanGetCloneNode(tempDoc) {
     // 适配 MSN 页面 https://github.com/siyuan-note/siyuan/issues/14197
     adaptMSN(tempDoc);
 
-    // 前处理，增加可识别样式
     if (items.expBold) {
         // 替换粗体样式为内核可识别 <b> 标签 https://github.com/siyuan-note/siyuan/issues/13306
         siyuanProcessBoldStyle(tempDoc);
@@ -566,6 +623,11 @@ async function siyuanGetCloneNode(tempDoc) {
     if (items.expItalic) {
         // 替换斜体样式为内核可识别 <i> 标签 https://github.com/siyuan-note/siyuan/issues/13306
         siyuanProcessItalicStyle(tempDoc);
+    }
+
+    if (items.expUnderline) {
+        // 替换下划线样式为内核可识别 <u> 标签
+        siyuanProcessUnderlineStyle(tempDoc);
     }
 
     if (items.expRemoveImgLink) {
@@ -580,7 +642,7 @@ async function siyuanGetCloneNode(tempDoc) {
     }
 
     if (items.expSvgToImg) {
-        // 将网页内嵌的SVG节点转换成内嵌的IMG节点
+        // 将网页内嵌的 SVG 节点转换成内嵌的 IMG 节点
         // https://github.com/siyuan-note/siyuan/issues/14523
         await siyuanSvgToImg(tempDoc);
     }
@@ -655,6 +717,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         expSpan: false,
         expBold: false,
         expItalic: false,
+        expUnderline: false,
         expRemoveImgLink: false,
         expListDocTree: false,
         selectedDatabaseID: ''

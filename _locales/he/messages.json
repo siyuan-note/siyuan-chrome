@@ -50,6 +50,9 @@
   "exp_italic": {
     "message": "גלה סגנון נטוי*"
   },
+  "exp_underline": {
+    "message": "גלה סגנון קו תחתון*"
+  },
   "exp_remove_img_link": {
     "message": "הסר קישור לתמונה*"
   },

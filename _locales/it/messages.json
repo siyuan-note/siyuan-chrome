@@ -33,7 +33,7 @@
     "message": "Scarica risorse"
   },
   "dirsFirst": {
-      "message": "Cartelle prime nella ricerca percorso"
+    "message": "Cartelle prime nella ricerca percorso"
   },
   "exp": {
     "message": "Mostra funzionalità sperimentali"
@@ -49,6 +49,9 @@
   },
   "exp_italic": {
     "message": "Rileva stile corsivo*"
+  },
+  "exp_underline": {
+    "message": "Rileva stile sottolineato*"
   },
   "exp_remove_img_link": {
     "message": "Rimuovi il link dell'immagine*"
