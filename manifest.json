@@ -32,6 +32,16 @@
     "clipboardWrite",
     "storage"
   ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "lib/mathjax.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
   "host_permissions": [
     "*://*/*"
   ],
@@ -43,5 +53,5 @@
   "name": "__MSG_extension_name__",
   "options_page": "options.html",
   "description": "__MSG_extension_description__",
-  "version": "1.13.11"
+  "version": "1.14.0"
 }

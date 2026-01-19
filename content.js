@@ -553,7 +553,7 @@ function adaptMSN(tempDoc) {
     }
 }
 
-// 重构并合并 Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
+// Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
 async function siyuanGetCloneNode(tempDoc) {
     let items;
     try {
@@ -662,6 +662,13 @@ async function siyuanGetCloneNode(tempDoc) {
 
     const clonedDoc = document.cloneNode(true);
     return clonedDoc;
+}
+
+const setMathJaxDataTex = () => {
+    const script = document.createElement('script');
+    script.src = chrome.runtime.getURL('lib/mathjax.js');
+    (document.head || document.documentElement).appendChild(script);
+    script.onload = () => script.remove();
 }
 
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
@@ -818,6 +825,9 @@ const siyuanGetReadability = async (tabId) => {
     }
 
     try {
+        // 处理 MathJax 公式，添加 data-tex 属性 https://github.com/siyuan-note/siyuan/issues/13543
+        setMathJaxDataTex();
+
         // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
         document.querySelectorAll(".hljs-comment").forEach(item => {
             item.classList.remove("hljs-comment")
