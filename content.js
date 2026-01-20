@@ -664,7 +664,7 @@ async function siyuanGetCloneNode(tempDoc) {
     return clonedDoc;
 }
 
-const setMathJaxDataTex = () => {
+const setMathJaxDataFormula = () => {
     const script = document.createElement('script');
     script.src = chrome.runtime.getURL('lib/mathjax.js');
     (document.head || document.documentElement).appendChild(script);
@@ -825,8 +825,8 @@ const siyuanGetReadability = async (tabId) => {
     }
 
     try {
-        // 处理 MathJax 公式，添加 data-tex 属性 https://github.com/siyuan-note/siyuan/issues/13543
-        setMathJaxDataTex();
+        // 处理 MathJax 公式 https://github.com/siyuan-note/siyuan/issues/13543
+        setMathJaxDataFormula();
 
         // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
         document.querySelectorAll(".hljs-comment").forEach(item => {
