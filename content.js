@@ -665,11 +665,23 @@ async function siyuanGetCloneNode(tempDoc) {
 }
 
 const setMathJaxDataFormula = () => {
-    const script = document.createElement('script');
-    script.src = chrome.runtime.getURL('lib/mathjax.js');
-    (document.head || document.documentElement).appendChild(script);
-    script.onload = () => script.remove();
-}
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = chrome.runtime.getURL('lib/mathjax.js');
+        (document.head || document.documentElement).appendChild(script);
+
+        const cleanUp = () => {
+            try { script.remove(); } catch (e) {}
+            resolve();
+        };
+
+        script.onload = cleanUp;
+        script.onerror = () => {
+            console.warn('MathJax load failed');
+            cleanUp();
+        };
+    });
+};
 
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
     chrome.storage.sync.get({
@@ -826,7 +838,7 @@ const siyuanGetReadability = async (tabId) => {
 
     try {
         // 处理 MathJax 公式 https://github.com/siyuan-note/siyuan/issues/13543
-        setMathJaxDataFormula();
+        await setMathJaxDataFormula();
 
         // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
         document.querySelectorAll(".hljs-comment").forEach(item => {
