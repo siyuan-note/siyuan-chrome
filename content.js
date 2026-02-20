@@ -639,29 +639,50 @@ async function siyuanGetCloneNode(tempDoc) {
     });
 
     // 如果行级标签包含了块级标签，则将该行级标签改为 div
-    const inlineTags = ['span', 'strong', 'b', 'i', 'em', 'a'];
-    const blockTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'table', 'tr', 'td', 'th', 'blockquote', 'pre', 'code', 'section'];
-    inlineTags.forEach(inlineTag => {
-        const elements = document.querySelectorAll(inlineTag);
-        elements.forEach(element => {
-            let containsBlock = false;
-            blockTags.forEach(blockTag => {
-                if (element.querySelector(blockTag)) {
-                    containsBlock = true;
-                }
-            });
-            if (containsBlock) {
-                const div = document.createElement('div');
-                while (element.firstChild) {
-                    div.appendChild(element.firstChild);
-                }
-                element.parentNode.replaceChild(div, element);
-            }
-        });
-    });
+    fixInvalidNesting(tempDoc);
 
     const clonedDoc = document.cloneNode(true);
     return clonedDoc;
+}
+
+/**
+ * 修复 HTML 结构：将包含块级元素的行级标签改为 div
+ * @param {Document|Element} doc - 需要处理的 DOM 文档或元素节点
+ */
+function fixInvalidNesting(doc) {
+    const inlineTags = ['span', 'strong', 'b', 'i', 'em', 'a'];
+    // 注意：code 建议移出行内标签列表，因为它通常被视为行内元素
+    const blockTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'table', 'tr', 'td', 'th', 'blockquote', 'section', 'article'];
+
+    const inlineSelector = inlineTags.join(',');
+    const blockSelector = blockTags.join(',');
+
+    // 1. 获取所有可能是行内的元素
+    const allInlines = Array.from(doc.querySelectorAll(inlineSelector));
+
+    // 2. 过滤出真正包含块级子元素的行内元素
+    // 使用 reverse() 从 DOM 树的最深层开始处理，防止父级先被替换导致子级丢失
+    const targets = allInlines.filter(el => el.querySelector(blockSelector)).reverse();
+
+    targets.forEach(oldEl => {
+        // 再次检查 oldEl 是否还在 DOM 树中（防止在之前的循环中已被父级替换）
+        if (!oldEl.parentNode) return;
+
+        const newDiv = doc.createElement('div');
+
+        // 复制属性
+        for (const attr of oldEl.attributes) {
+            newDiv.setAttribute(attr.name, attr.value);
+        }
+
+        // 转移子节点
+        while (oldEl.firstChild) {
+            newDiv.appendChild(oldEl.firstChild);
+        }
+
+        // 替换
+        oldEl.parentNode.replaceChild(newDiv, oldEl);
+    });
 }
 
 const setMathJaxDataFormula = () => {
