@@ -6,6 +6,29 @@
 
 ## 配置步骤
 
+### 0. 前置要求 ⚠️
+
+在配置自动化之前，**必须先完成以下配置**：
+
+1. **配置思源 API Token**
+   - 打开思源笔记
+   - 点击左上角菜单 → 设置 → 关于
+   - 找到 "API token" 字段，复制这个 token
+   - 回到扩展选项页面 → "API 令牌" → 粘贴并保存
+
+2. **配置保存路径**
+   - 在扩展选项页面
+   - 找到 "保存路径" 字段
+   - 输入关键字搜索笔记本（例如 "inbox"）
+   - 从下拉列表中选择一个路径
+
+3. **验证配置**
+   - 确保 API token 不为空
+   - 确保保存路径已选择
+   - 尝试手动点击 "发送到思源" 按钮测试是否正常
+
+> **提示**: 如果这一步失败，自动化功能也无法工作。请先确保手动剪藏正常。
+
 ### 1. 配置自动化暗号
 
 1. 点击扩展图标打开选项页面
@@ -99,6 +122,41 @@ window.postMessage({
 }
 ```
 
+## 调试技巧
+
+### 查看控制台日志
+
+扩展会在浏览器控制台输出调试日志：
+
+1. 按 `F12` 打开开发者工具
+2. 切换到 Console 标签
+3. 寻找 `[SIYUAN]` 开头的日志
+
+**正常流程：**
+```
+[SIYUAN] Clipping started: 文章标题
+[SIYUAN] siyuanSendUpload called, type: article
+[SIYUAN] Storage config: { hasToken: true, hasNotebook: true, ip: '...' }
+[SIYUAN] Sending to background: { func: 'upload-copy', type: 'article', title: '...' }
+```
+
+**错误日志：**
+```
+[SIYUAN] Token missing          → 需要在扩展选项配置 API token
+[SIYUAN] Notebook missing       → 需要选择保存路径
+```
+
+### 使用测试页面
+
+推荐使用 `test-postmessage.html` 进行手动测试：
+
+```bash
+# 用 Chrome 打开测试页面
+open test-postmessage.html
+```
+
+测试页面会显示详细的日志输出和错误信息。
+
 ## 完整示例
 
 参考 `playwright-example.js` 文件。
@@ -111,19 +169,33 @@ window.postMessage({
 
 ## 常见问题
 
+### Q: 提示 "API token not configured" 或 "Save path not configured"？
+A: 这是**最常见**的错误。需要先在扩展选项中配置：
+   1. 点击扩展图标打开选项页面
+   2. 配置 **API 令牌**（从思源设置→关于中复制）
+   3. 配置 **保存路径**（搜索并选择一个笔记本）
+   4. 保存后刷新页面
+
 ### Q: token 验证失败？
-A: 确保 Playwright 脚本中的 token 与扩展选项中配置的完全一致。
+A: 确保 Playwright 脚本中的 token 与扩展选项中配置的完全一致（区分大小写）。
 
 ### Q: 没有收到响应？
 A: 检查：
-- 扩展是否已加载
-- 是否注入了响应监听器
-- 网页是否在 content script 的作用域内（`<all_urls>`）
+   - 扩展是否已加载
+   - 是否注入了响应监听器
+   - 网页是否在 content script 的作用域内（`<all_urls>`）
+   - 浏览器控制台是否有报错
+
+### Q: Readability 返回 null 或内容为空？
+A: 某些网页结构复杂，Readability 无法提取。尝试：
+   - 换一个简单的网页测试（如维基百科）
+   - 检查控制台 Readability 日志
+   - 使用 `test-postmessage.html` 测试基础功能
 
 ### Q: 支持哪些 action？
 A: 目前支持：
-- `clipArticle` - 剪藏整个网页
-- `copy` - 复制选中文本
+   - `clipArticle` - 剪藏整个网页
+   - `copy` - 复制选中文本
 
 ## 测试
 

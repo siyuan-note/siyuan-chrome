@@ -2,18 +2,30 @@
  * Playwright 示例：通过 postMessage 与 SiYuan Chrome 扩展通信
  * 
  * 使用方法：
- * 1. 在扩展选项中配置自动化暗号（例如：my-secret-token-123）
+ * 1. 在扩展选项中配置：
+ *    - API 令牌（从思源设置→关于中获取）
+ *    - 保存路径（选择一个笔记本）
+ *    - 自动化暗号（例如：my-secret-token-123）
  * 2. 修改下面的 TOKEN 常量为你配置的暗号
  * 3. 运行此脚本
+ * 
+ * 注意：必须先确保手动剪藏正常工作！
  */
 
 const { chromium } = require('playwright');
 
 // ===== 配置区域 =====
-const TOKEN = 'my-secret-token-123'; // 必须与扩展选项中配置的暗号一致
+const TOKEN = 'my-secret-token-123'; // 必须与扩展选项中配置的自动化暗号一致
 const SIYUAN_API_URL = 'http://127.0.0.1:6806';
-const SIYUAN_TOKEN = 'your-siyuan-api-token'; // 思源 API token
+const SIYUAN_TOKEN = 'your-siyuan-api-token'; // 思源 API token（从思源设置→关于中获取）
 // ====================
+
+/**
+ * 重要提示：
+ * 1. 必须先在扩展选项中配置 API token 和保存路径
+ * 2. 测试手动剪藏是否正常工作
+ * 3. 确保 TOKEN 与扩展配置完全一致
+ */
 
 (async () => {
     const browser = await chromium.launch({
