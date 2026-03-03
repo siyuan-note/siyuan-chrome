@@ -95,6 +95,9 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "Please start SiYuan and ensure network connectivity before trying again"
   },
+  "tip_no_selection": {
+    "message": "No text selected. Please select content first."
+  },
   "template_config": {
     "message": "Clipping template"
   },

@@ -30,8 +30,25 @@
     "scripting",
     "contextMenus",
     "clipboardWrite",
-    "storage"
+    "storage",
+    "commands"
   ],
+  "commands": {
+    "copy-to-siyuan": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C",
+        "mac": "Command+Shift+C"
+      },
+      "description": "Copy selected text to SiYuan"
+    },
+    "send-to-siyuan": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Clip entire page to SiYuan"
+    }
+  },
   "web_accessible_resources": [
     {
       "resources": [

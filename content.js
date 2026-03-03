@@ -38,6 +38,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const tempElement = document.createElement('div')
                 tempElement.appendChild(range.cloneContents())
                 siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part")
+            } else {
+                siyuanShowTipByKey("tip_no_selection", 3000)
             }
         })
 

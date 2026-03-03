@@ -95,6 +95,9 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "请启动思源并确保网络连通后再试"
   },
+  "tip_no_selection": {
+    "message": "未选中文本，请先选择要复制的内容"
+  },
   "template_config": {
     "message": "剪藏模板配置"
   },
