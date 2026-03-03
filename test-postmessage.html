@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiYuan Extension postMessage 测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background-color: #3575f0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #2a65d0;
+        }
+        #log {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #3575f0;
+            padding-left: 10px;
+        }
+        .success {
+            border-left-color: #4caf50;
+            background-color: #e8f5e9;
+        }
+        .error {
+            border-left-color: #f44336;
+            background-color: #ffebee;
+        }
+        .info {
+            border-left-color: #2196f3;
+            background-color: #e3f2fd;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 SiYuan Extension postMessage 测试</h1>
+    
+    <div class="test-section">
+        <h2>配置</h2>
+        <label>
+            Automation Token:
+            <input type="text" id="tokenInput" value="my-secret-token-123" style="width: 300px; padding: 8px;">
+        </label>
+        <p style="color: #666; font-size: 14px;">
+            ⚠️ 请确保这个 token 与扩展选项中配置的完全一致
+        </p>
+    </div>
+
+    <div class="test-section">
+        <h2>测试 1: 剪藏整个网页</h2>
+        <p>当前页面内容会被剪藏到思源笔记</p>
+        <button onclick="testClipArticle()">✂️ 剪藏当前网页</button>
+    </div>
+
+    <div class="test-section">
+        <h2>测试 2: 复制选中文本</h2>
+        <p>请先选中下面这段文字，然后点击复制按钮</p>
+        <div style="background: #f9f9f9; padding: 15px; margin: 10px 0; border-radius: 6px;">
+            <p>这是一段测试文本，用于验证复制功能是否正常工作。请用鼠标选中这段文字中的任意部分，然后点击"📋 复制选中文本"按钮。</p>
+        </div>
+        <button onclick="testCopy()">📋 复制选中文本</button>
+    </div>
+
+    <div class="test-section">
+        <h2>测试 3: 错误处理 - Token 错误</h2>
+        <button onclick="testWrongToken()">❌ 使用错误 token 测试</button>
+    </div>
+
+    <div class="test-section">
+        <h2>日志输出</h2>
+        <button onclick="clearLog()">🗑️ 清空日志</button>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        // 添加消息监听器
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'SIYUAN_RESPONSE') {
+                logResponse(event.data);
+            }
+        });
+
+        function testClipArticle() {
+            const token = document.getElementById('tokenInput').value;
+            log('发送剪藏请求...', 'info');
+            
+            window.postMessage({
+                type: 'SIYUAN_CLIP',
+                action: 'clipArticle',
+                token: token,
+                timestamp: Date.now()
+            }, '*');
+        }
+
+        function testCopy() {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0) {
+                log('❌ 错误：请先选中一段文字', 'error');
+                return;
+            }
+            
+            const token = document.getElementById('tokenInput').value;
+            log('发送复制请求...', 'info');
+            
+            window.postMessage({
+                type: 'SIYUAN_CLIP',
+                action: 'copy',
+                token: token,
+                timestamp: Date.now()
+            }, '*');
+        }
+
+        function testWrongToken() {
+            log('发送带有错误 token 的请求...', 'info');
+            
+            window.postMessage({
+                type: 'SIYUAN_CLIP',
+                action: 'clipArticle',
+                token: 'wrong-token-12345',
+                timestamp: Date.now()
+            }, '*');
+        }
+
+        function logResponse(data) {
+            if (data.success) {
+                log('✅ 成功: ' + JSON.stringify(data, null, 2), 'success');
+            } else {
+                log('❌ 失败: ' + JSON.stringify(data, null, 2), 'error');
+            }
+        }
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            entry.textContent = `[${timestamp}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        // 页面加载时的提示
+        window.addEventListener('load', () => {
+            log('页面已加载，准备测试', 'info');
+            log('请确保：1) 扩展已加载 2) Token 已配置', 'info');
+        });
+    </script>
+</body>
+</html>

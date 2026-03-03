@@ -55,13 +55,14 @@ const SIYUAN_TOKEN = 'your-siyuan-api-token'; // 思源 API token
     });
 
     try {
-        // 访问目标网页
+        // 访问一个简单的文章页面（更容易测试）
         await page.goto('https://zh.wikipedia.org/wiki/笔记软件', {
             waitUntil: 'networkidle',
             timeout: 30000
         });
 
         console.log('📄 页面加载完成');
+        console.log('📝 页面标题:', await page.title());
 
         // ===== 测试 1: 剪藏整个网页 =====
         console.log('✂️ 开始剪藏整个网页...');
