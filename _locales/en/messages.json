@@ -116,6 +116,21 @@
   "template_restore_default": {
     "message": "Restore default"
   },
+  "automation_token_label": {
+    "message": "Automation Token"
+  },
+  "automation_token_placeholder": {
+    "message": "Enter a secret code for Playwright automation"
+  },
+  "automation_token_tip": {
+    "message": "This token is used to verify postMessage requests from Playwright"
+  },
+  "tip_automation_token_not_set": {
+    "message": "Automation token not configured. Please set it in extension options."
+  },
+  "tip_automation_token_invalid": {
+    "message": "Invalid automation token"
+  },
   "database_label": {
     "message": "Add to database"
   },

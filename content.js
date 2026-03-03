@@ -1,4 +1,74 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // 监听来自网页的 postMessage 请求（Playwright 自动化）
+    window.addEventListener('message', (event) => {
+        // 验证消息类型
+        if (!event.data || event.data.type !== 'SIYUAN_CLIP') {
+            return
+        }
+
+        const { action, token, data } = event.data
+
+        // 验证 token
+        chrome.storage.sync.get({ automationToken: '' }, (items) => {
+            if (!items.automationToken) {
+                siyuanShowTipByKey('tip_automation_token_not_set', 5000)
+                // 发送失败回调
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    error: 'Automation token not configured'
+                }, '*')
+                return
+            }
+
+            if (token !== items.automationToken) {
+                siyuanShowTipByKey('tip_automation_token_invalid', 5000)
+                // 发送失败回调
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    error: 'Invalid automation token'
+                }, '*')
+                return
+            }
+
+            // 根据 action 执行不同操作
+            if (action === 'copy') {
+                // 复制选中内容
+                const selection = window.getSelection()
+                if (selection && 0 < selection.rangeCount) {
+                    const range = selection.getRangeAt(0)
+                    const tempElement = document.createElement('div')
+                    tempElement.appendChild(range.cloneContents())
+                    siyuanSendUpload(tempElement, undefined, data?.srcUrl, 'part')
+                    // 发送成功回调
+                    window.postMessage({
+                        type: 'SIYUAN_RESPONSE',
+                        success: true,
+                        action: 'copy'
+                    }, '*')
+                } else {
+                    siyuanShowTipByKey('tip_no_selection', 3000)
+                    window.postMessage({
+                        type: 'SIYUAN_RESPONSE',
+                        success: false,
+                        error: 'No text selected'
+                    }, '*')
+                }
+            } else if (action === 'clipArticle') {
+                // 剪藏整个网页
+                siyuanGetReadabilityForAutomation()
+            } else {
+                siyuanShowTip('Unknown action: ' + action, 3000)
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    error: 'Unknown action: ' + action
+                }, '*')
+            }
+        })
+    })
+
     chrome.runtime.onMessage.addListener(
         async (request, sender, sendResponse) => {
             if ('tip' === request.func && request.tip) {
@@ -885,4 +955,16 @@ const siyuanGetReadability = async (tabId) => {
         console.error(e)
         siyuanShowTip(e.message, 7 * 1000)
     }
+}
+
+// 自动化剪藏网页（用于 Playwright）
+const siyuanGetReadabilityForAutomation = () => {
+    siyuanGetReadability(undefined)
+    // 发送成功回调（在 siyuanSendUpload 完成后会由后台发送响应）
+    window.postMessage({
+        type: 'SIYUAN_RESPONSE',
+        success: true,
+        action: 'clipArticle',
+        message: 'Clipping started'
+    }, '*')
 }
