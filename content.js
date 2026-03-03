@@ -959,12 +959,84 @@ const siyuanGetReadability = async (tabId) => {
 
 // 自动化剪藏网页（用于 Playwright）
 const siyuanGetReadabilityForAutomation = () => {
-    siyuanGetReadability(undefined)
-    // 发送成功回调（在 siyuanSendUpload 完成后会由后台发送响应）
-    window.postMessage({
-        type: 'SIYUAN_RESPONSE',
-        success: true,
-        action: 'clipArticle',
-        message: 'Clipping started'
-    }, '*')
+    try {
+        siyuanShowTipByKey('tip_clipping', 60 * 1000)
+    } catch (e) {
+        alert(chrome.i18n.getMessage('tip_first_time'))
+        window.location.reload()
+        return
+    }
+
+    // 处理 MathJax 公式
+    setMathJaxDataFormula().then(() => {
+        // 隐藏评论代码
+        document.querySelectorAll('.hljs-comment').forEach(item => {
+            item.classList.remove('hljs-comment')
+            item.classList.add('hljs-cmt')
+        })
+
+        // Readability 前处理
+        siyuanGetCloneNode(document).then(clonedDoc => {
+            try {
+                const article = new Readability(clonedDoc, {
+                    keepClasses: true,
+                    charThreshold: 16,
+                    debug: true
+                }).parse()
+
+                if (!article) {
+                    siyuanShowTip('Failed to parse article', 7000)
+                    window.postMessage({
+                        type: 'SIYUAN_RESPONSE',
+                        success: false,
+                        action: 'clipArticle',
+                        error: 'Readability returned null'
+                    }, '*')
+                    return
+                }
+
+                const tempElement = document.createElement('div')
+                tempElement.innerHTML = article.content
+
+                // 发送响应（在上传开始前）
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: true,
+                    action: 'clipArticle',
+                    message: 'Clipping started',
+                    article: {
+                        title: article.title,
+                        contentLength: article.content ? article.content.length : 0
+                    }
+                }, '*')
+
+                siyuanSendUpload(tempElement, undefined, undefined, 'article', article, window.location.href)
+            } catch (e) {
+                console.error(e)
+                siyuanShowTip(e.message, 7000)
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    action: 'clipArticle',
+                    error: e.message
+                }, '*')
+            }
+        }).catch(e => {
+            console.error(e)
+            window.postMessage({
+                type: 'SIYUAN_RESPONSE',
+                success: false,
+                action: 'clipArticle',
+                error: e.message
+            }, '*')
+        })
+    }).catch(e => {
+        console.error(e)
+        window.postMessage({
+            type: 'SIYUAN_RESPONSE',
+            success: false,
+            action: 'clipArticle',
+            error: e.message
+        }, '*')
+    })
 }
