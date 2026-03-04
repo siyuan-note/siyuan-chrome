@@ -1,7 +1,7 @@
 # SiYuan Chrome Extension - Knowledge Base
 
 **Generated:** 2026-03-04
-**Commit:** c3ea8b2
+**Commit:** 2b7e81f
 **Branch:** main
 
 ## OVERVIEW
@@ -34,17 +34,19 @@ Chrome extension for clipping web content to SiYuan note-taking app. Manifest V3
 | Options UI | `popup.js` + `options.html` | Settings storage (`chrome.storage.sync`) |
 | i18n system | `popup.js:656-750` | `siyuanLoadLanguageFile()`, `siyuanTranslateDOM()` |
 | Template rendering | `background.js:44-86` | `renderTemplate()` for clip formatting |
+| **Automation broadcast** | `background.js:314-321` | `clip-success`/`clip-error` events for automation mode |
 
 ## CODE MAP
 
 | Symbol | Type | Location | Role |
 |--------|------|----------|------|
-| `safeTabsSendMessage` | Function | `background.js:32` | Safe tab message sending (ignores errors) |
-| `renderTemplate` | Function | `background.js:44` | Template engine for clip formatting |
+| `safeTabsSendMessage` | Function | `background.js:52` | Safe tab message sending (ignores errors) |
+| `renderTemplate` | Function | `background.js:64` | Template engine for clip formatting |
 | `siyuanShowTip` | Function | `content.js:73` | Toast notification system |
 | `siyuanGetCloneNode` | Function | `content.js:556` | Pre-Readability DOM processor |
-| `siyuanSendUpload` | Function | `content.js:707` | Uploads content to SiYuan API |
-| `siyuanGetReadability` | Function | `content.js:851` | Main article clipping flow |
+| `siyuanSendUpload` | Function | `content.js:805` | Uploads content to SiYuan API |
+| `siyuanGetReadability` | Function | `content.js:873` | Main article clipping flow |
+| `siyuanGetReadabilityForAutomation` | Function | `content.js:988` | Automation mode entry (Playwright) |
 | `querySql` | Function | `popup.js:396` | SQL query helper for doc search |
 | `sortSearchResults` | Function | `popup.js:464` | Directory-first sorting algorithm |
 | `siyuanLoadLanguageFile` | Function | `popup.js:714` | i18n loader with fallback |
@@ -100,3 +102,5 @@ Chrome extension for clipping web content to SiYuan note-taking app. Manifest V3
 - **MV3 migration**: Already migrated (uses `chrome.runtime.onInstalled`, service workers)
 - **MathJax handling**: Dynamic script injection for formula rendering (content.js:688)
 - **Cross-origin images**: Fetches with custom headers to avoid CORS blocks (content.js:790)
+- **Automation mode**: Uses `window.postMessage` for communication (content.js:1000+)
+- **Broadcast events**: `clip-success`/`clip-error` sent via `safeTabsSendMessage` (background.js:314)
