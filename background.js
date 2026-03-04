@@ -52,11 +52,16 @@ chrome.commands.onCommand.addListener(function (command) {
 function safeTabsSendMessage(tabId, message) {
     if (!tabId) return;
     try {
-        chrome.tabs.sendMessage(tabId, message, () => {
-            void chrome.runtime.lastError;
+        console.log('[background.js] safeTabsSendMessage:', message.func, 'to tab', tabId)
+        chrome.tabs.sendMessage(tabId, message, (response) => {
+            if (chrome.runtime.lastError) {
+                console.warn('[background.js] sendMessage error:', chrome.runtime.lastError.message)
+            } else {
+                console.log('[background.js] sendMessage response:', response)
+            }
         });
     } catch (e) {
-        // ignore
+        console.error('[background.js] sendMessage exception:', e)
     }
 }
 
@@ -144,7 +149,10 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         return
     }
 
-    const requestData = request.data
+    // Use sender.tab.id if requestData.tabId is not provided (for automation mode)
+    const tabId = request.data.tabId || (sender.tab && sender.tab.id)
+    const requestData = {...request.data, tabId: tabId}
+    
     const fetchFileErr = requestData.fetchFileErr
     const dom = requestData.dom
     const files = requestData.files
@@ -309,6 +317,14 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                             'tip': requestData.tip,
                         })
 
+                        console.log('[background.js] Broadcasting clip-success, docId:', response.data)
+                        // Broadcast success event for automation mode
+                        safeTabsSendMessage(requestData.tabId, {
+                            'func': 'clip-success',
+                            'docId': response.data,
+                            'title': requestData.title
+                        })
+
                         // 检查是否需要打开文档
                         chrome.storage.sync.get({
                             expOpenAfterClip: false,
@@ -344,6 +360,11 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                             'func': 'tip',
                             'msg': response.msg,
                             'tip': requestData.tip,
+                        })
+                        // Broadcast error event for automation mode
+                        safeTabsSendMessage(requestData.tabId, {
+                            'func': 'clip-error',
+                            'error': response.msg || 'Failed to create document'
                         })
                     }
                 })
