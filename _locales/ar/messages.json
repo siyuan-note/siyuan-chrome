@@ -122,7 +122,25 @@
   "save_path_none": {
     "message": "بدون"
   },
-  "database_none": {
+"database_none": {
     "message": "بدون"
+  },
+  "automation_token_label": {
+    "message": "رمز الأتمتة"
+  },
+  "automation_token_placeholder": {
+    "message": "أدخل رمزًا سريًا لأتمتة Playwright"
+  },
+  "automation_token_tip": {
+    "message": "يُستخدم هذا الرمز للتحقق من طلبات postMessage من Playwright"
+  },
+  "tip_automation_token_not_set": {
+    "message": "لم يتم تكوين رمز الأتمتة. يرجى تعيينه في خيارات الإضافة."
+  },
+  "tip_automation_token_invalid": {
+    "message": "رمز أتمتة غير صالح"
+  },
+  "tip_no_selection": {
+    "message": "لم يتم تحديد نص. يرجى تحديد المحتوى أولاً."
   }
 }

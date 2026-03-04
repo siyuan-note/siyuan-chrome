@@ -122,7 +122,25 @@
   "save_path_none": {
     "message": "Нет"
   },
-  "database_none": {
+"database_none": {
     "message": "Нет"
+  },
+  "automation_token_label": {
+    "message": "Токен автоматизации"
+  },
+  "automation_token_placeholder": {
+    "message": "Введите секретный код для автоматизации Playwright"
+  },
+  "automation_token_tip": {
+    "message": "Этот токен используется для проверки запросов postMessage от Playwright"
+  },
+  "tip_automation_token_not_set": {
+    "message": "Токен автоматизации не настроен. Пожалуйста, установите его в параметрах расширения."
+  },
+  "tip_automation_token_invalid": {
+    "message": "Недействительный токен автоматизации"
+  },
+  "tip_no_selection": {
+    "message": "Текст не выбран. Пожалуйста, сначала выберите содержимое."
   }
 }

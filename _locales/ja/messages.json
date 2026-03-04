@@ -122,7 +122,25 @@
   "save_path_none": {
     "message": "なし"
   },
-  "database_none": {
+"database_none": {
     "message": "なし"
+  },
+  "automation_token_label": {
+    "message": "自動化トークン"
+  },
+  "automation_token_placeholder": {
+    "message": "Playwright自動化用のシークレットコードを入力"
+  },
+  "automation_token_tip": {
+    "message": "このトークンはPlaywrightからのpostMessageリクエストを検証するために使用されます"
+  },
+  "tip_automation_token_not_set": {
+    "message": "自動化トークンが設定されていません。拡張機能のオプションで設定してください。"
+  },
+  "tip_automation_token_invalid": {
+    "message": "無効な自動化トークン"
+  },
+  "tip_no_selection": {
+    "message": "テキストが選択されていません。先にコンテンツを選択してください。"
   }
 }

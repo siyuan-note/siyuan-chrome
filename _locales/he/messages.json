@@ -122,7 +122,25 @@
   "save_path_none": {
     "message": "אין"
   },
-  "database_none": {
-    "message": "אין"
+"database_none": {
+    "message": "ללא"
+  },
+  "automation_token_label": {
+    "message": "אסימון אוטומציה"
+  },
+  "automation_token_placeholder": {
+    "message": "הזן קוד סודי לאוטומציה של Playwright"
+  },
+  "automation_token_tip": {
+    "message": "אסימון זה משמש לאימות בקשות postMessage מ-Playwright"
+  },
+  "tip_automation_token_not_set": {
+    "message": "אסימון האוטומציה לא הוגדר. אנא הגדר אותו באפשרויות ההרחבה."
+  },
+  "tip_automation_token_invalid": {
+    "message": "אסימון אוטומציה לא תקף"
+  },
+  "tip_no_selection": {
+    "message": "לא נבחר טקסט. אנא בחר תוכן תחילה."
   }
 }

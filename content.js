@@ -1,4 +1,74 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // 监听来自网页的 postMessage 请求（Playwright 自动化）
+    window.addEventListener('message', (event) => {
+        // 验证消息类型
+        if (!event.data || event.data.type !== 'SIYUAN_CLIP') {
+            return
+        }
+
+        const { action, token, data } = event.data
+
+        // 验证 token
+        chrome.storage.sync.get({ automationToken: '' }, (items) => {
+            if (!items.automationToken) {
+                siyuanShowTipByKey('tip_automation_token_not_set', 5000)
+                // 发送失败回调
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    error: 'Automation token not configured'
+                }, '*')
+                return
+            }
+
+            if (token !== items.automationToken) {
+                siyuanShowTipByKey('tip_automation_token_invalid', 5000)
+                // 发送失败回调
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    error: 'Invalid automation token'
+                }, '*')
+                return
+            }
+
+            // 根据 action 执行不同操作
+            if (action === 'copy') {
+                // 复制选中内容
+                const selection = window.getSelection()
+                if (selection && 0 < selection.rangeCount) {
+                    const range = selection.getRangeAt(0)
+                    const tempElement = document.createElement('div')
+                    tempElement.appendChild(range.cloneContents())
+                    siyuanSendUpload(tempElement, undefined, data?.srcUrl, 'part')
+                    // 发送成功回调
+                    window.postMessage({
+                        type: 'SIYUAN_RESPONSE',
+                        success: true,
+                        action: 'copy'
+                    }, '*')
+                } else {
+                    siyuanShowTipByKey('tip_no_selection', 3000)
+                    window.postMessage({
+                        type: 'SIYUAN_RESPONSE',
+                        success: false,
+                        error: 'No text selected'
+                    }, '*')
+                }
+            } else if (action === 'clipArticle') {
+                // 剪藏整个网页
+                siyuanGetReadabilityForAutomation()
+            } else {
+                siyuanShowTip('Unknown action: ' + action, 3000)
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    error: 'Unknown action: ' + action
+                }, '*')
+            }
+        })
+    })
+
     chrome.runtime.onMessage.addListener(
         async (request, sender, sendResponse) => {
             if ('tip' === request.func && request.tip) {
@@ -38,6 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 const tempElement = document.createElement('div')
                 tempElement.appendChild(range.cloneContents())
                 siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part")
+            } else {
+                siyuanShowTipByKey("tip_no_selection", 3000)
             }
         })
 
@@ -704,6 +776,29 @@ const setMathJaxDataFormula = () => {
     });
 };
 
+// Listen for broadcast events from background (for automation mode)
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.func === 'clip-success') {
+        window.postMessage({
+            type: 'SIYUAN_RESPONSE',
+            success: true,
+            action: 'clipArticle',
+            message: 'Clipping completed',
+            docId: request.docId,
+            title: request.title
+        }, '*')
+    } else if (request.func === 'clip-error') {
+        window.postMessage({
+            type: 'SIYUAN_RESPONSE',
+            success: false,
+            action: 'clipArticle',
+            error: request.error
+        }, '*')
+    }
+    sendResponse({})
+    return true
+})
+
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
     chrome.storage.sync.get({
         ip: 'http://127.0.0.1:6806',
@@ -725,11 +820,13 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
     }, async function (items) {
         if (!items.token) {
             siyuanShowTipByKey("tip_token_miss")
+            console.error('[SIYUAN] Token missing')
             return
         }
 
         if (!items.notebook) {
             siyuanShowTipByKey("tip_save_path_miss")
+            console.error('[SIYUAN] Notebook missing')
             return
         }
 
@@ -883,4 +980,119 @@ const siyuanGetReadability = async (tabId) => {
         console.error(e)
         siyuanShowTip(e.message, 7 * 1000)
     }
+}
+
+// 自动化剪藏网页（用于 Playwright）
+const siyuanGetReadabilityForAutomation = () => {
+    // 先检查基本配置
+    chrome.storage.sync.get({
+        token: '',
+        notebook: '',
+        ip: 'http://127.0.0.1:6806'
+    }, (config) => {
+        if (!config.token) {
+            siyuanShowTipByKey('tip_token_miss', 5000)
+            window.postMessage({
+                type: 'SIYUAN_RESPONSE',
+                success: false,
+                action: 'clipArticle',
+                error: 'API token not configured'
+            }, '*')
+            return
+        }
+
+        if (!config.notebook) {
+            siyuanShowTipByKey('tip_save_path_miss', 5000)
+            window.postMessage({
+                type: 'SIYUAN_RESPONSE',
+                success: false,
+                action: 'clipArticle',
+                error: 'Save path not configured'
+            }, '*')
+            return
+        }
+
+        // 配置检查通过，开始剪藏
+        try {
+            siyuanShowTipByKey('tip_clipping', 60 * 1000)
+        } catch (e) {
+            alert(chrome.i18n.getMessage('tip_first_time'))
+            window.location.reload()
+            return
+        }
+
+        // 处理 MathJax 公式
+        setMathJaxDataFormula().then(() => {
+            // 隐藏评论代码
+            document.querySelectorAll('.hljs-comment').forEach(item => {
+                item.classList.remove('hljs-comment')
+                item.classList.add('hljs-cmt')
+            })
+
+            // Readability 前处理
+            siyuanGetCloneNode(document).then(clonedDoc => {
+                try {
+                    const article = new Readability(clonedDoc, {
+                        keepClasses: true,
+                        charThreshold: 16,
+                        debug: true
+                    }).parse()
+
+                    if (!article) {
+                        siyuanShowTip('Failed to parse article', 7000)
+                        window.postMessage({
+                            type: 'SIYUAN_RESPONSE',
+                            success: false,
+                            action: 'clipArticle',
+                            error: 'Readability returned null'
+                        }, '*')
+                        return
+                    }
+
+                    const tempElement = document.createElement('div')
+                    tempElement.innerHTML = article.content
+
+                    window.postMessage({
+                        type: 'SIYUAN_RESPONSE',
+                        success: true,
+                        action: 'clipArticle',
+                        message: 'Clipping started',
+                        article: {
+                            title: article.title,
+                            contentLength: article.content ? article.content.length : 0
+                        }
+                    }, '*')
+
+                    console.log('[SIYUAN] Calling siyuanSendUpload...')
+                    // Automation mode: tabId from sender.tab in background.js
+                    siyuanSendUpload(tempElement, undefined, undefined, 'article', article, window.location.href)
+                } catch (e) {
+                    console.error(e)
+                    siyuanShowTip(e.message, 7000)
+                    window.postMessage({
+                        type: 'SIYUAN_RESPONSE',
+                        success: false,
+                        action: 'clipArticle',
+                        error: e.message
+                    }, '*')
+                }
+            }).catch(e => {
+                console.error(e)
+                window.postMessage({
+                    type: 'SIYUAN_RESPONSE',
+                    success: false,
+                    action: 'clipArticle',
+                    error: e.message
+                }, '*')
+            })
+        }).catch(e => {
+            console.error(e)
+            window.postMessage({
+                type: 'SIYUAN_RESPONSE',
+                success: false,
+                action: 'clipArticle',
+                error: e.message
+            }, '*')
+        })
+    })
 }

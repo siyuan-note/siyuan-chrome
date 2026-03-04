@@ -122,7 +122,25 @@
   "save_path_none": {
     "message": "Ninguno"
   },
-  "database_none": {
+"database_none": {
     "message": "Ninguno"
+  },
+  "automation_token_label": {
+    "message": "Token de automatización"
+  },
+  "automation_token_placeholder": {
+    "message": "Ingrese un código secreto para la automatización de Playwright"
+  },
+  "automation_token_tip": {
+    "message": "Este token se utiliza para verificar las solicitudes postMessage de Playwright"
+  },
+  "tip_automation_token_not_set": {
+    "message": "Token de automatización no configurado. Por favor, configúrelo en las opciones de la extensión."
+  },
+  "tip_automation_token_invalid": {
+    "message": "Token de automatización inválido"
+  },
+  "tip_no_selection": {
+    "message": "No hay texto seleccionado. Por favor, seleccione el contenido primero."
   }
 }

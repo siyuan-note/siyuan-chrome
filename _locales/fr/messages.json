@@ -122,7 +122,25 @@
   "save_path_none": {
     "message": "Aucun"
   },
-  "database_none": {
+"database_none": {
     "message": "Aucun"
+  },
+  "automation_token_label": {
+    "message": "Jeton d'automatisation"
+  },
+  "automation_token_placeholder": {
+    "message": "Entrez un code secret pour l'automatisation Playwright"
+  },
+  "automation_token_tip": {
+    "message": "Ce jeton est utilisé pour vérifier les requêtes postMessage de Playwright"
+  },
+  "tip_automation_token_not_set": {
+    "message": "Jeton d'automatisation non configuré. Veuillez le définir dans les options de l'extension."
+  },
+  "tip_automation_token_invalid": {
+    "message": "Jeton d'automatisation invalide"
+  },
+  "tip_no_selection": {
+    "message": "Aucun texte sélectionné. Veuillez d'abord sélectionner le contenu."
   }
 }

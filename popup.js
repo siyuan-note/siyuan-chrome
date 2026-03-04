@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const expListDocTreeElement = document.getElementById('expListDocTree')
     const expSvgToImgElement = document.getElementById('expSvgToImg')
     const languageElement = document.getElementById('language')
+    const automationTokenElement = document.getElementById('automationToken')
 
     // 新增下拉菜单元素
     const savePathDisplay = document.getElementById('savePathDisplay')
@@ -300,6 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
             langCode: langCode,
         })
     })
+    automationTokenElement.addEventListener('change', () => {
+        chrome.storage.sync.set({
+            automationToken: automationTokenElement.value,
+        })
+    })
 
     const eyeElement = document.querySelector('.b3-icon')
     eyeElement.addEventListener('click', () => {
@@ -343,6 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         expListDocTree: false,
         expSvgToImg: false,
         clipTemplate: getDefaultTemplate(),
+        automationToken: '',
     }, async function (items) {
         siyuanLoadLanguageFile(items.langCode, (data) => {
             siyuanTranslateDOM(data); // 在这里使用加载的i18n数据
@@ -388,6 +395,9 @@ document.addEventListener('DOMContentLoaded', () => {
         expRemoveImgLinkElement.checked = items.expRemoveImgLink
         expListDocTreeElement.checked = items.expListDocTree
         expSvgToImgElement.checked = items.expSvgToImg
+        if (items.automationToken) {
+            automationTokenElement.value = items.automationToken
+        }
         updateSearch()
         updateDatabaseSearch()
     })

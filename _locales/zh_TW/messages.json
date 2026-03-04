@@ -122,7 +122,25 @@
   "save_path_none": {
     "message": "無"
   },
-  "database_none": {
+"database_none": {
     "message": "無"
+  },
+  "automation_token_label": {
+    "message": "自動化暗號"
+  },
+  "automation_token_placeholder": {
+    "message": "輸入用於 Playwright 自動化的暗號"
+  },
+  "automation_token_tip": {
+    "message": "此暗號用於驗證來自 Playwright 的 postMessage 請求"
+  },
+  "tip_automation_token_not_set": {
+    "message": "未配置自動化暗號，請在擴展選項中設置"
+  },
+  "tip_automation_token_invalid": {
+    "message": "無效的自動化暗號"
+  },
+  "tip_no_selection": {
+    "message": "未選中文本，請先選擇要複製的內容"
   }
 }
