@@ -52,12 +52,9 @@ chrome.commands.onCommand.addListener(function (command) {
 function safeTabsSendMessage(tabId, message) {
     if (!tabId) return;
     try {
-        console.log('[background.js] safeTabsSendMessage:', message.func, 'to tab', tabId)
         chrome.tabs.sendMessage(tabId, message, (response) => {
             if (chrome.runtime.lastError) {
                 console.warn('[background.js] sendMessage error:', chrome.runtime.lastError.message)
-            } else {
-                console.log('[background.js] sendMessage response:', response)
             }
         });
     } catch (e) {
@@ -149,7 +146,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         return
     }
 
-    // Use sender.tab.id if requestData.tabId is not provided (for automation mode)
+    // Use sender.tab.id as fallback for automation mode
     const tabId = request.data.tabId || (sender.tab && sender.tab.id)
     const requestData = {...request.data, tabId: tabId}
     
@@ -317,7 +314,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
                             'tip': requestData.tip,
                         })
 
-                        console.log('[background.js] Broadcasting clip-success, docId:', response.data)
                         // Broadcast success event for automation mode
                         safeTabsSendMessage(requestData.tabId, {
                             'func': 'clip-success',

@@ -778,9 +778,7 @@ const setMathJaxDataFormula = () => {
 
 // Listen for broadcast events from background (for automation mode)
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('[content.js] Message listener 2 received:', request)
     if (request.func === 'clip-success') {
-        console.log('[content.js] Broadcasting success, docId:', request.docId)
         window.postMessage({
             type: 'SIYUAN_RESPONSE',
             success: true,
@@ -790,7 +788,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             title: request.title
         }, '*')
     } else if (request.func === 'clip-error') {
-        console.log('[content.js] Broadcasting error:', request.error)
         window.postMessage({
             type: 'SIYUAN_RESPONSE',
             success: false,
@@ -1072,8 +1069,7 @@ const siyuanGetReadabilityForAutomation = () => {
                     }, '*')
 
                     console.log('[SIYUAN] Calling siyuanSendUpload...')
-                    // For automation mode, pass undefined tabId - broadcast will still work
-                    // because background uses the sender.tab.id from onMessage
+                    // Automation mode: tabId from sender.tab in background.js
                     siyuanSendUpload(tempElement, undefined, undefined, 'article', article, window.location.href)
                 } catch (e) {
                     console.error(e)
