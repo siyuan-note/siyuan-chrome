@@ -18,6 +18,17 @@ SiYuan browser extension for Chrome.
 2. On a web page, select the content you want to clip, then choose "Copy to SiYuan" from the context menu
 3. Paste in SiYuan
 
+### ⌨️ Keyboard Shortcuts
+
+The extension supports the following keyboard shortcuts:
+
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+Shift+C` (Windows/Linux) / `Cmd+Shift+C` (Mac) | Copy selected text to SiYuan |
+| `Ctrl+Shift+S` (Windows/Linux) / `Cmd+Shift+S` (Mac) | Clip entire page to SiYuan |
+
+You can customize these shortcuts in your browser's extension settings.
+
 ### 🔒 Privacy Policy
 
 * All data is stored on a device fully controlled by the user

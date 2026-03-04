@@ -92,8 +92,11 @@
   "tip_save_path_miss": {
     "message": "Please select save path before clipping content"
   },
-  "tip_siyuan_kernel_unavailable": {
+"tip_siyuan_kernel_unavailable": {
     "message": "Please start SiYuan and ensure network connectivity before trying again"
+  },
+  "tip_no_selection": {
+    "message": "No text selected. Please select content first."
   },
   "template_config": {
     "message": "Clipping template"
