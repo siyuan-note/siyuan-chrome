@@ -15,8 +15,19 @@
 ### ✨  使用
 
 1. 安装扩展，在扩展的选项中配置 API token（token 可在思源设置 - 关于中查看）
-2. 在 Web 页面上选择需要剪藏的内容，然后在右键菜单中选择 “Copy to SiYuan”
+2. 在 Web 页面上选择需要剪藏的内容，然后在右键菜单中选择 "Copy to SiYuan"
 3. 在思源中粘贴
+
+### ⌨️ 快捷键
+
+扩展支持以下快捷键：
+
+| 快捷键 | 功能 |
+|--------|------|
+| `Ctrl+Shift+C` (Windows/Linux) / `Cmd+Shift+C` (Mac) | 复制选中文本到思源 |
+| `Ctrl+Shift+S` (Windows/Linux) / `Cmd+Shift+S` (Mac) | 剪藏整页到思源 |
+
+您可以在浏览器的扩展设置中自定义这些快捷键。
 
 ### 🔒 隐私条款
 
