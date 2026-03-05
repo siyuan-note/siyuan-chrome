@@ -95,6 +95,9 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "SiYuanを起動し、ネットワーク接続が確立されていることを確認してから再試行してください"
   },
+  "tip_no_selection": {
+    "message": "テキストが選択されていません、コピーする内容を選択してください"
+  },
   "template_config": {
     "message": "テンプレート設定"
   },

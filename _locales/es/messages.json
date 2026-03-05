@@ -95,6 +95,9 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "Inicie SiYuan y asegúrese de que haya conectividad de red antes de intentar nuevamente"
   },
+  "tip_no_selection": {
+    "message": "No hay texto seleccionado, por favor selecciona el contenido que deseas copiar"
+  },
   "template_config": {
     "message": "Configuración de plantilla de recorte"
   },

@@ -27,7 +27,7 @@
 | `Ctrl+Shift+C` (Windows/Linux) / `Cmd+Shift+C` (Mac) | 复制选中文本到思源 |
 | `Ctrl+Shift+S` (Windows/Linux) / `Cmd+Shift+S` (Mac) | 剪藏整页到思源 |
 
-您可以在浏览器的扩展设置中自定义这些快捷键。
+请在浏览器的扩展设置中自定义这些快捷键。
 
 ### 🔒 隐私条款
 

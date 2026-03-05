@@ -95,6 +95,9 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "Bitte starten Sie SiYuan und stellen Sie sicher, dass die Netzwerkverbindung funktioniert, bevor Sie es erneut versuchen"
   },
+  "tip_no_selection": {
+    "message": "Kein Text ausgewählt, bitte wählen Sie zuerst den zu kopierenden Inhalt aus"
+  },
   "template_config": {
     "message": "Clipping-Vorlagenkonfiguration"
   },

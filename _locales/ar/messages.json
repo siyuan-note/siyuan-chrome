@@ -95,6 +95,9 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "يرجى تشغيل سييوان والتأكد من الاتصال بالشبكة قبل المحاولة مرة أخرى"
   },
+  "tip_no_selection": {
+    "message": "لم يتم تحديد أي نص، يرجى تحديد المحتوى الذي تريد نسخه"
+  },
   "template_config": {
     "message": "إعداد قالب القص"
   },

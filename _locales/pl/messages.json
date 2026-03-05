@@ -95,6 +95,10 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "Uruchom SiYuan i upewnij się, że połączenie z siecią jest aktywne przed ponowną próbą"
   },
+  "tip_no_selection": {
+    "message": "Nie zaznaczono tekstu, zaznacz proszę zawartość, którą chcesz skopiować"
+  },
+
   "template_config": {
     "message": "Konfiguracja szablonu"
   },

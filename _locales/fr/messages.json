@@ -95,6 +95,9 @@
   "tip_siyuan_kernel_unavailable": {
     "message": "Veuillez démarrer SiYuan et vous assurer que la connexion réseau fonctionne avant de réessayer"
   },
+  "tip_no_selection": {
+    "message": "Aucun texte sélectionné, veuillez d'abord sélectionner le contenu à copier"
+  },
   "template_config": {
     "message": "Configuration du modèle de clipping"
   },

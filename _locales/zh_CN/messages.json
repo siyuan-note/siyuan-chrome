@@ -92,7 +92,7 @@
   "tip_save_path_miss": {
     "message": "剪藏前请先选择保存路径"
   },
-"tip_siyuan_kernel_unavailable": {
+  "tip_siyuan_kernel_unavailable": {
     "message": "请启动思源并确保网络连通后再试"
   },
   "tip_no_selection": {

@@ -27,7 +27,7 @@ The extension supports the following keyboard shortcuts:
 | `Ctrl+Shift+C` (Windows/Linux) / `Cmd+Shift+C` (Mac) | Copy selected text to SiYuan |
 | `Ctrl+Shift+S` (Windows/Linux) / `Cmd+Shift+S` (Mac) | Clip entire page to SiYuan |
 
-You can customize these shortcuts in your browser's extension settings.
+Please customize these shortcuts in your browser's extension settings.
 
 ### 🔒 Privacy Policy
 
