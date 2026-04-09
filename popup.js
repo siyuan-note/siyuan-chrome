@@ -606,7 +606,7 @@ const updateDatabaseSearch = () => {
             if (response && response.msg) {
                 document.getElementById('log').innerHTML = "Database search: " + response.msg
             } else {
-                document.getElementById('log').innerHTML = "Database search failed."
+                document.getElementById('log').innerHTML = "Database search (nil resp): Authentication failed or API error."
             }
             return
         }
