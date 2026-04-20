@@ -755,7 +755,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
             srcList.push(src)
         })
 
-        const files = {}
+        let files = {}
         srcList = [...new Set(srcList)]
 
         if (!items.assets) { // 不剪藏资源文件 https://github.com/siyuan-note/siyuan/issues/12583
@@ -763,6 +763,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         }
 
         let fetchFileErr = false;
+        let filesSize = 0;
         for (let i = 0; i < srcList.length; i++) {
             let src = srcList[i]
             siyuanShowTip(chrome.i18n.getMessage("tip_clip_img") + ' [' + i + '/' + srcList.length + ']...');
@@ -793,9 +794,19 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
                 continue
             }
             const image = await response.blob()
+            const data = await siyuanConvertBlobToBase64(image)
             files[escape(src)] = {
                 type: image.type,
-                data: await siyuanConvertBlobToBase64(image),
+                data: data,
+            }
+
+            filesSize += data.length
+            if (1000 * 1000 * 60 < filesSize) {
+                // 下载图片总大小超过 60MB 时走内核剪藏
+                fetchFileErr = true
+                files = {}
+                console.warn("Total image size exceeds 60MB, fallback to kernel netImg2LocalAssets")
+                break
             }
         }
 
