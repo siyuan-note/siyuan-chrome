@@ -563,54 +563,56 @@ async function siyuanGetCloneNode(tempDoc) {
         };
     }
 
+    const clonedDoc = tempDoc.cloneNode(true);
+
     // 适配 MSN 页面 https://github.com/siyuan-note/siyuan/issues/14197
-    adaptMSN(tempDoc);
+    adaptMSN(clonedDoc);
 
     if (items.expBold) {
         // 替换粗体样式为内核可识别 <b> 标签 https://github.com/siyuan-note/siyuan/issues/13306
-        siyuanProcessBoldStyle(tempDoc);
+        siyuanProcessBoldStyle(clonedDoc);
     }
 
     if (items.expItalic) {
         // 替换斜体样式为内核可识别 <i> 标签 https://github.com/siyuan-note/siyuan/issues/13306
-        siyuanProcessItalicStyle(tempDoc);
+        siyuanProcessItalicStyle(clonedDoc);
     }
 
     if (items.expUnderline) {
         // 替换下划线样式为内核可识别 <u> 标签
-        siyuanProcessUnderlineStyle(tempDoc);
+        siyuanProcessUnderlineStyle(clonedDoc);
     }
 
     if (items.expRemoveImgLink) {
         // 移除图片链接 https://github.com/siyuan-note/siyuan/issues/13941
-        siyuanRemoveImgLink(tempDoc);
+        siyuanRemoveImgLink(clonedDoc);
     }
 
     if (items.expSpan) {
         // 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
         // 处理会换行的 span 后添加 <br>，让内核能识别到换行
-        siyuanSpansAddBr(tempDoc);
+        siyuanSpansAddBr(clonedDoc);
     }
 
     if (items.expSvgToImg) {
         // 将网页内嵌的 SVG 节点转换成内嵌的 IMG 节点
         // https://github.com/siyuan-note/siyuan/issues/14523
-        await siyuanSvgToImg(tempDoc);
+        await siyuanSvgToImg(clonedDoc);
     }
 
     // 合并嵌套的标签
-    simplifyNestedTags(tempDoc, 'STRONG');
-    simplifyNestedTags(tempDoc, 'B');
-    simplifyNestedTags(tempDoc, 'I');
-    simplifyNestedTags(tempDoc, 'EM');
-    simplifyNestedTags(tempDoc, 'DIV');
-    simplifyNestedTags(tempDoc, 'SPAN');
-    simplifyNestedTags(tempDoc, 'SECTION');
-    simplifyNestedTags(tempDoc, 'ARTICLE');
-    simplifyNestedTags(tempDoc, 'P');
+    simplifyNestedTags(clonedDoc, 'STRONG');
+    simplifyNestedTags(clonedDoc, 'B');
+    simplifyNestedTags(clonedDoc, 'I');
+    simplifyNestedTags(clonedDoc, 'EM');
+    simplifyNestedTags(clonedDoc, 'DIV');
+    simplifyNestedTags(clonedDoc, 'SPAN');
+    simplifyNestedTags(clonedDoc, 'SECTION');
+    simplifyNestedTags(clonedDoc, 'ARTICLE');
+    simplifyNestedTags(clonedDoc, 'P');
 
     // 如果公式被嵌套包裹，则去掉外层包裹 https://github.com/siyuan-note/siyuan/issues/14382
-    const mathElements = tempDoc.querySelectorAll('.ztext-math');
+    const mathElements = clonedDoc.querySelectorAll('.ztext-math');
     mathElements.forEach(mathElement => {
         if (mathElement.parentElement.tagName === 'B' || mathElement.parentElement.tagName === 'STRONG' || mathElement.parentElement.tagName === 'I' || mathElement.parentElement.tagName === 'EM') {
             const parent = mathElement.parentElement;
@@ -622,9 +624,8 @@ async function siyuanGetCloneNode(tempDoc) {
     });
 
     // 如果行级标签包含了块级标签，则将该行级标签改为 div
-    fixInvalidNesting(tempDoc);
+    fixInvalidNesting(clonedDoc);
 
-    const clonedDoc = document.cloneNode(true);
     return clonedDoc;
 }
 
