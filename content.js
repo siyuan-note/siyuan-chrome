@@ -1,6 +1,6 @@
 const eventDispatcher = async (request, sender, sendResponse) => {
     if ('tip' === request.func && request.tip) {
-        siyuanShowTip(request.msg, request.timeout)
+        siyuanShowTip(request.msg, undefined, request.timeout)
         return
     }
 
@@ -46,47 +46,139 @@ document.addEventListener('DOMContentLoaded', function () {
     chrome.runtime.onMessage.addListener(eventDispatcher)
 })
 
+/**
+ * 页面顶部提示（#siyuanmessage）状态机。
+ *
+ * 模式（{@link TIP_BEHAVIOR}）：
+ * - progress：保持显示，直到下一个状态替换
+ * - transient：超时后自动隐藏（默认 5000 ms）
+ *
+ * 动画：首次弹出 / 收起时有 transition；progress 状态下仅更新 innerHTML，保持连贯。
+ *
+ * 剪藏典型流转：tip_clipping → tip_clip_img → tip_clipping → tip_clip_ok
+ *
+ * @typedef {'progress' | 'transient'} TipModeValue
+ * @typedef {'tip_clipping' | 'tip_clip_img' | 'tip_clip_ok' | 'tip_token_miss' | 'tip_token_invalid' | 'tip_save_path_miss' | 'tip_siyuan_kernel_unavailable' | 'tip_no_selection'} TipKey
+ */
+
+const TIP_MODE = {
+    PROGRESS: 'progress',
+    TRANSIENT: 'transient',
+}
+
+/** @type {Record<TipKey, TipModeValue>} */
+const TIP_BEHAVIOR = {
+    tip_clipping: TIP_MODE.PROGRESS,
+    tip_clip_img: TIP_MODE.PROGRESS,
+    tip_clip_ok: TIP_MODE.TRANSIENT,
+    tip_token_miss: TIP_MODE.TRANSIENT,
+    tip_token_invalid: TIP_MODE.TRANSIENT,
+    tip_save_path_miss: TIP_MODE.TRANSIENT,
+    tip_siyuan_kernel_unavailable: TIP_MODE.TRANSIENT,
+    tip_no_selection: TIP_MODE.TRANSIENT,
+}
+
+/** @type {ReturnType<typeof setTimeout> | null} */
 let tipTimeoutId
+/** @type {ReturnType<typeof setTimeout> | null} */
+let tipHideAnimTimeoutId
 
-const siyuanShowTip = (msg, timeout) => {
-    let messageElement = document.getElementById('siyuanmessage')
-    if (!messageElement) {
-        document.body.insertAdjacentHTML('afterend', `<div style=" position:fixed;top: 0;z-index: 999999999;transform: translate3d(0, -100px, 0);opacity: 0;transition: opacity 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms, transform 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms;width: 100%;align-items: center;justify-content: center;height: 0;display: flex;" id="siyuanmessage">
-<div style="line-height: 20px;border-radius: 4px;padding: 8px 16px;color: #fff;font-size: inherit;background-color: #4285f4;box-sizing: border-box;box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);transition: transform 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms;transform: scale(0.8);top: 16px;position: absolute;word-break: break-word;max-width: 80vw;"></div></div>`)
-        messageElement = document.getElementById('siyuanmessage')
+const siyuanCancelTipHideAnimation = () => {
+    if (tipHideAnimTimeoutId) {
+        clearTimeout(tipHideAnimTimeoutId)
+        tipHideAnimTimeoutId = null
     }
+}
 
-    messageElement.style.transform = 'translate3d(0, 0, 0)'
-    messageElement.style.opacity = '1'
-    if (!messageElement.firstElementChild || messageElement.firstElementChild.tagName !== 'DIV') {
-        messageElement.innerHTML = '<div style="line-height: 20px;border-radius: 4px;padding: 8px 16px;color: #fff;font-size: inherit;background-color: #4285f4;box-sizing: border-box;box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);transition: transform 0.15s cubic-bezier(0, 0, 0.2, 1) 0ms;transform: scale(0.8);top: 16px;position: absolute;word-break: break-word;max-width: 80vw;"></div>'
-    }
-    messageElement.firstElementChild.innerHTML = msg
-    if (!timeout) {
-        timeout = 5000
+/** @param {HTMLElement} tip */
+const siyuanAnimateTipIn = (tip) => {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            tip.style.transform = 'translate3d(-50%, 0, 0) scale(0.8)'
+            tip.style.opacity = '1'
+        })
+    })
+}
+
+/**
+ * @param {string} msg
+ * @returns {HTMLElement}
+ */
+const siyuanMountTipElement = (msg) => {
+    siyuanCancelTipHideAnimation()
+    document.getElementById('siyuanmessage')?.remove()
+
+    const tip = document.createElement('div')
+    tip.id = 'siyuanmessage'
+    tip.style.cssText = 'position:fixed;top:16px;left:50%;z-index:999999999;line-height:20px;border-radius:4px;padding:8px 16px;color:#fff;font-size:inherit;background-color:#4285f4;box-sizing:border-box;box-shadow:0 3px 5px -1px rgba(0,0,0,0.2),0 6px 10px 0 rgba(0,0,0,0.14),0 1px 18px 0 rgba(0,0,0,0.12);transition:opacity 0.15s cubic-bezier(0,0,0.2,1) 0ms,transform 0.15s cubic-bezier(0,0,0.2,1) 0ms;word-break:break-word;max-width:80vw;'
+    tip.innerHTML = msg
+    tip.style.transform = 'translate3d(-50%, -100px, 0) scale(0.8)'
+    tip.style.opacity = '0'
+    document.body.insertAdjacentElement('afterend', tip)
+    siyuanAnimateTipIn(tip)
+    return tip
+}
+
+/**
+ * @param {string} msg 提示文案（HTML）
+ * @param {TipKey | string} [key] 查 {@link TIP_BEHAVIOR}，省略时为 transient
+ * @param {number} [timeout] transient 隐藏延迟（毫秒）
+ */
+const siyuanShowTip = (msg, key, timeout) => {
+    const isProgress = key && TIP_BEHAVIOR[key] === TIP_MODE.PROGRESS
+    const existingTip = document.getElementById('siyuanmessage')
+
+    siyuanCancelTipHideAnimation()
+
+    if (existingTip && existingTip.style.opacity !== '0') {
+        // progress 或 tip_clip_ok 等：同一轮展示中只换文案，不重新弹出
+        existingTip.innerHTML = msg
+    } else {
+        siyuanMountTipElement(msg)
     }
 
     if (tipTimeoutId) {
-        clearTimeout(tipTimeoutId);
+        clearTimeout(tipTimeoutId)
+        tipTimeoutId = null
+    }
+
+    if (isProgress) {
+        return
     }
 
     tipTimeoutId = setTimeout(() => {
-        siyuanClearTip();
-    }, timeout);
+        siyuanClearTip()
+    }, timeout || 5000)
 }
 
 // Add i18n support https://github.com/siyuan-note/siyuan/issues/13559
+/**
+ * @param {TipKey | string} msgKey
+ * @param {number} [timeout]
+ */
 const siyuanShowTipByKey = (msgKey, timeout) => {
-    siyuanShowTip(chrome.i18n.getMessage(msgKey), timeout);
+    siyuanShowTip(chrome.i18n.getMessage(msgKey), msgKey, timeout)
 }
 
+/** 收起动画结束后移除元素，并清除 transient 定时器 */
 const siyuanClearTip = () => {
-    let messageElement = document.getElementById('siyuanmessage')
-    if (!messageElement) {
+    if (tipTimeoutId) {
+        clearTimeout(tipTimeoutId)
+        tipTimeoutId = null
+    }
+
+    const tip = document.getElementById('siyuanmessage')
+    if (!tip) {
         return
     }
-    messageElement.style.transform = 'translate3d(0, -100px, 0)'
-    messageElement.style.opacity = '0'
+
+    siyuanCancelTipHideAnimation()
+    tip.style.transform = 'translate3d(-50%, -100px, 0) scale(0.8)'
+    tip.style.opacity = '0'
+    tipHideAnimTimeoutId = setTimeout(() => {
+        tip.remove()
+        tipHideAnimTimeoutId = null
+    }, 150)
 }
 
 const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
@@ -774,7 +866,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         let filesSize = 0;
         for (let i = 0; i < srcList.length; i++) {
             let src = srcList[i]
-            siyuanShowTip(chrome.i18n.getMessage("tip_clip_img") + ' [' + i + '/' + srcList.length + ']...');
+            siyuanShowTip(chrome.i18n.getMessage("tip_clip_img") + ' [' + i + '/' + srcList.length + ']...', 'tip_clip_img')
             let response;
             try {
                 // Wikipedia 使用图片原图 https://github.com/siyuan-note/siyuan/issues/11640
@@ -844,6 +936,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
             tabId,
             selectedDatabaseID: items.selectedDatabaseID,
         };
+        siyuanShowTipByKey("tip_clipping")
         chrome.runtime.sendMessage({func: 'upload-copy', data: msgJSON})
     })
 }
@@ -876,7 +969,7 @@ const copyToClipboard = async (textToCopy) => {
 
 const siyuanGetReadability = async (tabId) => {
     try {
-        siyuanShowTipByKey("tip_clipping", 60 * 1000)
+        siyuanShowTipByKey("tip_clipping")
     } catch (e) {
         alert(chrome.i18n.getMessage("tip_first_time"));
         window.location.reload();
@@ -912,6 +1005,6 @@ const siyuanGetReadability = async (tabId) => {
         siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
     } catch (e) {
         console.error(e)
-        siyuanShowTip(e.message, 7 * 1000)
+        siyuanShowTip(e.message, undefined, 7 * 1000)
     }
 }
