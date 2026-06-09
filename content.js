@@ -28,6 +28,11 @@ const eventDispatcher = async (request, sender, sendResponse) => {
         return
     }
 
+    const clipSettings = await siyuanEnsureClipReady()
+    if (!clipSettings) {
+        return
+    }
+
     siyuanShowTipByKey("tip_clipping")
 
     const selection = window.getSelection()
@@ -785,7 +790,7 @@ const setMathJaxDataFormula = () => {
     });
 };
 
-const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
+const siyuanGetClipSettings = () => new Promise((resolve) => {
     chrome.storage.sync.get({
         ip: 'http://127.0.0.1:6806',
         showTip: true,
@@ -803,18 +808,66 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         expRemoveImgLink: false,
         expListDocTree: false,
         selectedDatabaseID: ''
-    }, async function (items) {
-        if (!items.token) {
-            siyuanShowTipByKey("tip_token_miss")
-            return
-        }
+    }, resolve)
+})
 
-        if (!items.notebook) {
-            siyuanShowTipByKey("tip_save_path_miss")
-            return
-        }
+/** @returns {Promise<object | null>} 配置与内核均就绪时返回 settings */
+const siyuanEnsureClipReady = async () => {
+    const items = await siyuanGetClipSettings()
+    if (!items.token) {
+        siyuanShowTipByKey("tip_token_miss")
+        return null
+    }
 
-        let srcList = []
+    if (!items.notebook) {
+        siyuanShowTipByKey("tip_save_path_miss")
+        return null
+    }
+
+    let base = (items.ip || '').trim()
+    if (!base) base = 'http://127.0.0.1:6806'
+    if (!/^https?:\/\//i.test(base)) base = 'http://' + base
+    while (base.endsWith('/')) base = base.slice(0, -1)
+
+    let kernelReady = false
+    try {
+        const response = await fetch(base + '/api/filetree/searchDocs', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Token ' + items.token,
+                'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify({
+                k: '',
+                flashcard: false,
+            }),
+        })
+        if (response.status === 401 || response.status === 403) {
+            siyuanShowTipByKey("tip_token_invalid")
+            return null
+        }
+        if (response.status === 200) {
+            try {
+                await response.json()
+                kernelReady = true
+            } catch (e) {
+            }
+        }
+    } catch (e) {
+    }
+
+    if (!kernelReady) {
+        siyuanShowTipByKey("tip_siyuan_kernel_unavailable")
+        return null
+    }
+
+    return items
+}
+
+const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
+    const items = await siyuanGetClipSettings()
+
+    let srcList = []
         if (srcUrl) {
             srcList.push(srcUrl)
         }
@@ -938,7 +991,6 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href)
         };
         siyuanShowTipByKey("tip_clipping")
         chrome.runtime.sendMessage({func: 'upload-copy', data: msgJSON})
-    })
 }
 
 const copyToClipboard = async (textToCopy) => {
@@ -969,12 +1021,19 @@ const copyToClipboard = async (textToCopy) => {
 
 const siyuanGetReadability = async (tabId) => {
     try {
-        siyuanShowTipByKey("tip_clipping")
+        chrome.i18n.getMessage("tip_clipping")
     } catch (e) {
         alert(chrome.i18n.getMessage("tip_first_time"));
         window.location.reload();
         return;
     }
+
+    const clipSettings = await siyuanEnsureClipReady()
+    if (!clipSettings) {
+        return
+    }
+
+    siyuanShowTipByKey("tip_clipping")
 
     try {
         // 处理 MathJax 公式 https://github.com/siyuan-note/siyuan/issues/13543
