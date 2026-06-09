@@ -603,6 +603,11 @@ async function siyuanGetCloneNode(tempDoc) {
     simplifyNestedTags(tempDoc, 'B');
     simplifyNestedTags(tempDoc, 'I');
     simplifyNestedTags(tempDoc, 'EM');
+    simplifyNestedTags(tempDoc, 'DIV');
+    simplifyNestedTags(tempDoc, 'SPAN');
+    simplifyNestedTags(tempDoc, 'SECTION');
+    simplifyNestedTags(tempDoc, 'ARTICLE');
+    simplifyNestedTags(tempDoc, 'P');
 
     // 如果公式被嵌套包裹，则去掉外层包裹 https://github.com/siyuan-note/siyuan/issues/14382
     const mathElements = tempDoc.querySelectorAll('.ztext-math');
@@ -895,6 +900,11 @@ const siyuanGetReadability = async (tabId) => {
         }).parse()
         const tempElement = document.createElement('div')
         tempElement.innerHTML = article.content
+        simplifyNestedTags(tempElement, 'DIV')
+        simplifyNestedTags(tempElement, 'SPAN')
+        simplifyNestedTags(tempElement, 'SECTION')
+        simplifyNestedTags(tempElement, 'ARTICLE')
+        simplifyNestedTags(tempElement, 'P')
         // console.log(article)
         siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
     } catch (e) {
