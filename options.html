@@ -448,6 +448,12 @@
             background-color: var(--b3-theme-background);
             -webkit-font-smoothing: antialiased;
             -webkit-tap-highlight-color: var(--b3-list-hover);
+            overflow: hidden;
+        }
+
+        #mainContainer {
+            max-height: 580px;
+            overflow-y: auto;
         }
 
         .b3-label {
@@ -631,6 +637,13 @@
         .dropdown-options li.selected {
             background-color: var(--b3-theme-primary-lightest);
             color: var(--b3-theme-primary);
+        }
+
+        #send {
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
         }
     </style>
 </head>
