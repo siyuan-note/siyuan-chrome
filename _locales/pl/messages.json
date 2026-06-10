@@ -98,7 +98,9 @@
   "tip_no_selection": {
     "message": "Nie zaznaczono tekstu, zaznacz proszę zawartość, którą chcesz skopiować"
   },
-
+  "tip_readability_failed": {
+    "message": "Nie udało się wyodrębnić treści artykułu z tej strony"
+  },
   "template_config": {
     "message": "Konfiguracja szablonu"
   },
@@ -107,9 +109,6 @@
   },
   "template_cancel": {
     "message": "Anuluj"
-  },
-  "template_saved": {
-    "message": "Szablon został pomyślnie zapisany"
   },
   "template_help": {
     "message": "Zmienne dostępne:<br>${title} - Tytuł strony<br>${url} - URL strony<br>${siteName} - Nazwa witryny<br>${date} - Bieżąca data (yyyy-MM-dd)<br>${time} - Bieżący czas (HH:mm)<br>${tags} - Tagi<br>${excerpt} - Fragment strony<br>${content} - Zawartość strony"

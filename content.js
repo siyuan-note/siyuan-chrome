@@ -1,55 +1,61 @@
+let siyuanLangReady = siyuanInitLanguageFromStorage();
+
+chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "sync" && changes.langCode) {
+        siyuanLangReady = siyuanLoadLanguageFile(changes.langCode.newValue);
+    }
+});
+
 const eventDispatcher = async (request, sender, sendResponse) => {
-    if ('tip' === request.func && request.tip) {
-        siyuanShowTip(request.msg, undefined, request.timeout)
-        return
+    if ("tip" === request.func && request.tip) {
+        siyuanShowTip(request.msg, undefined, request.timeout);
+        return;
     }
 
-    if ('tipKey' === request.func && request.tip) {
-        siyuanShowTipByKey(request.msg, request.timeout)
-        return
+    if ("tipKey" === request.func && request.tip) {
+        void siyuanShowTipByKey(request.msg, request.timeout);
+        return;
     }
 
-    if ('copy2Clipboard' === request.func) {
-        await copyToClipboard(request.data)
-        return
+    if ("copy2Clipboard" === request.func) {
+        await copyToClipboard(request.data);
+        return;
     }
 
-    if ('reload' === request.func) {
-        window.location.reload()
-        return
+    if ("reload" === request.func) {
+        window.location.reload();
+        return;
     }
 
-    if ('siyuanGetReadability' === request.func) {
-        siyuanGetReadability(request.tabId)
-        return
+    if ("siyuanGetReadability" === request.func) {
+        siyuanGetReadability(request.tabId);
+        return;
     }
 
-    if ('copy' !== request.func) {
-        return
+    if ("copy" !== request.func) {
+        return;
     }
 
-    const clipSettings = await siyuanEnsureClipReady()
+    const clipSettings = await siyuanEnsureClipReady();
     if (!clipSettings) {
-        return
+        return;
     }
 
-    siyuanShowTipByKey("tip_clipping")
-
-    const selection = window.getSelection()
+    const selection = window.getSelection();
     if (selection && 0 < selection.rangeCount) {
-        const range = selection.getRangeAt(0)
-        const tempElement = document.createElement('div')
-        tempElement.appendChild(range.cloneContents())
-        siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part")
+        const range = selection.getRangeAt(0);
+        const tempElement = document.createElement("div");
+        tempElement.appendChild(range.cloneContents());
+        siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part", undefined, undefined, clipSettings);
     } else {
-        siyuanShowTipByKey("tip_no_selection", 3000)
+        void siyuanShowTipByKey("tip_no_selection", 3000);
     }
-}
+};
 
-document.addEventListener('DOMContentLoaded', function () {
-    chrome.runtime.onMessage.removeListener(eventDispatcher)
-    chrome.runtime.onMessage.addListener(eventDispatcher)
-})
+document.addEventListener("DOMContentLoaded", function () {
+    chrome.runtime.onMessage.removeListener(eventDispatcher);
+    chrome.runtime.onMessage.addListener(eventDispatcher);
+});
 
 /**
  * 页面顶部提示（#siyuanmessage）状态机。
@@ -63,13 +69,13 @@ document.addEventListener('DOMContentLoaded', function () {
  * 剪藏典型流转：tip_clipping → tip_clip_img → tip_clipping → tip_clip_ok
  *
  * @typedef {'progress' | 'transient'} TipModeValue
- * @typedef {'tip_clipping' | 'tip_clip_img' | 'tip_clip_ok' | 'tip_token_miss' | 'tip_token_invalid' | 'tip_save_path_miss' | 'tip_siyuan_kernel_unavailable' | 'tip_no_selection'} TipKey
+ * @typedef {'tip_clipping' | 'tip_clip_img' | 'tip_clip_ok' | 'tip_token_miss' | 'tip_token_invalid' | 'tip_save_path_miss' | 'tip_siyuan_kernel_unavailable' | 'tip_no_selection' | 'tip_readability_failed'} TipKey
  */
 
 const TIP_MODE = {
-    PROGRESS: 'progress',
-    TRANSIENT: 'transient',
-}
+    PROGRESS: "progress",
+    TRANSIENT: "transient",
+};
 
 /** @type {Record<TipKey, TipModeValue>} */
 const TIP_BEHAVIOR = {
@@ -81,48 +87,50 @@ const TIP_BEHAVIOR = {
     tip_save_path_miss: TIP_MODE.TRANSIENT,
     tip_siyuan_kernel_unavailable: TIP_MODE.TRANSIENT,
     tip_no_selection: TIP_MODE.TRANSIENT,
-}
+    tip_readability_failed: TIP_MODE.TRANSIENT,
+};
 
 /** @type {ReturnType<typeof setTimeout> | null} */
-let tipTimeoutId
+let tipTimeoutId;
 /** @type {ReturnType<typeof setTimeout> | null} */
-let tipHideAnimTimeoutId
+let tipHideAnimTimeoutId;
 
 const siyuanCancelTipHideAnimation = () => {
     if (tipHideAnimTimeoutId) {
-        clearTimeout(tipHideAnimTimeoutId)
-        tipHideAnimTimeoutId = null
+        clearTimeout(tipHideAnimTimeoutId);
+        tipHideAnimTimeoutId = null;
     }
-}
+};
 
 /** @param {HTMLElement} tip */
 const siyuanAnimateTipIn = (tip) => {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            tip.style.transform = 'translate3d(-50%, 0, 0) scale(0.8)'
-            tip.style.opacity = '1'
-        })
-    })
-}
+            tip.style.transform = "translate3d(-50%, 0, 0) scale(0.8)";
+            tip.style.opacity = "1";
+        });
+    });
+};
 
 /**
  * @param {string} msg
  * @returns {HTMLElement}
  */
 const siyuanMountTipElement = (msg) => {
-    siyuanCancelTipHideAnimation()
-    document.getElementById('siyuanmessage')?.remove()
+    siyuanCancelTipHideAnimation();
+    document.getElementById("siyuanmessage")?.remove();
 
-    const tip = document.createElement('div')
-    tip.id = 'siyuanmessage'
-    tip.style.cssText = 'position:fixed;top:16px;left:50%;z-index:999999999;line-height:20px;border-radius:4px;padding:8px 16px;color:#fff;font-size:inherit;background-color:#4285f4;box-sizing:border-box;box-shadow:0 3px 5px -1px rgba(0,0,0,0.2),0 6px 10px 0 rgba(0,0,0,0.14),0 1px 18px 0 rgba(0,0,0,0.12);transition:opacity 0.15s cubic-bezier(0,0,0.2,1) 0ms,transform 0.15s cubic-bezier(0,0,0.2,1) 0ms;word-break:break-word;max-width:80vw;'
-    tip.innerHTML = msg
-    tip.style.transform = 'translate3d(-50%, -100px, 0) scale(0.8)'
-    tip.style.opacity = '0'
-    document.body.insertAdjacentElement('afterend', tip)
-    siyuanAnimateTipIn(tip)
-    return tip
-}
+    const tip = document.createElement("div");
+    tip.id = "siyuanmessage";
+    tip.style.cssText =
+        "position:fixed;top:16px;left:50%;z-index:999999999;line-height:20px;border-radius:4px;padding:8px 16px;color:#fff;font-size:inherit;background-color:#4285f4;box-sizing:border-box;box-shadow:0 3px 5px -1px rgba(0,0,0,0.2),0 6px 10px 0 rgba(0,0,0,0.14),0 1px 18px 0 rgba(0,0,0,0.12);transition:opacity 0.15s cubic-bezier(0,0,0.2,1) 0ms,transform 0.15s cubic-bezier(0,0,0.2,1) 0ms;word-break:break-word;max-width:80vw;";
+    tip.innerHTML = msg;
+    tip.style.transform = "translate3d(-50%, -100px, 0) scale(0.8)";
+    tip.style.opacity = "0";
+    document.body.appendChild(tip);
+    siyuanAnimateTipIn(tip);
+    return tip;
+};
 
 /**
  * @param {string} msg 提示文案（HTML）
@@ -130,68 +138,72 @@ const siyuanMountTipElement = (msg) => {
  * @param {number} [timeout] transient 隐藏延迟（毫秒）
  */
 const siyuanShowTip = (msg, key, timeout) => {
-    const isProgress = key && TIP_BEHAVIOR[key] === TIP_MODE.PROGRESS
-    const existingTip = document.getElementById('siyuanmessage')
+    const isProgress = key && TIP_BEHAVIOR[key] === TIP_MODE.PROGRESS;
+    const existingTip = document.getElementById("siyuanmessage");
 
-    siyuanCancelTipHideAnimation()
+    siyuanCancelTipHideAnimation();
 
-    if (existingTip && existingTip.style.opacity !== '0') {
+    if (existingTip && existingTip.style.opacity !== "0") {
         // progress 或 tip_clip_ok 等：同一轮展示中只换文案，不重新弹出
-        existingTip.innerHTML = msg
+        existingTip.innerHTML = msg;
     } else {
-        siyuanMountTipElement(msg)
+        siyuanMountTipElement(msg);
     }
 
     if (tipTimeoutId) {
-        clearTimeout(tipTimeoutId)
-        tipTimeoutId = null
+        clearTimeout(tipTimeoutId);
+        tipTimeoutId = null;
     }
 
     if (isProgress) {
-        return
+        return;
     }
 
     tipTimeoutId = setTimeout(() => {
-        siyuanClearTip()
-    }, timeout || 5000)
-}
+        siyuanClearTip();
+    }, timeout || 5000);
+};
 
 // Add i18n support https://github.com/siyuan-note/siyuan/issues/13559
 /**
  * @param {TipKey | string} msgKey
  * @param {number} [timeout]
+ * @param {(msg: string) => string} [format]
  */
-const siyuanShowTipByKey = (msgKey, timeout) => {
-    siyuanShowTip(chrome.i18n.getMessage(msgKey), msgKey, timeout)
-}
+const siyuanShowTipByKey = async (msgKey, timeout, format) => {
+    await siyuanLangReady;
+    const msg = format ? format(siyuanGetMessage(msgKey)) : siyuanGetMessage(msgKey);
+    siyuanShowTip(msg, msgKey, timeout);
+};
 
 /** 收起动画结束后移除元素，并清除 transient 定时器 */
 const siyuanClearTip = () => {
     if (tipTimeoutId) {
-        clearTimeout(tipTimeoutId)
-        tipTimeoutId = null
+        clearTimeout(tipTimeoutId);
+        tipTimeoutId = null;
     }
 
-    const tip = document.getElementById('siyuanmessage')
+    const tip = document.getElementById("siyuanmessage");
     if (!tip) {
-        return
+        return;
     }
 
-    siyuanCancelTipHideAnimation()
-    tip.style.transform = 'translate3d(-50%, -100px, 0) scale(0.8)'
-    tip.style.opacity = '0'
+    siyuanCancelTipHideAnimation();
+    tip.style.transform = "translate3d(-50%, -100px, 0) scale(0.8)";
+    tip.style.opacity = "0";
     tipHideAnimTimeoutId = setTimeout(() => {
-        tip.remove()
-        tipHideAnimTimeoutId = null
-    }, 150)
-}
+        tip.remove();
+        tipHideAnimTimeoutId = null;
+    }, 150);
+};
 
-const siyuanConvertBlobToBase64 = (blob) => new Promise((resolve, reject) => {
-    const reader = new FileReader
-    reader.onerror = reject
-    reader.onload = () => resolve(reader.result)
-    reader.readAsDataURL(blob)
-})
+const siyuanConvertBlobToBase64 = (blob) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
 
 // 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
 // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
@@ -199,11 +211,18 @@ function isIgnoredElement(element) {
     // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
     while (element) {
         let tagName = element.tagName.toLowerCase();
-        const className = element.className.toLowerCase();
-        if (tagName === 'math' ||
-            className.includes('math') || className.includes('mathjax') || className.includes('latex') ||
-            className.includes('katex') || className.includes('mjx') || className.includes('mathml') ||
-            className.includes('equation') || className.includes('formula')) {
+        const className = String(element.className || "").toLowerCase();
+        if (
+            tagName === "math" ||
+            className.includes("math") ||
+            className.includes("mathjax") ||
+            className.includes("latex") ||
+            className.includes("katex") ||
+            className.includes("mjx") ||
+            className.includes("mathml") ||
+            className.includes("equation") ||
+            className.includes("formula")
+        ) {
             return true;
         }
 
@@ -215,9 +234,9 @@ function isIgnoredElement(element) {
         tagName = element.tagName.toLowerCase();
 
         // 如果父元素是 pre、code、span、math 或与数学相关的类名
-        if (tagName === 'pre' || tagName === 'code' || tagName === 'span' || tagName === 'section') {
+        if (["pre", "code", "span", "section"].includes(tagName)) {
             return true;
-        } else if (tagName === 'div' || tagName === 'p') {
+        } else if (["div", "p"].includes(tagName)) {
             return false; // 找到 div、p 直接返回
         }
     }
@@ -229,52 +248,48 @@ function isIgnoredElement(element) {
 function siyuanProcessTextByWhiteSpace(element) {
     const text = element.textContent;
     const whiteSpace = getComputedStyle(element).whiteSpace;
-    const brTag = '<br>';
+    const brTag = "<br>";
 
     switch (whiteSpace) {
-        case 'normal':
-        case 'nowrap':
+        case "normal":
+        case "nowrap":
             // 合并所有空白字符为一个空格；换行为 <br>；去除行末空格
             return text
-                .replace(/[ \t\r\f\v]+/g, ' ')         // 合并空格和制表符
-                .replace(/[ \t]+\n/g, '\n')            // 去除行末空格
-                .replace(/\n+/g, brTag)               // 合并换行并转为 <br>
+                .replace(/[ \t\r\f\v]+/g, " ") // 合并空格和制表符
+                .replace(/[ \t]+\n/g, "\n") // 去除行末空格
+                .replace(/\n+/g, brTag) // 合并换行并转为 <br>
                 .trim();
-        case 'pre':
+        case "pre":
             // 保留所有空白和换行，换行转为 <br>
-            return text
-                .replace(/\n/g, brTag);
-        case 'pre-wrap':
+            return text.replace(/\n/g, brTag);
+        case "pre-wrap":
             // 保留空白字符，换行转为 <br>，不处理行末空格（挂起）
-            return text
-                .replace(/\n+/g, brTag);
-        case 'pre-line':
+            return text.replace(/\n+/g, brTag);
+        case "pre-line":
             // 合并空格，保留换行符，换行转为 <br>，移除行末空格
             return text
-                .replace(/[ \t\r\f\v]+/g, ' ')
-                .replace(/[ \t]+\n/g, '\n')
+                .replace(/[ \t\r\f\v]+/g, " ")
+                .replace(/[ \t]+\n/g, "\n")
                 .replace(/\n+/g, brTag)
                 .trim();
-        case 'break-spaces':
+        case "break-spaces":
             // 保留所有空白字符和换行符，换行为 <br>
-            return text
-                .replace(/\n/g, brTag);
+            return text.replace(/\n/g, brTag);
         default:
             // 默认处理和 normal 相同
             return text
-                .replace(/[ \t\r\f\v]+/g, ' ')
-                .replace(/[ \t]+\n/g, '\n')
+                .replace(/[ \t\r\f\v]+/g, " ")
+                .replace(/[ \t]+\n/g, "\n")
                 .replace(/\n+/g, brTag)
                 .trim();
     }
 }
 
-
 // 处理会换行的 span 后添加 <br>，让内核能识别到换行
 function siyuanSpansAddBr(tempElement) {
-    const spans = tempElement.querySelectorAll('span');
+    const spans = tempElement.querySelectorAll("span");
     if (!spans || spans.length === 0) {
-        console.log('No span elements found.');
+        console.log("No span elements found.");
         return;
     }
 
@@ -286,12 +301,15 @@ function siyuanSpansAddBr(tempElement) {
 
         // 现有的条件判断，判断是否满足换行条件
         if (
-            (style.whiteSpace.trim().toLowerCase() === 'normal' || style.whiteSpace.trim().toLowerCase() === 'pre-wrap') &&
-            (style.wordWrap.trim().toLowerCase() === 'break-word' || style.overflowWrap.trim().toLowerCase() === 'break-word' || style.wordBreak.trim().toLowerCase() === 'break-word')
+            (style.whiteSpace.trim().toLowerCase() === "normal" ||
+                style.whiteSpace.trim().toLowerCase() === "pre-wrap") &&
+            (style.wordWrap.trim().toLowerCase() === "break-word" ||
+                style.overflowWrap.trim().toLowerCase() === "break-word" ||
+                style.wordBreak.trim().toLowerCase() === "break-word")
         ) {
             // 检查父元素是否是 pre、code 或 span
             if (isIgnoredElement(span)) {
-                console.log('Skipping span due to parent being pre, code or span.');
+                console.log("Skipping span due to parent being pre, code or span.");
                 return; // 如果父元素是 pre、code 或 span 或者数学公式，跳过该 span
             }
 
@@ -304,29 +322,30 @@ function siyuanSpansAddBr(tempElement) {
 
     if (matchedSpans.length > 0) {
         console.log(`Added <br> for ${matchedSpans.length} span elements.(Total span: ${spans.length})`);
-        console.log('Matched span elements:', matchedSpans);
+        console.log("Matched span elements:", matchedSpans);
     } else {
-        console.log('No span elements matched the criteria.');
+        console.log("No span elements matched the criteria.");
     }
-};
+}
 
 // 替换粗体样式为内核可识别<b>标签 https://github.com/siyuan-note/siyuan/issues/13306
 function siyuanProcessBoldStyle(tempElement) {
     // 获取所有应用了 font-weight: bold 的元素
-    const boldElements = tempElement.querySelectorAll('*');
+    const boldElements = tempElement.querySelectorAll("*");
 
-    boldElements.forEach(element => {
+    boldElements.forEach((element) => {
         const style = window.getComputedStyle(element);
-        if (element.tagName === 'B' || element.tagName === 'STRONG') {
+        if (["B", "STRONG"].includes(element.tagName)) {
             return; // 如果元素本身是 <b> 或 <strong> 标签，跳过
         }
 
         if (parentContainsBold(element)) {
-            return;  // 如果元素的父元素是 <b> 或 <strong> 标签，跳过
+            return; // 如果元素的父元素是 <b> 或 <strong> 标签，跳过
         }
 
         // 判断是否具有 font-weight: bold
-        if (style.fontWeight === 'bold' || style.fontWeight === '700') { // '700' 是 bold 的常见数值
+        if (style.fontWeight === "bold" || style.fontWeight === "700") {
+            // '700' 是 bold 的常见数值
             // 将 element 中的各个元素使用 <b> 标签包裹
             const children = element.childNodes;
             for (let i = 0; i < children.length; i++) {
@@ -334,18 +353,18 @@ function siyuanProcessBoldStyle(tempElement) {
                 if (child.nodeType === Node.TEXT_NODE) {
                     // 如果是文本节点，直接包裹在 <b> 标签中
                     const text = child.nodeValue;
-                    const textElement = document.createElement('b');
+                    const textElement = document.createElement("b");
                     textElement.textContent = text;
                     element.replaceChild(textElement, child);
                 } else if (child.nodeType === Node.ELEMENT_NODE) {
                     // 如果是元素节点，递归处理
                     const childElement = child;
                     const childTagName = childElement.tagName.toLowerCase();
-                    if (childTagName === 'b' || childTagName === 'strong') {
+                    if (["b", "strong"].includes(childTagName)) {
                         continue; // 如果是 <b> 或 <strong> 标签，跳过
                     }
                     if (parentContainsBold(childElement)) {
-                        continue;  // 如果元素的父元素是 <b> 或 <strong> 标签，跳过
+                        continue; // 如果元素的父元素是 <b> 或 <strong> 标签，跳过
                     }
                     // 递归处理
                     siyuanProcessBoldStyle(childElement);
@@ -358,8 +377,7 @@ function siyuanProcessBoldStyle(tempElement) {
 function parentContainsBold(element) {
     let parent = element.parentElement;
     while (parent) {
-        if (parent.tagName === 'B' || parent.tagName === 'STRONG' ||
-            parent.tagName === 'H1' || parent.tagName === 'H2' || parent.tagName === 'H3' || parent.tagName === 'H4' || parent.tagName === 'H5' || parent.tagName === 'H6') {
+        if (["B", "STRONG", "H1", "H2", "H3", "H4", "H5", "H6"].includes(parent.tagName)) {
             return true;
         }
         parent = parent.parentElement;
@@ -370,20 +388,20 @@ function parentContainsBold(element) {
 // 替换斜体样式为内核可识别 <i> 标签 https://github.com/siyuan-note/siyuan/issues/13306
 function siyuanProcessItalicStyle(tempElement) {
     // 获取所有元素
-    const allElements = tempElement.querySelectorAll('*');
+    const allElements = tempElement.querySelectorAll("*");
 
-    allElements.forEach(element => {
+    allElements.forEach((element) => {
         const style = window.getComputedStyle(element);
-        if (element.tagName === 'I' || element.tagName === 'EM') {
+        if (["I", "EM"].includes(element.tagName)) {
             return; // 如果元素本身是 <i> 或 <em> 标签，跳过
         }
 
         if (parentContainsItalic(element)) {
-            return;  // 如果元素的父元素是 I 或 EM 标签，跳过
+            return; // 如果元素的父元素是 I 或 EM 标签，跳过
         }
 
         // 判断是否具有 font-style: italic
-        if (style.fontStyle === 'italic') {
+        if (style.fontStyle === "italic") {
             // 将 element 中的各个元素使用 <i> 标签包裹
             const children = element.childNodes;
             for (let i = 0; i < children.length; i++) {
@@ -391,18 +409,18 @@ function siyuanProcessItalicStyle(tempElement) {
                 if (child.nodeType === Node.TEXT_NODE) {
                     // 如果是文本节点，直接包裹在 <i> 标签中
                     const text = child.nodeValue;
-                    const textElement = document.createElement('i');
+                    const textElement = document.createElement("i");
                     textElement.textContent = text;
                     element.replaceChild(textElement, child);
                 } else if (child.nodeType === Node.ELEMENT_NODE) {
                     // 如果是元素节点，递归处理
                     const childElement = child;
                     const childTagName = childElement.tagName.toLowerCase();
-                    if (childTagName === 'i' || childTagName === 'em') {
+                    if (["i", "em"].includes(childTagName)) {
                         continue; // 如果是 <i> 或 <em> 标签，跳过
                     }
                     if (parentContainsItalic(childElement)) {
-                        continue;  // 如果元素的父元素是 I 或 EM 标签，跳过
+                        continue; // 如果元素的父元素是 I 或 EM 标签，跳过
                     }
                     // 递归处理
                     siyuanProcessItalicStyle(childElement);
@@ -415,7 +433,7 @@ function siyuanProcessItalicStyle(tempElement) {
 function parentContainsItalic(element) {
     let parent = element.parentElement;
     while (parent) {
-        if (parent.tagName === 'I' || parent.tagName === 'EM') {
+        if (["I", "EM"].includes(parent.tagName)) {
             return true;
         }
         parent = parent.parentElement;
@@ -425,20 +443,20 @@ function parentContainsItalic(element) {
 
 function siyuanProcessUnderlineStyle(tempElement) {
     // 获取所有元素
-    const allElements = tempElement.querySelectorAll('*');
+    const allElements = tempElement.querySelectorAll("*");
 
-    allElements.forEach(element => {
+    allElements.forEach((element) => {
         const style = window.getComputedStyle(element);
-        if (element.tagName === 'U') {
+        if (element.tagName === "U") {
             return; // 如果元素本身是 <u> 标签，跳过
         }
 
         if (parentContainsUnderline(element)) {
-            return;  // 如果元素的父元素是 U 标签，跳过
+            return; // 如果元素的父元素是 U 标签，跳过
         }
 
         // 判断是否具有 text-decoration: underline
-        if (style.textDecorationLine.includes('underline')) {
+        if (style.textDecorationLine.includes("underline")) {
             // 将 element 中的各个元素使用 <u> 标签包裹
             const children = element.childNodes;
             for (let i = 0; i < children.length; i++) {
@@ -446,18 +464,18 @@ function siyuanProcessUnderlineStyle(tempElement) {
                 if (child.nodeType === Node.TEXT_NODE) {
                     // 如果是文本节点，直接包裹在 <u> 标签中
                     const text = child.nodeValue;
-                    const textElement = document.createElement('u');
+                    const textElement = document.createElement("u");
                     textElement.textContent = text;
                     element.replaceChild(textElement, child);
                 } else if (child.nodeType === Node.ELEMENT_NODE) {
                     // 如果是元素节点，递归处理
                     const childElement = child;
                     const childTagName = childElement.tagName.toLowerCase();
-                    if (childTagName === 'u') {
+                    if (childTagName === "u") {
                         continue; // 如果是 <u> 标签，跳过
                     }
                     if (parentContainsUnderline(childElement)) {
-                        continue;  // 如果元素的父元素是 U 标签，跳过
+                        continue; // 如果元素的父元素是 U 标签，跳过
                     }
                     // 递归处理
                     siyuanProcessUnderlineStyle(childElement);
@@ -469,7 +487,7 @@ function siyuanProcessUnderlineStyle(tempElement) {
     function parentContainsUnderline(element) {
         let parent = element.parentElement;
         while (parent) {
-            if (parent.tagName === 'U') {
+            if (parent.tagName === "U") {
                 return true;
             }
             parent = parent.parentElement;
@@ -484,7 +502,7 @@ function simplifyNestedTags(root, tagName) {
 
     while (hasNested) {
         hasNested = false;
-        elements.forEach(element => {
+        elements.forEach((element) => {
             if (simplifyElement(element, tagName)) {
                 hasNested = true;
             }
@@ -495,7 +513,7 @@ function simplifyNestedTags(root, tagName) {
     function simplifyElement(element, tagName) {
         let nestedFound = false;
         if (element.hasChildNodes()) {
-            element.childNodes.forEach(child => {
+            element.childNodes.forEach((child) => {
                 if (child.nodeType === Node.ELEMENT_NODE) {
                     if (child.tagName === tagName) {
                         nestedFound = true;
@@ -515,14 +533,14 @@ function simplifyNestedTags(root, tagName) {
 
 // 移除图片链接 https://github.com/siyuan-note/siyuan/issues/13941
 function siyuanRemoveImgLink(tempElement) {
-    const images = tempElement.querySelectorAll('img');
-    images.forEach(image => {
+    const images = tempElement.querySelectorAll("img");
+    images.forEach((image) => {
         const parent = image.parentElement;
         if (!parent) {
             return;
         }
 
-        if (parent.tagName === 'A') {
+        if (parent.tagName === "A") {
             const grandParent = parent.parentElement;
             if (!grandParent) {
                 return;
@@ -539,11 +557,11 @@ async function siyuanSvgToBase64(svgNode) {
     const serializer = new XMLSerializer();
     let svgStr = serializer.serializeToString(svgNode);
 
-    if (!svgStr.startsWith('<?xml')) {
+    if (!svgStr.startsWith("<?xml")) {
         svgStr = '<?xml version="1.0" encoding="UTF-8"?>' + svgStr;
     }
 
-    const svgBlob = new Blob([svgStr], {type: 'image/svg+xml'});
+    const svgBlob = new Blob([svgStr], { type: "image/svg+xml" });
 
     const dataUrl = await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -556,23 +574,22 @@ async function siyuanSvgToBase64(svgNode) {
 }
 
 async function siyuanSvgToImg(tempElement) {
-    const svgElements = tempElement.querySelectorAll('svg');
+    const svgElements = tempElement.querySelectorAll("svg");
     console.log(`Found ${svgElements.length} SVG elements`);
 
     for (const svg of svgElements) {
-        const img = document.createElement('img');
+        const img = document.createElement("img");
         img.src = await siyuanSvgToBase64(svg);
         img.style.cssText = window.getComputedStyle(svg).cssText;
         svg.parentNode.replaceChild(img, svg);
     }
 }
 
-
 function adaptMSN(tempDoc) {
     if (tempDoc.documentURI.indexOf("msn.cn") !== -1) {
         // 删除掉其他不相关文章
-        const articles = document.querySelectorAll(".consumption-page-gridarea_content");
-        articles.forEach(article => {
+        const articles = tempDoc.querySelectorAll(".consumption-page-gridarea_content");
+        articles.forEach((article) => {
             const shadowHost = article.querySelector("views-header-wc");
             if (!shadowHost) {
                 return;
@@ -592,17 +609,17 @@ function adaptMSN(tempDoc) {
         });
 
         // 将 Shadow DOM 展开
-        const shadowHosts = document.querySelectorAll('cp-article');
-        shadowHosts.forEach(element => {
+        const shadowHosts = tempDoc.querySelectorAll("cp-article");
+        shadowHosts.forEach((element) => {
             const shadowRoot = element.shadowRoot;
             if (!shadowRoot) {
                 return;
             }
 
-            const slots = shadowRoot.querySelectorAll('slot');
-            slots.forEach(slot => {
-                const slotName = slot.getAttribute('name');
-                element.querySelectorAll(`[slot="${slotName}"]`).forEach(slotElement => {
+            const slots = shadowRoot.querySelectorAll("slot");
+            slots.forEach((slot) => {
+                const slotName = slot.getAttribute("name");
+                element.querySelectorAll(`[slot="${slotName}"]`).forEach((slotElement) => {
                     const imgEle = slotElement.querySelector("cp-article-image");
                     if (!imgEle) {
                         return;
@@ -611,12 +628,12 @@ function adaptMSN(tempDoc) {
                     if (!imgShadowRoot) {
                         return;
                     }
-                    const imgs = imgShadowRoot.querySelectorAll('img');
+                    const imgs = imgShadowRoot.querySelectorAll("img");
                     if (!imgs || imgs.length === 0) {
                         return;
                     }
-                    slotElement.innerHTML = ""
-                    imgs.forEach(img => {
+                    slotElement.innerHTML = "";
+                    imgs.forEach((img) => {
                         slotElement.appendChild(img.cloneNode(true));
                     });
                     slot.innerHTML = slotElement.innerHTML;
@@ -624,7 +641,7 @@ function adaptMSN(tempDoc) {
             });
 
             const shadowContent = shadowRoot.innerHTML;
-            const newDiv = document.createElement('div');
+            const newDiv = tempDoc.createElement("div");
             newDiv.innerHTML = shadowContent;
             element.parentNode.replaceChild(newDiv, element);
         });
@@ -636,14 +653,7 @@ async function siyuanGetCloneNode(tempDoc) {
     let items;
     try {
         items = await new Promise((resolve, reject) => {
-            chrome.storage.sync.get({
-                expSpan: false,
-                expBold: false,
-                expItalic: false,
-                expUnderline: false,
-                expRemoveImgLink: false,
-                expSvgToImg: false,
-            }, (result) => {
+            chrome.storage.sync.get(siyuanStorageDefaultsFor(SIYUAN_EXP_STORAGE_KEYS), (result) => {
                 if (chrome.runtime.lastError) {
                     reject(chrome.runtime.lastError);
                 } else {
@@ -653,14 +663,7 @@ async function siyuanGetCloneNode(tempDoc) {
         });
     } catch (error) {
         console.error("获取失败，错误信息：", error);
-        items = {
-            expSpan: false,
-            expBold: false,
-            expItalic: false,
-            expUnderline: false,
-            expRemoveImgLink: false,
-            expSvgToImg: false,
-        };
+        items = siyuanStorageDefaultsFor(SIYUAN_EXP_STORAGE_KEYS);
     }
 
     // 适配 MSN 页面 https://github.com/siyuan-note/siyuan/issues/14197
@@ -699,21 +702,22 @@ async function siyuanGetCloneNode(tempDoc) {
     }
 
     // 合并嵌套的标签
-    simplifyNestedTags(tempDoc, 'STRONG');
-    simplifyNestedTags(tempDoc, 'B');
-    simplifyNestedTags(tempDoc, 'I');
-    simplifyNestedTags(tempDoc, 'EM');
-    simplifyNestedTags(tempDoc, 'DIV');
-    simplifyNestedTags(tempDoc, 'SPAN');
-    simplifyNestedTags(tempDoc, 'SECTION');
-    simplifyNestedTags(tempDoc, 'ARTICLE');
-    simplifyNestedTags(tempDoc, 'P');
+    simplifyNestedTags(tempDoc, "STRONG");
+    simplifyNestedTags(tempDoc, "B");
+    simplifyNestedTags(tempDoc, "I");
+    simplifyNestedTags(tempDoc, "EM");
+    simplifyNestedTags(tempDoc, "DIV");
+    simplifyNestedTags(tempDoc, "SPAN");
+    simplifyNestedTags(tempDoc, "SECTION");
+    simplifyNestedTags(tempDoc, "ARTICLE");
+    simplifyNestedTags(tempDoc, "P");
 
     // 如果公式被嵌套包裹，则去掉外层包裹 https://github.com/siyuan-note/siyuan/issues/14382
-    const mathElements = tempDoc.querySelectorAll('.ztext-math');
-    mathElements.forEach(mathElement => {
-        if (mathElement.parentElement.tagName === 'B' || mathElement.parentElement.tagName === 'STRONG' || mathElement.parentElement.tagName === 'I' || mathElement.parentElement.tagName === 'EM') {
-            const parent = mathElement.parentElement;
+    const mathElements = tempDoc.querySelectorAll(".ztext-math");
+    mathElements.forEach((mathElement) => {
+        const mathParent = mathElement.parentElement;
+        if (mathParent && ["B", "STRONG", "I", "EM"].includes(mathParent.tagName)) {
+            const parent = mathParent;
             while (parent.firstChild) {
                 parent.parentNode.insertBefore(parent.firstChild, parent);
             }
@@ -733,25 +737,44 @@ async function siyuanGetCloneNode(tempDoc) {
  * @param {Document|Element} doc - 需要处理的 DOM 文档或元素节点
  */
 function fixInvalidNesting(doc) {
-    const inlineTags = ['span', 'strong', 'b', 'i', 'em', 'a'];
+    const inlineTags = ["span", "strong", "b", "i", "em", "a"];
     // 注意：code 建议移出行内标签列表，因为它通常被视为行内元素
-    const blockTags = ['div', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'table', 'tr', 'td', 'th', 'blockquote', 'section', 'article'];
+    const blockTags = [
+        "div",
+        "p",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "ul",
+        "ol",
+        "li",
+        "table",
+        "tr",
+        "td",
+        "th",
+        "blockquote",
+        "section",
+        "article",
+    ];
 
-    const inlineSelector = inlineTags.join(',');
-    const blockSelector = blockTags.join(',');
+    const inlineSelector = inlineTags.join(",");
+    const blockSelector = blockTags.join(",");
 
     // 1. 获取所有可能是行内的元素
     const allInlines = Array.from(doc.querySelectorAll(inlineSelector));
 
     // 2. 过滤出真正包含块级子元素的行内元素
     // 使用 reverse() 从 DOM 树的最深层开始处理，防止父级先被替换导致子级丢失
-    const targets = allInlines.filter(el => el.querySelector(blockSelector)).reverse();
+    const targets = allInlines.filter((el) => el.querySelector(blockSelector)).reverse();
 
-    targets.forEach(oldEl => {
+    targets.forEach((oldEl) => {
         // 再次检查 oldEl 是否还在 DOM 树中（防止在之前的循环中已被父级替换）
         if (!oldEl.parentNode) return;
 
-        const newDiv = doc.createElement('div');
+        const newDiv = doc.createElement("div");
 
         // 复制属性
         for (const attr of oldEl.attributes) {
@@ -770,232 +793,209 @@ function fixInvalidNesting(doc) {
 
 const setMathJaxDataFormula = () => {
     return new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.src = chrome.runtime.getURL('lib/mathjax.js');
+        const script = document.createElement("script");
+        script.src = chrome.runtime.getURL("lib/mathjax.js");
         (document.head || document.documentElement).appendChild(script);
 
         const cleanUp = () => {
             try {
                 script.remove();
-            } catch (e) {
-            }
+            } catch (e) {}
             resolve();
         };
 
         script.onload = cleanUp;
         script.onerror = () => {
-            console.warn('MathJax load failed');
+            console.warn("MathJax load failed");
             cleanUp();
         };
     });
 };
 
-const siyuanGetClipSettings = () => new Promise((resolve) => {
-    chrome.storage.sync.get({
-        ip: 'http://127.0.0.1:6806',
-        showTip: true,
-        token: '',
-        notebook: '',
-        parentDoc: '',
-        parentHPath: '',
-        tags: '',
-        assets: true,
-        expOpenAfterClip: false,
-        expSpan: false,
-        expBold: false,
-        expItalic: false,
-        expUnderline: false,
-        expRemoveImgLink: false,
-        expListDocTree: false,
-        selectedDatabaseID: ''
-    }, resolve)
-})
+const siyuanGetClipSettings = () =>
+    new Promise((resolve) => {
+        chrome.storage.sync.get(SIYUAN_STORAGE_DEFAULTS, resolve);
+    });
 
 /** @returns {Promise<object | null>} 配置与内核均就绪时返回 settings */
 const siyuanEnsureClipReady = async () => {
-    const items = await siyuanGetClipSettings()
-    if (!items.token) {
-        siyuanShowTipByKey("tip_token_miss")
-        return null
-    }
+    const items = await siyuanGetClipSettings();
 
-    if (!items.notebook) {
-        siyuanShowTipByKey("tip_save_path_miss")
-        return null
-    }
-
-    let base = (items.ip || '').trim()
-    if (!base) base = 'http://127.0.0.1:6806'
-    if (!/^https?:\/\//i.test(base)) base = 'http://' + base
-    while (base.endsWith('/')) base = base.slice(0, -1)
-
-    let kernelReady = false
+    let result;
     try {
-        const response = await fetch(base + '/api/filetree/searchDocs', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Token ' + items.token,
-                'Content-Type': 'application/json; charset=UTF-8',
+        result = await chrome.runtime.sendMessage({
+            func: "check-kernel",
+            data: {
+                ip: items.ip,
+                token: items.token,
+                notebook: items.notebook,
             },
-            body: JSON.stringify({
-                k: '',
-                flashcard: false,
-            }),
-        })
-        if (response.status === 401 || response.status === 403) {
-            siyuanShowTipByKey("tip_token_invalid")
-            return null
-        }
-        if (response.status === 200) {
-            try {
-                await response.json()
-                kernelReady = true
-            } catch (e) {
-            }
-        }
+        });
     } catch (e) {
+        result = { ok: false, error: "tip_siyuan_kernel_unavailable" };
     }
 
-    if (!kernelReady) {
-        siyuanShowTipByKey("tip_siyuan_kernel_unavailable")
-        return null
+    if (!result.ok) {
+        void siyuanShowTipByKey(result.error);
+        return null;
     }
 
-    return items
+    return items;
+};
+
+/** 规范化上传用的 parentHPath（去掉笔记本根路径前缀） */
+function siyuanNormalizeParentHPath(parentHPath) {
+    const path = (parentHPath || "").trim();
+    if (!path) return "";
+    const slashIdx = path.indexOf("/");
+    return slashIdx >= 0 ? path.substring(slashIdx) : path;
 }
 
-const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href) => {
-    const items = await siyuanGetClipSettings()
+const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href, clipItems) => {
+    const items = clipItems || (await siyuanGetClipSettings());
 
-    let srcList = []
-        if (srcUrl) {
-            srcList.push(srcUrl)
-        }
-        const images = tempElement.querySelectorAll('img')
-        images.forEach(item => {
-            let src = item.getAttribute('src')
-            if (!src) {
-                return
-            }
+    if (type !== "article") {
+        void siyuanShowTipByKey("tip_clipping");
+    }
 
-            if (item.className.includes("emoji") && "" !== item.getAttribute("alt")) {
-                // 图片 Emoji 直接使用 alt https://github.com/siyuan-note/siyuan/issues/13342
-                return
-            }
-
-            // 处理使用 data-original 属性的情况 https://github.com/siyuan-note/siyuan/issues/11826
-            let dataOriginal = item.getAttribute('data-original')
-            if (dataOriginal && !dataOriginal.startsWith("/")) {
-                if (!src || !src.endsWith('.gif')) {
-                    src = dataOriginal
-                }
-            }
-
-            if ('https:' === window.location.protocol) {
-                if (src.startsWith('http:')) {
-                    src = src.replace('http:', 'https:')
-                } else if (src.startsWith('//')) {
-                    src = 'https:' + src
-                }
-                item.setAttribute('src', src)
-            }
-
-            if (-1 < item.className.indexOf("ztext-gif") && -1 < src.indexOf("zhimg.com")) {
-                // 处理知乎动图
-                src = src.replace(".jpg", ".webp")
-            }
-
-            srcList.push(src)
-        })
-
-        let files = {}
-        srcList = [...new Set(srcList)]
-
-        if (!items.assets) { // 不剪藏资源文件 https://github.com/siyuan-note/siyuan/issues/12583
-            srcList = []
+    let srcList = [];
+    if (srcUrl) {
+        srcList.push(srcUrl);
+    }
+    const images = tempElement.querySelectorAll("img");
+    images.forEach((item) => {
+        let src = item.getAttribute("src");
+        if (!src) {
+            return;
         }
 
-        let fetchFileErr = false;
-        let filesSize = 0;
-        for (let i = 0; i < srcList.length; i++) {
-            let src = srcList[i]
-            siyuanShowTip(chrome.i18n.getMessage("tip_clip_img") + ' [' + i + '/' + srcList.length + ']...', 'tip_clip_img')
-            let response;
-            try {
-                // Wikipedia 使用图片原图 https://github.com/siyuan-note/siyuan/issues/11640
-                if (-1 !== src.indexOf('wikipedia/commons/thumb/')) {
-                    let idx = src.lastIndexOf('.')
-                    let ext = src.substring(idx)
-                    if (0 < src.indexOf('.svg.png')) {
-                        ext = '.svg'
-                    }
-                    idx = src.indexOf(ext + '/')
-                    if (0 < idx) {
-                        src = src.substring(0, idx + ext.length)
-                        src = src.replace('/commons/thumb/', '/commons/')
-                    }
-                }
-                response = await fetch(src, {
-                    "headers": {
-                        "accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
-                        "sec-fetch-dest": "image",
-                    },
-                });
-            } catch (e) {
-                console.warn("fetch [" + src + "] failed", e)
-                fetchFileErr = true;
-                continue
-            }
-            const image = await response.blob()
-            const data = await siyuanConvertBlobToBase64(image)
-            files[escape(src)] = {
-                type: image.type,
-                data: data,
-            }
+        const itemClassName = String(item.className || "");
+        if (itemClassName.includes("emoji") && "" !== item.getAttribute("alt")) {
+            // 图片 Emoji 直接使用 alt https://github.com/siyuan-note/siyuan/issues/13342
+            return;
+        }
 
-            filesSize += data.length
-            if (1000 * 1000 * 60 < filesSize) {
-                // 下载图片总大小超过 60MB 时走内核剪藏
-                fetchFileErr = true
-                files = {}
-                console.warn("Total image size exceeds 60MB, fallback to kernel netImg2LocalAssets")
-                break
+        // 处理使用 data-original 属性的情况 https://github.com/siyuan-note/siyuan/issues/11826
+        let dataOriginal = item.getAttribute("data-original");
+        if (dataOriginal && !dataOriginal.startsWith("/")) {
+            if (!src || !src.endsWith(".gif")) {
+                src = dataOriginal;
             }
         }
 
-        let title = article && article.title ? article.title : document.title || "";
-        let siteName = article && article.siteName ? article.siteName : "";
-        let excerpt = article && article.excerpt ? article.excerpt : "";
-        let url = href || window.location.href;
+        if ("https:" === window.location.protocol) {
+            if (src.startsWith("http:")) {
+                src = src.replace("http:", "https:");
+            } else if (src.startsWith("//")) {
+                src = "https:" + src;
+            }
+            item.setAttribute("src", src);
+        }
 
-        const msgJSON = {
-            fetchFileErr,
-            files: files,
-            dom: tempElement.innerHTML,
-            api: items.ip,
-            token: items.token,
-            notebook: items.notebook,
-            parentDoc: items.parentDoc,
-            parentHPath: items.parentHPath.substring(items.parentHPath.indexOf('/')),
-            tags: items.tags,
-            assets: items.assets,
-            tip: items.showTip,
-            title: title,
-            siteName: siteName,
-            excerpt: excerpt,
-            listDocTree: items.expListDocTree,
-            href: url,
-            type,
-            tabId,
-            selectedDatabaseID: items.selectedDatabaseID,
+        if (-1 < itemClassName.indexOf("ztext-gif") && -1 < src.indexOf("zhimg.com")) {
+            // 处理知乎动图
+            src = src.replace(".jpg", ".webp");
+        }
+
+        srcList.push(src);
+    });
+
+    let files = {};
+    srcList = [...new Set(srcList)];
+
+    if (!items.assets) {
+        // 不剪藏资源文件 https://github.com/siyuan-note/siyuan/issues/12583
+        srcList = [];
+    }
+
+    let fetchFileErr = false;
+    let filesSize = 0;
+    for (let i = 0; i < srcList.length; i++) {
+        let src = srcList[i];
+        void siyuanShowTipByKey("tip_clip_img", undefined, (msg) => `${msg} [${i}/${srcList.length}]...`);
+        let response;
+        try {
+            // Wikipedia 使用图片原图 https://github.com/siyuan-note/siyuan/issues/11640
+            if (-1 !== src.indexOf("wikipedia/commons/thumb/")) {
+                let idx = src.lastIndexOf(".");
+                let ext = src.substring(idx);
+                if (0 < src.indexOf(".svg.png")) {
+                    ext = ".svg";
+                }
+                idx = src.indexOf(ext + "/");
+                if (0 < idx) {
+                    src = src.substring(0, idx + ext.length);
+                    src = src.replace("/commons/thumb/", "/commons/");
+                }
+            }
+            response = await fetch(src, {
+                headers: {
+                    accept: "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+                    "sec-fetch-dest": "image",
+                },
+            });
+        } catch (e) {
+            console.warn("fetch [" + src + "] failed", e);
+            fetchFileErr = true;
+            continue;
+        }
+        if (!response.ok) {
+            console.warn("fetch [" + src + "] HTTP " + response.status);
+            fetchFileErr = true;
+            continue;
+        }
+        const image = await response.blob();
+        const data = await siyuanConvertBlobToBase64(image);
+        files[escape(src)] = {
+            type: image.type,
+            data: data,
         };
-        siyuanShowTipByKey("tip_clipping")
-        chrome.runtime.sendMessage({func: 'upload-copy', data: msgJSON})
-}
+
+        filesSize += data.length;
+        if (1000 * 1000 * 60 < filesSize) {
+            // 下载图片总大小超过 60MB 时走内核剪藏
+            fetchFileErr = true;
+            files = {};
+            console.warn("Total image size exceeds 60MB, fallback to kernel netImg2LocalAssets");
+            break;
+        }
+    }
+
+    let title = article && article.title ? article.title : document.title || "";
+    let siteName = article && article.siteName ? article.siteName : "";
+    let excerpt = article && article.excerpt ? article.excerpt : "";
+    let url = href || window.location.href;
+
+    const msgJSON = {
+        fetchFileErr,
+        files: files,
+        dom: tempElement.innerHTML,
+        api: items.ip,
+        token: items.token,
+        notebook: items.notebook,
+        parentDoc: items.parentDoc,
+        parentHPath: siyuanNormalizeParentHPath(items.parentHPath),
+        tags: items.tags,
+        assets: items.assets,
+        tip: items.showTip,
+        title: title,
+        siteName: siteName,
+        excerpt: excerpt,
+        listDocTree: items.expListDocTree,
+        href: url,
+        type,
+        tabId,
+        selectedDatabaseID: items.selectedDatabaseID,
+    };
+    if (srcList.length > 0) {
+        void siyuanShowTipByKey("tip_clipping");
+    }
+    chrome.runtime.sendMessage({ func: "upload-copy", data: msgJSON });
+};
 
 const copyToClipboard = async (textToCopy) => {
     // 修复无焦点的未捕获异常：https://github.com/siyuan-note/siyuan/issues/13208
-    await new Promise(resolve => requestAnimationFrame(resolve));
+    await new Promise((resolve) => requestAnimationFrame(resolve));
 
     if (navigator.clipboard && window.isSecureContext) {
         try {
@@ -1005,45 +1005,47 @@ const copyToClipboard = async (textToCopy) => {
         }
     }
 
-    let textArea = document.createElement('textarea')
-    textArea.value = textToCopy
-    textArea.style.position = 'fixed'
-    textArea.style.left = '-999999px'
-    textArea.style.top = '-999999px'
-    document.body.appendChild(textArea)
-    textArea.focus()
-    textArea.select()
+    let textArea = document.createElement("textarea");
+    textArea.value = textToCopy;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
     return new Promise((res, rej) => {
-        document.execCommand('copy') ? res() : rej()
-        textArea.remove()
-    })
-}
+        document.execCommand("copy") ? res() : rej();
+        textArea.remove();
+    });
+};
 
 const siyuanGetReadability = async (tabId) => {
     try {
-        chrome.i18n.getMessage("tip_clipping")
+        chrome.i18n.getMessage("tip_clipping");
     } catch (e) {
-        alert(chrome.i18n.getMessage("tip_first_time"));
-        window.location.reload();
+        await siyuanLangReady;
+        const shouldRefresh = confirm(siyuanGetMessage("tip_first_time"));
+        if (shouldRefresh) {
+            window.location.reload();
+        }
+    }
+
+    const clipSettings = await siyuanEnsureClipReady();
+    if (!clipSettings) {
         return;
     }
 
-    const clipSettings = await siyuanEnsureClipReady()
-    if (!clipSettings) {
-        return
-    }
-
-    siyuanShowTipByKey("tip_clipping")
+    void siyuanShowTipByKey("tip_clipping");
 
     try {
         // 处理 MathJax 公式 https://github.com/siyuan-note/siyuan/issues/13543
         await setMathJaxDataFormula();
 
         // 浏览器剪藏扩展剪藏某些网页代码块丢失注释 https://github.com/siyuan-note/siyuan/issues/5676
-        document.querySelectorAll(".hljs-comment").forEach(item => {
-            item.classList.remove("hljs-comment")
-            item.classList.add("hljs-cmt")
-        })
+        document.querySelectorAll(".hljs-comment").forEach((item) => {
+            item.classList.remove("hljs-comment");
+            item.classList.add("hljs-cmt");
+        });
 
         // 重构并合并 Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
         const clonedDoc = await siyuanGetCloneNode(document);
@@ -1051,19 +1053,23 @@ const siyuanGetReadability = async (tabId) => {
         const article = new Readability(clonedDoc, {
             keepClasses: true,
             charThreshold: 16,
-            debug: true
-        }).parse()
-        const tempElement = document.createElement('div')
-        tempElement.innerHTML = article.content
-        simplifyNestedTags(tempElement, 'DIV')
-        simplifyNestedTags(tempElement, 'SPAN')
-        simplifyNestedTags(tempElement, 'SECTION')
-        simplifyNestedTags(tempElement, 'ARTICLE')
-        simplifyNestedTags(tempElement, 'P')
+            debug: true,
+        }).parse();
+        if (!article?.content) {
+            void siyuanShowTipByKey("tip_readability_failed", 7000);
+            return;
+        }
+        const tempElement = document.createElement("div");
+        tempElement.innerHTML = article.content;
+        simplifyNestedTags(tempElement, "DIV");
+        simplifyNestedTags(tempElement, "SPAN");
+        simplifyNestedTags(tempElement, "SECTION");
+        simplifyNestedTags(tempElement, "ARTICLE");
+        simplifyNestedTags(tempElement, "P");
         // console.log(article)
-        siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href)
+        siyuanSendUpload(tempElement, tabId, undefined, "article", article, window.location.href, clipSettings);
     } catch (e) {
-        console.error(e)
-        siyuanShowTip(e.message, undefined, 7 * 1000)
+        console.error(e);
+        siyuanShowTip(e.message, undefined, 7 * 1000);
     }
-}
+};

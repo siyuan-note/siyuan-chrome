@@ -98,6 +98,9 @@
   "tip_no_selection": {
     "message": "텍스트가 선택되지 않았습니다. 복사할 내용을 먼저 선택하세요"
   },
+  "tip_readability_failed": {
+    "message": "이 페이지에서 본문 내용을 추출하지 못했습니다"
+  },
   "template_config": {
     "message": "클리핑 템플릿 구성"
   },
@@ -106,9 +109,6 @@
   },
   "template_cancel": {
     "message": "취소"
-  },
-  "template_saved": {
-    "message": "템플릿이 저장되었습니다"
   },
   "template_help": {
     "message": "사용 가능한 변수:<br>${title} - 페이지 제목<br>${url} - 페이지 URL<br>${siteName} - 사이트 이름<br>${date} - 현재 날짜 (yyyy-MM-dd)<br>${time} - 현재 시간 (HH:mm)<br>${tags} - 태그<br>${excerpt} - 페이지 요약<br>${content} - 페이지 내용"

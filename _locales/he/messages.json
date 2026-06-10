@@ -98,6 +98,9 @@
   "tip_no_selection": {
     "message": "לא נבחר טקסט, נא בחר קודם את התוכן להעתקה"
   },
+  "tip_readability_failed": {
+    "message": "לא ניתן לחלץ את תוכן המאמר מדף זה"
+  },
   "template_config": {
     "message": "הגדרת תבנית חיתוך"
   },
@@ -106,9 +109,6 @@
   },
   "template_cancel": {
     "message": "ביטול"
-  },
-  "template_saved": {
-    "message": "התבנית נשמרה בהצלחה"
   },
   "template_help": {
     "message": "משתנים זמינים:<br>${title} - כותרת הדף<br>${url} - כתובת URL של הדף<br>${siteName} - שם האתר<br>${date} - תאריך נוכחי (yyyy-MM-dd)<br>${time} - שעה נוכחית (HH:mm)<br>${tags} - תגים<br>${excerpt} - תקציר הדף<br>${content} - תוכן הדף"

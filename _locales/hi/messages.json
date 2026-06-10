@@ -98,6 +98,9 @@
   "tip_no_selection": {
     "message": "कोई टेक्स्ट चयनित नहीं, कृपया पहले कॉपी करने के लिए सामग्री चुनें"
   },
+  "tip_readability_failed": {
+    "message": "इस पृष्ठ से लेख सामग्री निकालने में विफल"
+  },
   "template_config": {
     "message": "क्लिपिंग टेम्पलेट कॉन्फ़िगरेशन"
   },
@@ -106,9 +109,6 @@
   },
   "template_cancel": {
     "message": "रद्द करें"
-  },
-  "template_saved": {
-    "message": "टेम्पलेट सफलतापूर्वक सहेजा गया"
   },
   "template_help": {
     "message": "उपलब्ध चर:<br>${title} - पेज शीर्षक<br>${url} - पेज URL<br>${siteName} - साइट का नाम<br>${date} - वर्तमान दिनांक (yyyy-MM-dd)<br>${time} - वर्तमान समय (HH:mm)<br>${tags} - टैग<br>${excerpt} - पेज सारांश<br>${content} - पेज सामग्री"

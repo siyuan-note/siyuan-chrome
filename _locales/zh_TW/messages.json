@@ -98,6 +98,9 @@
   "tip_no_selection": {
     "message": "未選中文本，請先選擇要複製的內容"
   },
+  "tip_readability_failed": {
+    "message": "無法從目前頁面提取正文內容"
+  },
   "template_config": {
     "message": "剪藏模板配置"
   },
@@ -106,9 +109,6 @@
   },
   "template_cancel": {
     "message": "取消"
-  },
-  "template_saved": {
-    "message": "模板保存成功"
   },
   "template_help": {
     "message": "可用變數：<br>${title} - 頁面標題<br>${url} - 頁面URL<br>${siteName} - 網站名稱<br>${date} - 當前日期 (yyyy-MM-dd)<br>${time} - 當前時間 (HH:mm)<br>${tags} - 標籤<br>${excerpt} - 頁面摘要<br>${content} - 頁面內容"

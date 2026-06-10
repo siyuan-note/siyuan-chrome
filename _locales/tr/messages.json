@@ -98,6 +98,9 @@
   "tip_no_selection": {
     "message": "Metin seçilmedi, lütfen önce kopyalanacak içeriği seçin"
   },
+  "tip_readability_failed": {
+    "message": "Bu sayfadan makale içeriği çıkarılamadı"
+  },
   "template_config": {
     "message": "Kırpma şablonu yapılandırması"
   },
@@ -106,9 +109,6 @@
   },
   "template_cancel": {
     "message": "İptal"
-  },
-  "template_saved": {
-    "message": "Şablon başarıyla kaydedildi"
   },
   "template_help": {
     "message": "Kullanılabilir değişkenler:<br>${title} - Sayfa başlığı<br>${url} - Sayfa URL'si<br>${siteName} - Site adı<br>${date} - Geçerli tarih (yyyy-AA-gg)<br>${time} - Geçerli saat (SS:dd)<br>${tags} - Etiketler<br>${excerpt} - Sayfa alıntısı<br>${content} - Sayfa içeriği"

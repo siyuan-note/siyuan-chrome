@@ -17,6 +17,8 @@
         "<all_urls>"
       ],
       "js": [
+        "lib/siyuan-storage-defaults.js",
+        "lib/siyuan-i18n.js",
         "content.js",
         "lib/Readability.js"
       ]

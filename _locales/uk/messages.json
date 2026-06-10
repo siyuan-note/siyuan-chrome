@@ -98,6 +98,9 @@
   "tip_no_selection": {
     "message": "Текст не вибрано, спочатку виберіть вміст для копіювання"
   },
+  "tip_readability_failed": {
+    "message": "Не вдалося витягти вміст статті з цієї сторінки"
+  },
   "template_config": {
     "message": "Налаштування шаблону вирізання"
   },
@@ -106,9 +109,6 @@
   },
   "template_cancel": {
     "message": "Скасувати"
-  },
-  "template_saved": {
-    "message": "Шаблон успішно збережено"
   },
   "template_help": {
     "message": "Доступні змінні:<br>${title} - Заголовок сторінки<br>${url} - URL сторінки<br>${siteName} - Назва сайту<br>${date} - Поточна дата (рррр-ММ-дд)<br>${time} - Поточний час (ГГ:хх)<br>${tags} - Теги<br>${excerpt} - Витяг сторінки<br>${content} - Вміст сторінки"

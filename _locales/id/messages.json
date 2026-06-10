@@ -98,6 +98,9 @@
   "tip_no_selection": {
     "message": "Tidak ada teks yang dipilih, pilih konten yang akan disalin terlebih dahulu"
   },
+  "tip_readability_failed": {
+    "message": "Gagal mengekstrak konten artikel dari halaman ini"
+  },
   "template_config": {
     "message": "Konfigurasi templat kliping"
   },
@@ -106,9 +109,6 @@
   },
   "template_cancel": {
     "message": "Batal"
-  },
-  "template_saved": {
-    "message": "Templat berhasil disimpan"
   },
   "template_help": {
     "message": "Variabel yang tersedia:<br>${title} - Judul halaman<br>${url} - URL halaman<br>${siteName} - Nama situs<br>${date} - Tanggal saat ini (yyyy-MM-dd)<br>${time} - Waktu saat ini (HH:mm)<br>${tags} - Tag<br>${excerpt} - Kutipan halaman<br>${content} - Konten halaman"
