@@ -71,6 +71,12 @@
   "send": {
     "message": "שלח ל-SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "העתק טקסט נבחר ל-SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "גזור דף שלם ל-SiYuan"
+  },
   "tip_first_time": {
     "message": "לאחר התקנת תוסף SiYuan לראשונה, אנא רענן את הדף לפני השימוש"
   },

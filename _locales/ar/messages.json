@@ -71,6 +71,12 @@
   "send": {
     "message": "إرسال إلى سييوان"
   },
+  "command_copy_to_siyuan": {
+    "message": "نسخ النص المحدد إلى SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "قص الصفحة بأكملها إلى SiYuan"
+  },
   "tip_first_time": {
     "message": "بعد تثبيت الإضافة لأول مرة، يُرجى تحديث الصفحة قبل استخدامها"
   },

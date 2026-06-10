@@ -71,6 +71,12 @@
   "send": {
     "message": "发送到思源(SiYuan)"
   },
+  "command_copy_to_siyuan": {
+    "message": "复制选中文本到思源(SiYuan)"
+  },
+  "command_send_to_siyuan": {
+    "message": "剪藏整个页面到思源(SiYuan)"
+  },
   "tip_first_time": {
     "message": "首次安装思源扩展后，请刷新页面后再使用"
   },

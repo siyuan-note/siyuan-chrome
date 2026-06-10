@@ -71,6 +71,12 @@
   "send": {
     "message": "ส่งไปยัง SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "คัดลอกข้อความที่เลือกไปยัง SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "คลิปทั้งหน้าไปยัง SiYuan"
+  },
   "tip_first_time": {
     "message": "หลังจากติดตั้งส่วนขยาย SiYuan ครั้งแรก โปรดรีเฟรชหน้าก่อนใช้งาน"
   },

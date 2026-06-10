@@ -71,6 +71,12 @@
   "send": {
     "message": "Verzend naar SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Geselecteerde tekst naar SiYuan kopiëren"
+  },
+  "command_send_to_siyuan": {
+    "message": "Hele pagina naar SiYuan knippen"
+  },
   "tip_first_time": {
     "message": "Na de eerste installatie van de SiYuan extensie, vernieuw de pagina voor gebruik"
   },

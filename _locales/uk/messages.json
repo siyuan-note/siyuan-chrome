@@ -71,6 +71,12 @@
   "send": {
     "message": "Надіслати в SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Скопіювати виділений текст у SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "Вирізати всю сторінку в SiYuan"
+  },
   "tip_first_time": {
     "message": "Після першого встановлення розширення SiYuan оновіть сторінку перед використанням"
   },

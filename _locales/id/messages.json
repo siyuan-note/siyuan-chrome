@@ -71,6 +71,12 @@
   "send": {
     "message": "Kirim ke SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Salin teks yang dipilih ke SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "Klip seluruh halaman ke SiYuan"
+  },
   "tip_first_time": {
     "message": "Setelah menginstal ekstensi SiYuan untuk pertama kali, segarkan halaman sebelum digunakan"
   },

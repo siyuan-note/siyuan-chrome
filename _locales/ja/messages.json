@@ -71,6 +71,12 @@
   "send": {
     "message": "SiYuanに送信"
   },
+  "command_copy_to_siyuan": {
+    "message": "選択したテキストを SiYuan にコピー"
+  },
+  "command_send_to_siyuan": {
+    "message": "ページ全体を SiYuan にクリップ"
+  },
   "tip_first_time": {
     "message": "SiYuan拡張機能を初めてインストールした後、使用する前にページを更新してください"
   },

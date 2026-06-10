@@ -71,6 +71,12 @@
   "send": {
     "message": "SiYuan으로 보내기"
   },
+  "command_copy_to_siyuan": {
+    "message": "선택한 텍스트를 SiYuan으로 복사"
+  },
+  "command_send_to_siyuan": {
+    "message": "전체 페이지를 SiYuan으로 클리핑"
+  },
   "tip_first_time": {
     "message": "SiYuan 확장 프로그램을 처음 설치한 후 페이지를 새로고침한 다음 사용하세요"
   },

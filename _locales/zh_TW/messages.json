@@ -71,6 +71,12 @@
   "send": {
     "message": "發送到思源(SiYuan)"
   },
+  "command_copy_to_siyuan": {
+    "message": "複製選取文字到思源(SiYuan)"
+  },
+  "command_send_to_siyuan": {
+    "message": "剪藏整個頁面到思源(SiYuan)"
+  },
   "tip_first_time": {
     "message": "首次安裝思源擴展後，請刷新頁面後再使用"
   },

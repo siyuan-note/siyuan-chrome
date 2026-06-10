@@ -71,6 +71,12 @@
   "send": {
     "message": "Enviar a SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Copiar el texto seleccionado a SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "Recortar la página completa a SiYuan"
+  },
   "tip_first_time": {
     "message": "Después de instalar la extensión SiYuan por primera vez, actualice la página antes de usarla"
   },

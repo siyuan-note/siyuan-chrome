@@ -71,6 +71,12 @@
   "send": {
     "message": "Odoslať do SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Kopírovať vybraný text do SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "Orezať celú stránku do SiYuan"
+  },
   "tip_first_time": {
     "message": "Po prvej inštalácii rozšírenia SiYuan obnovte stránku pred použitím"
   },
