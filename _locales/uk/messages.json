@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Збережіть веб-сторінку в SiYuan одним клацанням"
+  },
+  "copy_to_siyuan": {
+    "message": "Скопіювати в SiYuan"
+  },
+  "show_tip": {
+    "message": "Показати підказку"
+  },
+  "siyuan_url": {
+    "message": "URL SiYuan"
+  },
+  "api_token": {
+    "message": "API-токен"
+  },
+  "save_path": {
+    "message": "Шлях збереження"
+  },
+  "save_path_placeholder": {
+    "message": "Введіть ключове слово для пошуку шляху збереження"
+  },
+  "tags": {
+    "message": "Теги"
+  },
+  "tags_placeholder": {
+    "message": "Розділяйте кілька тегів комами"
+  },
+  "assets": {
+    "message": "Файли"
+  },
+  "dirsFirst": {
+    "message": "Показувати спочатку каталоги при пошуку шляху"
+  },
+  "exp": {
+    "message": "Показати експериментальні функції"
+  },
+  "exp_tips": {
+    "message": "*: Експериментальні функції можуть бути нестабільними. Якщо є проблема з вирізанням, спробуйте перемкнути."
+  },
+  "exp_span": {
+    "message": "Виявляти перенесення рядків у span*"
+  },
+  "exp_bold": {
+    "message": "Виявляти жирний стиль*"
+  },
+  "exp_italic": {
+    "message": "Виявляти курсив*"
+  },
+  "exp_underline": {
+    "message": "Виявляти підкреслений стиль*"
+  },
+  "exp_remove_img_link": {
+    "message": "Видалити посилання на зображення*"
+  },
+  "exp_list_doc_tree": {
+    "message": "Після вирізання веб-сторінки показати дерево документів*"
+  },
+  "exp_open_after_clip": {
+    "message": "Після вирізання веб-сторінки відкрити документ*"
+  },
+  "exp_svg_to_img": {
+    "message": "Виявляти SVG, вбудований у HTML*"
+  },
+  "language": {
+    "message": "Мова"
+  },
+  "send": {
+    "message": "Надіслати в SiYuan"
+  },
+  "tip_first_time": {
+    "message": "Після першого встановлення розширення SiYuan оновіть сторінку перед використанням"
+  },
+  "tip_clipping": {
+    "message": "Вирізання, зачекайте..."
+  },
+  "tip_clip_img": {
+    "message": "Вирізання зображень"
+  },
+  "tip_clip_ok": {
+    "message": "Вирізання успішне"
+  },
+  "tip_token_miss": {
+    "message": "Налаштуйте API-токен перед вирізанням вмісту"
+  },
+  "tip_token_invalid": {
+    "message": "Недійсний API-токен"
+  },
+  "tip_save_path_miss": {
+    "message": "Виберіть шлях збереження перед вирізанням вмісту"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Запустіть SiYuan і переконайтеся в мережевому з'єднанні перед повторною спробою"
+  },
+  "tip_no_selection": {
+    "message": "Текст не вибрано, спочатку виберіть вміст для копіювання"
+  },
+  "template_config": {
+    "message": "Налаштування шаблону вирізання"
+  },
+  "template_save": {
+    "message": "Зберегти"
+  },
+  "template_cancel": {
+    "message": "Скасувати"
+  },
+  "template_saved": {
+    "message": "Шаблон успішно збережено"
+  },
+  "template_help": {
+    "message": "Доступні змінні:<br>${title} - Заголовок сторінки<br>${url} - URL сторінки<br>${siteName} - Назва сайту<br>${date} - Поточна дата (рррр-ММ-дд)<br>${time} - Поточний час (ГГ:хх)<br>${tags} - Теги<br>${excerpt} - Витяг сторінки<br>${content} - Вміст сторінки"
+  },
+  "template_restore_default": {
+    "message": "Відновити типове"
+  },
+  "database_label": {
+    "message": "Додати до бази даних"
+  },
+  "database_search_placeholder": {
+    "message": "Введіть ключове слово для пошуку бази даних"
+  },
+  "save_path_none": {
+    "message": "Порожньо"
+  },
+  "database_none": {
+    "message": "Порожньо"
+  }
+}

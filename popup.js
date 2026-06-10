@@ -659,7 +659,7 @@ let siyuanLangCode = null;
 
 function siyuanResolveLocale(lang) {
     try {
-        const available = ['ar', 'de', 'en', 'es', 'fr', 'he', 'it', 'ja', 'pl', 'ru', 'zh_CN', 'zh_TW'];
+        const available = ['ar', 'de', 'en', 'es', 'fr', 'he', 'hi', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt_BR', 'ru', 'sk', 'th', 'tr', 'uk', 'zh_CN', 'zh_TW'];
         if (!lang) return 'en';
         let code = String(lang).replace('-', '_');
         if (code.toLowerCase().startsWith('zh')) {

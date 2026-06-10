@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "वेब पेज को एक क्लिक में SiYuan में सहेजें"
+  },
+  "copy_to_siyuan": {
+    "message": "SiYuan में कॉपी करें"
+  },
+  "show_tip": {
+    "message": "टिप दिखाएं"
+  },
+  "siyuan_url": {
+    "message": "SiYuan URL"
+  },
+  "api_token": {
+    "message": "API टोकन"
+  },
+  "save_path": {
+    "message": "सहेजने का पथ"
+  },
+  "save_path_placeholder": {
+    "message": "सहेजने का पथ खोजने के लिए एक कीवर्ड दर्ज करें"
+  },
+  "tags": {
+    "message": "टैग"
+  },
+  "tags_placeholder": {
+    "message": "कई टैग को अल्पविराम से अलग करें"
+  },
+  "assets": {
+    "message": "एसेट्स"
+  },
+  "dirsFirst": {
+    "message": "पथ खोज में पहले निर्देशिकाएं दिखाएं"
+  },
+  "exp": {
+    "message": "प्रायोगिक सुविधाएं दिखाएं"
+  },
+  "exp_tips": {
+    "message": "*: प्रायोगिक सुविधाएं अस्थिर हो सकती हैं। यदि क्लिपिंग में कोई समस्या है तो स्विच करने का प्रयास करें।"
+  },
+  "exp_span": {
+    "message": "span नोड की पंक्ति विराम शैली पहचानें*"
+  },
+  "exp_bold": {
+    "message": "बोल्ड शैली पहचानें*"
+  },
+  "exp_italic": {
+    "message": "इटैलिक शैली पहचानें*"
+  },
+  "exp_underline": {
+    "message": "रेखांकित शैली पहचानें*"
+  },
+  "exp_remove_img_link": {
+    "message": "छवि लिंक हटाएं*"
+  },
+  "exp_list_doc_tree": {
+    "message": "वेब पेज क्लिप करने के बाद दस्तावेज़ ट्री दिखाएं*"
+  },
+  "exp_open_after_clip": {
+    "message": "वेब पेज क्लिप करने के बाद दस्तावेज़ खोलें*"
+  },
+  "exp_svg_to_img": {
+    "message": "HTML में एम्बेडेड SVG पहचानें*"
+  },
+  "language": {
+    "message": "भाषा"
+  },
+  "send": {
+    "message": "SiYuan में भेजें"
+  },
+  "tip_first_time": {
+    "message": "SiYuan एक्सटेंशन पहली बार इंस्टॉल करने के बाद, उपयोग से पहले पेज रीफ़्रेश करें"
+  },
+  "tip_clipping": {
+    "message": "क्लिपिंग हो रही है, कृपया प्रतीक्षा करें..."
+  },
+  "tip_clip_img": {
+    "message": "छवियां क्लिप हो रही हैं"
+  },
+  "tip_clip_ok": {
+    "message": "क्लिपिंग सफल"
+  },
+  "tip_token_miss": {
+    "message": "सामग्री क्लिप करने से पहले API टोकन कॉन्फ़िगर करें"
+  },
+  "tip_token_invalid": {
+    "message": "अमान्य API टोकन"
+  },
+  "tip_save_path_miss": {
+    "message": "सामग्री क्लिप करने से पहले सहेजने का पथ चुनें"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "कृपया SiYuan शुरू करें और पुनः प्रयास करने से पहले नेटवर्क कनेक्टिविटी सुनिश्चित करें"
+  },
+  "tip_no_selection": {
+    "message": "कोई टेक्स्ट चयनित नहीं, कृपया पहले कॉपी करने के लिए सामग्री चुनें"
+  },
+  "template_config": {
+    "message": "क्लिपिंग टेम्पलेट कॉन्फ़िगरेशन"
+  },
+  "template_save": {
+    "message": "सहेजें"
+  },
+  "template_cancel": {
+    "message": "रद्द करें"
+  },
+  "template_saved": {
+    "message": "टेम्पलेट सफलतापूर्वक सहेजा गया"
+  },
+  "template_help": {
+    "message": "उपलब्ध चर:<br>${title} - पेज शीर्षक<br>${url} - पेज URL<br>${siteName} - साइट का नाम<br>${date} - वर्तमान दिनांक (yyyy-MM-dd)<br>${time} - वर्तमान समय (HH:mm)<br>${tags} - टैग<br>${excerpt} - पेज सारांश<br>${content} - पेज सामग्री"
+  },
+  "template_restore_default": {
+    "message": "डिफ़ॉल्ट पुनर्स्थापित करें"
+  },
+  "database_label": {
+    "message": "डेटाबेस में जोड़ें"
+  },
+  "database_search_placeholder": {
+    "message": "डेटाबेस खोजने के लिए एक कीवर्ड दर्ज करें"
+  },
+  "save_path_none": {
+    "message": "खाली"
+  },
+  "database_none": {
+    "message": "खाली"
+  }
+}

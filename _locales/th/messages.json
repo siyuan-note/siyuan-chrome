@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "บันทึกหน้าเว็บไปยัง SiYuan ด้วยคลิกเดียว"
+  },
+  "copy_to_siyuan": {
+    "message": "คัดลอกไปยัง SiYuan"
+  },
+  "show_tip": {
+    "message": "แสดงเคล็ดลับ"
+  },
+  "siyuan_url": {
+    "message": "URL SiYuan"
+  },
+  "api_token": {
+    "message": "โทเค็น API"
+  },
+  "save_path": {
+    "message": "เส้นทางบันทึก"
+  },
+  "save_path_placeholder": {
+    "message": "ป้อนคำสำคัญเพื่อค้นหาเส้นทางบันทึก"
+  },
+  "tags": {
+    "message": "แท็ก"
+  },
+  "tags_placeholder": {
+    "message": "ใช้จุลภาคเพื่อแยกหลายแท็ก"
+  },
+  "assets": {
+    "message": "ทรัพยากร"
+  },
+  "dirsFirst": {
+    "message": "แสดงไดเรกทอรีก่อนในการค้นหาเส้นทาง"
+  },
+  "exp": {
+    "message": "แสดงคุณสมบัติทดลอง"
+  },
+  "exp_tips": {
+    "message": "*: คุณสมบัติทดลองอาจไม่เสถียร หากมีปัญหาในการตัดหน้าเว็บ ลองสลับเปิด/ปิด"
+  },
+  "exp_span": {
+    "message": "ตรวจจับการขึ้นบรรทัดใหม่ของ span*"
+  },
+  "exp_bold": {
+    "message": "ตรวจจับรูปแบบตัวหนา*"
+  },
+  "exp_italic": {
+    "message": "ตรวจจับรูปแบบตัวเอียง*"
+  },
+  "exp_underline": {
+    "message": "ตรวจจับรูปแบบขีดเส้นใต้*"
+  },
+  "exp_remove_img_link": {
+    "message": "ลบลิงก์รูปภาพ*"
+  },
+  "exp_list_doc_tree": {
+    "message": "แสดงผังเอกสารหลังตัดหน้าเว็บ*"
+  },
+  "exp_open_after_clip": {
+    "message": "เปิดเอกสารหลังตัดหน้าเว็บ*"
+  },
+  "exp_svg_to_img": {
+    "message": "ตรวจจับ SVG ที่ฝังใน HTML*"
+  },
+  "language": {
+    "message": "ภาษา"
+  },
+  "send": {
+    "message": "ส่งไปยัง SiYuan"
+  },
+  "tip_first_time": {
+    "message": "หลังจากติดตั้งส่วนขยาย SiYuan ครั้งแรก โปรดรีเฟรชหน้าก่อนใช้งาน"
+  },
+  "tip_clipping": {
+    "message": "กำลังตัดหน้าเว็บ โปรดรอสักครู่..."
+  },
+  "tip_clip_img": {
+    "message": "กำลังตัดภาพ"
+  },
+  "tip_clip_ok": {
+    "message": "ตัดหน้าเว็บสำเร็จ"
+  },
+  "tip_token_miss": {
+    "message": "โปรดกำหนดค่าโทเค็น API ก่อนตัดเนื้อหา"
+  },
+  "tip_token_invalid": {
+    "message": "โทเค็น API ไม่ถูกต้อง"
+  },
+  "tip_save_path_miss": {
+    "message": "โปรดเลือกเส้นทางบันทึกก่อนตัดเนื้อหา"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "โปรดเริ่ม SiYuan และตรวจสอบการเชื่อมต่อเครือข่ายก่อนลองอีกครั้ง"
+  },
+  "tip_no_selection": {
+    "message": "ไม่ได้เลือกข้อความ โปรดเลือกเนื้อหาที่จะคัดลอกก่อน"
+  },
+  "template_config": {
+    "message": "การตั้งค่าเทมเพลตการตัด"
+  },
+  "template_save": {
+    "message": "บันทึก"
+  },
+  "template_cancel": {
+    "message": "ยกเลิก"
+  },
+  "template_saved": {
+    "message": "บันทึกเทมเพลตสำเร็จ"
+  },
+  "template_help": {
+    "message": "ตัวแปรที่ใช้ได้:<br>${title} - ชื่อหน้า<br>${url} - URL ของหน้า<br>${siteName} - ชื่อเว็บไซต์<br>${date} - วันที่ปัจจุบัน (yyyy-MM-dd)<br>${time} - เวลาปัจจุบัน (HH:mm)<br>${tags} - แท็ก<br>${excerpt} - ข้อความย่อของหน้า<br>${content} - เนื้อหาของหน้า"
+  },
+  "template_restore_default": {
+    "message": "คืนค่าเริ่มต้น"
+  },
+  "database_label": {
+    "message": "เพิ่มไปยังฐานข้อมูล"
+  },
+  "database_search_placeholder": {
+    "message": "ป้อนคำสำคัญเพื่อค้นหาฐานข้อมูล"
+  },
+  "save_path_none": {
+    "message": "ว่างเปล่า"
+  },
+  "database_none": {
+    "message": "ว่างเปล่า"
+  }
+}

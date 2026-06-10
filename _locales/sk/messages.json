@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Uložte webovú stránku do SiYuan jedným kliknutím"
+  },
+  "copy_to_siyuan": {
+    "message": "Kopírovať do SiYuan"
+  },
+  "show_tip": {
+    "message": "Zobraziť tip"
+  },
+  "siyuan_url": {
+    "message": "SiYuan URL"
+  },
+  "api_token": {
+    "message": "API token"
+  },
+  "save_path": {
+    "message": "Cesta uloženia"
+  },
+  "save_path_placeholder": {
+    "message": "Zadajte kľúčové slovo na vyhľadanie cesty uloženia"
+  },
+  "tags": {
+    "message": "Tagy"
+  },
+  "tags_placeholder": {
+    "message": "Na oddelenie viacerých tagov použite čiarky"
+  },
+  "assets": {
+    "message": "Prílohy"
+  },
+  "dirsFirst": {
+    "message": "Pri vyhľadávaní cesty zobraziť najprv priečinky"
+  },
+  "exp": {
+    "message": "Zobraziť experimentálne funkcie"
+  },
+  "exp_tips": {
+    "message": "*: Experimentálne funkcie môžu byť nestabilné. Ak sa vyskytne problém s orezávaním, skúste prepnúť."
+  },
+  "exp_span": {
+    "message": "Rozpoznať zalamovanie span uzlov*"
+  },
+  "exp_bold": {
+    "message": "Rozpoznať tučný štýl*"
+  },
+  "exp_italic": {
+    "message": "Rozpoznať kurzívu*"
+  },
+  "exp_underline": {
+    "message": "Rozpoznať podčiarknutý štýl*"
+  },
+  "exp_remove_img_link": {
+    "message": "Odstrániť odkaz na obrázok*"
+  },
+  "exp_list_doc_tree": {
+    "message": "Po orezaní webovej stránky zobraziť strom dokumentov*"
+  },
+  "exp_open_after_clip": {
+    "message": "Po orezaní webovej stránky otvoriť dokument*"
+  },
+  "exp_svg_to_img": {
+    "message": "Rozpoznať SVG vložené v HTML*"
+  },
+  "language": {
+    "message": "Jazyk"
+  },
+  "send": {
+    "message": "Odoslať do SiYuan"
+  },
+  "tip_first_time": {
+    "message": "Po prvej inštalácii rozšírenia SiYuan obnovte stránku pred použitím"
+  },
+  "tip_clipping": {
+    "message": "Prebieha orezávanie, prosím čakajte..."
+  },
+  "tip_clip_img": {
+    "message": "Orezávanie obrázkov"
+  },
+  "tip_clip_ok": {
+    "message": "Orezanie úspešné"
+  },
+  "tip_token_miss": {
+    "message": "Pred orezaním obsahu nakonfigurujte API token"
+  },
+  "tip_token_invalid": {
+    "message": "Neplatný API token"
+  },
+  "tip_save_path_miss": {
+    "message": "Pred orezaním obsahu vyberte cestu uloženia"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Spustite SiYuan a zabezpečte sieťové pripojenie pred ďalším pokusom"
+  },
+  "tip_no_selection": {
+    "message": "Nie je vybratý žiadny text, najprv vyberte obsah na skopírovanie"
+  },
+  "template_config": {
+    "message": "Konfigurácia šablóny orezávania"
+  },
+  "template_save": {
+    "message": "Uložiť"
+  },
+  "template_cancel": {
+    "message": "Zrušiť"
+  },
+  "template_saved": {
+    "message": "Šablóna bola úspešne uložená"
+  },
+  "template_help": {
+    "message": "Dostupné premenné:<br>${title} - Názov stránky<br>${url} - URL stránky<br>${siteName} - Názov webu<br>${date} - Aktuálny dátum (rrrr-MM-dd)<br>${time} - Aktuálny čas (HH:mm)<br>${tags} - Tagy<br>${excerpt} - Úryvok stránky<br>${content} - Obsah stránky"
+  },
+  "template_restore_default": {
+    "message": "Obnoviť predvolené"
+  },
+  "database_label": {
+    "message": "Pridať do databázy"
+  },
+  "database_search_placeholder": {
+    "message": "Zadajte kľúčové slovo na vyhľadanie databázy"
+  },
+  "save_path_none": {
+    "message": "Prázdne"
+  },
+  "database_none": {
+    "message": "Prázdne"
+  }
+}

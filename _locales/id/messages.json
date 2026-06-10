@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Simpan halaman web ke SiYuan dengan satu klik"
+  },
+  "copy_to_siyuan": {
+    "message": "Salin ke SiYuan"
+  },
+  "show_tip": {
+    "message": "Tampilkan tips"
+  },
+  "siyuan_url": {
+    "message": "URL SiYuan"
+  },
+  "api_token": {
+    "message": "Token API"
+  },
+  "save_path": {
+    "message": "Jalur simpan"
+  },
+  "save_path_placeholder": {
+    "message": "Masukkan kata kunci untuk mencari jalur simpan"
+  },
+  "tags": {
+    "message": "Tag"
+  },
+  "tags_placeholder": {
+    "message": "Gunakan koma untuk memisahkan beberapa tag"
+  },
+  "assets": {
+    "message": "Aset"
+  },
+  "dirsFirst": {
+    "message": "Tampilkan direktori terlebih dahulu dalam pencarian jalur"
+  },
+  "exp": {
+    "message": "Tampilkan fitur eksperimental"
+  },
+  "exp_tips": {
+    "message": "*: Fitur eksperimental mungkin tidak stabil. Jika ada masalah dengan kliping, coba alihkan."
+  },
+  "exp_span": {
+    "message": "Deteksi gaya baris baru span*"
+  },
+  "exp_bold": {
+    "message": "Deteksi gaya tebal*"
+  },
+  "exp_italic": {
+    "message": "Deteksi gaya miring*"
+  },
+  "exp_underline": {
+    "message": "Deteksi gaya garis bawah*"
+  },
+  "exp_remove_img_link": {
+    "message": "Hapus tautan gambar*"
+  },
+  "exp_list_doc_tree": {
+    "message": "Tampilkan pohon dokumen setelah kliping halaman web*"
+  },
+  "exp_open_after_clip": {
+    "message": "Buka dokumen setelah kliping halaman web*"
+  },
+  "exp_svg_to_img": {
+    "message": "Deteksi SVG yang disematkan dalam HTML*"
+  },
+  "language": {
+    "message": "Bahasa"
+  },
+  "send": {
+    "message": "Kirim ke SiYuan"
+  },
+  "tip_first_time": {
+    "message": "Setelah menginstal ekstensi SiYuan untuk pertama kali, segarkan halaman sebelum digunakan"
+  },
+  "tip_clipping": {
+    "message": "Sedang mengklip, harap tunggu..."
+  },
+  "tip_clip_img": {
+    "message": "Mengklip gambar"
+  },
+  "tip_clip_ok": {
+    "message": "Kliping berhasil"
+  },
+  "tip_token_miss": {
+    "message": "Konfigurasikan token API sebelum mengklip konten"
+  },
+  "tip_token_invalid": {
+    "message": "Token API tidak valid"
+  },
+  "tip_save_path_miss": {
+    "message": "Pilih jalur simpan sebelum mengklip konten"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Mulai SiYuan dan pastikan konektivitas jaringan sebelum mencoba lagi"
+  },
+  "tip_no_selection": {
+    "message": "Tidak ada teks yang dipilih, pilih konten yang akan disalin terlebih dahulu"
+  },
+  "template_config": {
+    "message": "Konfigurasi templat kliping"
+  },
+  "template_save": {
+    "message": "Simpan"
+  },
+  "template_cancel": {
+    "message": "Batal"
+  },
+  "template_saved": {
+    "message": "Templat berhasil disimpan"
+  },
+  "template_help": {
+    "message": "Variabel yang tersedia:<br>${title} - Judul halaman<br>${url} - URL halaman<br>${siteName} - Nama situs<br>${date} - Tanggal saat ini (yyyy-MM-dd)<br>${time} - Waktu saat ini (HH:mm)<br>${tags} - Tag<br>${excerpt} - Kutipan halaman<br>${content} - Konten halaman"
+  },
+  "template_restore_default": {
+    "message": "Pulihkan default"
+  },
+  "database_label": {
+    "message": "Tambahkan ke database"
+  },
+  "database_search_placeholder": {
+    "message": "Masukkan kata kunci untuk mencari database"
+  },
+  "save_path_none": {
+    "message": "Kosong"
+  },
+  "database_none": {
+    "message": "Kosong"
+  }
+}

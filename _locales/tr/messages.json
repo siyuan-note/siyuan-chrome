@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Web sayfasını tek tıkla SiYuan'a kaydedin"
+  },
+  "copy_to_siyuan": {
+    "message": "SiYuan'a kopyala"
+  },
+  "show_tip": {
+    "message": "İpucunu göster"
+  },
+  "siyuan_url": {
+    "message": "SiYuan URL'si"
+  },
+  "api_token": {
+    "message": "API belirteci"
+  },
+  "save_path": {
+    "message": "Kayıt yolu"
+  },
+  "save_path_placeholder": {
+    "message": "Kayıt yolunu aramak için bir anahtar kelime girin"
+  },
+  "tags": {
+    "message": "Etiketler"
+  },
+  "tags_placeholder": {
+    "message": "Birden çok etiketi virgülle ayırın"
+  },
+  "assets": {
+    "message": "Varlıklar"
+  },
+  "dirsFirst": {
+    "message": "Yol aramasında önce dizinleri göster"
+  },
+  "exp": {
+    "message": "Deneysel özellikleri göster"
+  },
+  "exp_tips": {
+    "message": "*: Deneysel özellikler kararsız olabilir. Kırpma ile ilgili bir sorun varsa değiştirmeyi deneyin."
+  },
+  "exp_span": {
+    "message": "Span düğümü satır sonu stillerini algıla*"
+  },
+  "exp_bold": {
+    "message": "Kalın stili algıla*"
+  },
+  "exp_italic": {
+    "message": "İtalik stili algıla*"
+  },
+  "exp_underline": {
+    "message": "Altı çizili stili algıla*"
+  },
+  "exp_remove_img_link": {
+    "message": "Görsel bağlantısını kaldır*"
+  },
+  "exp_list_doc_tree": {
+    "message": "Web sayfası kırpıldıktan sonra belge ağacını göster*"
+  },
+  "exp_open_after_clip": {
+    "message": "Web sayfası kırpıldıktan sonra belgeyi aç*"
+  },
+  "exp_svg_to_img": {
+    "message": "HTML içine gömülü SVG'yi algıla*"
+  },
+  "language": {
+    "message": "Dil"
+  },
+  "send": {
+    "message": "SiYuan'a gönder"
+  },
+  "tip_first_time": {
+    "message": "SiYuan uzantısını ilk kez yükledikten sonra, kullanmadan önce sayfayı yenileyin"
+  },
+  "tip_clipping": {
+    "message": "Kırpılıyor, lütfen bekleyin..."
+  },
+  "tip_clip_img": {
+    "message": "Görseller kırpılıyor"
+  },
+  "tip_clip_ok": {
+    "message": "Kırpma başarılı"
+  },
+  "tip_token_miss": {
+    "message": "İçeriği kırpmadan önce API belirtecini yapılandırın"
+  },
+  "tip_token_invalid": {
+    "message": "Geçersiz API belirteci"
+  },
+  "tip_save_path_miss": {
+    "message": "İçeriği kırpmadan önce kayıt yolunu seçin"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "SiYuan'ı başlatın ve yeniden denemeden önce ağ bağlantısını sağlayın"
+  },
+  "tip_no_selection": {
+    "message": "Metin seçilmedi, lütfen önce kopyalanacak içeriği seçin"
+  },
+  "template_config": {
+    "message": "Kırpma şablonu yapılandırması"
+  },
+  "template_save": {
+    "message": "Kaydet"
+  },
+  "template_cancel": {
+    "message": "İptal"
+  },
+  "template_saved": {
+    "message": "Şablon başarıyla kaydedildi"
+  },
+  "template_help": {
+    "message": "Kullanılabilir değişkenler:<br>${title} - Sayfa başlığı<br>${url} - Sayfa URL'si<br>${siteName} - Site adı<br>${date} - Geçerli tarih (yyyy-AA-gg)<br>${time} - Geçerli saat (SS:dd)<br>${tags} - Etiketler<br>${excerpt} - Sayfa alıntısı<br>${content} - Sayfa içeriği"
+  },
+  "template_restore_default": {
+    "message": "Varsayılanı geri yükle"
+  },
+  "database_label": {
+    "message": "Veritabanına ekle"
+  },
+  "database_search_placeholder": {
+    "message": "Veritabanını aramak için bir anahtar kelime girin"
+  },
+  "save_path_none": {
+    "message": "Boş"
+  },
+  "database_none": {
+    "message": "Boş"
+  }
+}

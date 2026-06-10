@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "웹 페이지를 클릭 한 번으로 SiYuan에 저장하세요"
+  },
+  "copy_to_siyuan": {
+    "message": "SiYuan으로 복사"
+  },
+  "show_tip": {
+    "message": "팁 표시"
+  },
+  "siyuan_url": {
+    "message": "SiYuan URL"
+  },
+  "api_token": {
+    "message": "API 토큰"
+  },
+  "save_path": {
+    "message": "저장 경로"
+  },
+  "save_path_placeholder": {
+    "message": "저장 경로를 검색하려면 키워드를 입력하세요"
+  },
+  "tags": {
+    "message": "태그"
+  },
+  "tags_placeholder": {
+    "message": "쉼표로 여러 태그를 구분하세요"
+  },
+  "assets": {
+    "message": "리소스 다운로드"
+  },
+  "dirsFirst": {
+    "message": "경로 검색 시 디렉토리 우선 표시"
+  },
+  "exp": {
+    "message": "실험적 기능 표시"
+  },
+  "exp_tips": {
+    "message": "*: 실험적 기능은 불안정할 수 있습니다. 클리핑에 문제가 있는 경우 전환해 보세요."
+  },
+  "exp_span": {
+    "message": "span 노드의 줄바꿈 스타일 인식*"
+  },
+  "exp_bold": {
+    "message": "굵게 스타일 인식*"
+  },
+  "exp_italic": {
+    "message": "기울임꼴 스타일 인식*"
+  },
+  "exp_underline": {
+    "message": "밑줄 스타일 인식*"
+  },
+  "exp_remove_img_link": {
+    "message": "이미지 링크 제거*"
+  },
+  "exp_list_doc_tree": {
+    "message": "웹 페이지 클리핑 후 문서 트리 표시*"
+  },
+  "exp_open_after_clip": {
+    "message": "웹 페이지 클리핑 후 문서 열기*"
+  },
+  "exp_svg_to_img": {
+    "message": "HTML에 포함된 SVG 인식*"
+  },
+  "language": {
+    "message": "인터페이스 언어"
+  },
+  "send": {
+    "message": "SiYuan으로 보내기"
+  },
+  "tip_first_time": {
+    "message": "SiYuan 확장 프로그램을 처음 설치한 후 페이지를 새로고침한 다음 사용하세요"
+  },
+  "tip_clipping": {
+    "message": "클리핑 중입니다. 잠시만 기다려 주세요..."
+  },
+  "tip_clip_img": {
+    "message": "이미지 클리핑 중"
+  },
+  "tip_clip_ok": {
+    "message": "클리핑 성공"
+  },
+  "tip_token_miss": {
+    "message": "클리핑 전에 API 토큰을 구성하세요"
+  },
+  "tip_token_invalid": {
+    "message": "유효하지 않은 API 토큰"
+  },
+  "tip_save_path_miss": {
+    "message": "클리핑 전에 저장 경로를 선택하세요"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "SiYuan을 시작하고 네트워크 연결을 확인한 후 다시 시도하세요"
+  },
+  "tip_no_selection": {
+    "message": "텍스트가 선택되지 않았습니다. 복사할 내용을 먼저 선택하세요"
+  },
+  "template_config": {
+    "message": "클리핑 템플릿 구성"
+  },
+  "template_save": {
+    "message": "저장"
+  },
+  "template_cancel": {
+    "message": "취소"
+  },
+  "template_saved": {
+    "message": "템플릿이 저장되었습니다"
+  },
+  "template_help": {
+    "message": "사용 가능한 변수:<br>${title} - 페이지 제목<br>${url} - 페이지 URL<br>${siteName} - 사이트 이름<br>${date} - 현재 날짜 (yyyy-MM-dd)<br>${time} - 현재 시간 (HH:mm)<br>${tags} - 태그<br>${excerpt} - 페이지 요약<br>${content} - 페이지 내용"
+  },
+  "template_restore_default": {
+    "message": "기본값 복원"
+  },
+  "database_label": {
+    "message": "데이터베이스에 추가"
+  },
+  "database_search_placeholder": {
+    "message": "데이터베이스를 검색하려면 키워드를 입력하세요"
+  },
+  "save_path_none": {
+    "message": "비어 있음"
+  },
+  "database_none": {
+    "message": "비어 있음"
+  }
+}

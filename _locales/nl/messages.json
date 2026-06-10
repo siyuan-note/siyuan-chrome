@@ -1,0 +1,131 @@
+{
+  "extension_name": {
+    "message": "SiYuan"
+  },
+  "extension_description": {
+    "message": "Sla de webpagina met één klik op in SiYuan"
+  },
+  "copy_to_siyuan": {
+    "message": "Kopieer naar SiYuan"
+  },
+  "show_tip": {
+    "message": "Toon tip"
+  },
+  "siyuan_url": {
+    "message": "SiYuan URL"
+  },
+  "api_token": {
+    "message": "API-token"
+  },
+  "save_path": {
+    "message": "Opslagpad"
+  },
+  "save_path_placeholder": {
+    "message": "Voer een trefwoord in om het opslagpad te zoeken"
+  },
+  "tags": {
+    "message": "Tags"
+  },
+  "tags_placeholder": {
+    "message": "Gebruik komma's om meerdere tags te scheiden"
+  },
+  "assets": {
+    "message": "Assets"
+  },
+  "dirsFirst": {
+    "message": "Toon mappen eerst bij pad zoeken"
+  },
+  "exp": {
+    "message": "Toon experimentele functies"
+  },
+  "exp_tips": {
+    "message": "*: Experimentele functies kunnen instabiel zijn. Schakel om als er problemen zijn met knippen."
+  },
+  "exp_span": {
+    "message": "Detecteer span-tekst regeleinden*"
+  },
+  "exp_bold": {
+    "message": "Detecteer vetgedrukte stijl*"
+  },
+  "exp_italic": {
+    "message": "Detecteer cursieve stijl*"
+  },
+  "exp_underline": {
+    "message": "Detecteer onderstreepte stijl*"
+  },
+  "exp_remove_img_link": {
+    "message": "Verwijder afbeeldingslink*"
+  },
+  "exp_list_doc_tree": {
+    "message": "Toon documentboom na webpagina knippen*"
+  },
+  "exp_open_after_clip": {
+    "message": "Open document na webpagina knippen*"
+  },
+  "exp_svg_to_img": {
+    "message": "Detecteer SVG ingebed in HTML*"
+  },
+  "language": {
+    "message": "Taal"
+  },
+  "send": {
+    "message": "Verzend naar SiYuan"
+  },
+  "tip_first_time": {
+    "message": "Na de eerste installatie van de SiYuan extensie, vernieuw de pagina voor gebruik"
+  },
+  "tip_clipping": {
+    "message": "Bezig met knippen, even geduld..."
+  },
+  "tip_clip_img": {
+    "message": "Afbeeldingen knippen"
+  },
+  "tip_clip_ok": {
+    "message": "Knippen succesvol"
+  },
+  "tip_token_miss": {
+    "message": "Configureer API-token voor het knippen van inhoud"
+  },
+  "tip_token_invalid": {
+    "message": "Ongeldige API-token"
+  },
+  "tip_save_path_miss": {
+    "message": "Selecteer opslagpad voor het knippen van inhoud"
+  },
+  "tip_siyuan_kernel_unavailable": {
+    "message": "Start SiYuan en zorg voor netwerkconnectiviteit voor opnieuw proberen"
+  },
+  "tip_no_selection": {
+    "message": "Geen tekst geselecteerd, selecteer eerst de te kopiëren inhoud"
+  },
+  "template_config": {
+    "message": "Knipsjabloon configuratie"
+  },
+  "template_save": {
+    "message": "Opslaan"
+  },
+  "template_cancel": {
+    "message": "Annuleren"
+  },
+  "template_saved": {
+    "message": "Sjabloon succesvol opgeslagen"
+  },
+  "template_help": {
+    "message": "Beschikbare variabelen:<br>${title} - Paginatitel<br>${url} - Pagina URL<br>${siteName} - Sitenaam<br>${date} - Huidige datum (jjjj-MM-dd)<br>${time} - Huidige tijd (UU:mm)<br>${tags} - Tags<br>${excerpt} - Pagina uittreksel<br>${content} - Pagina inhoud"
+  },
+  "template_restore_default": {
+    "message": "Standaard herstellen"
+  },
+  "database_label": {
+    "message": "Toevoegen aan database"
+  },
+  "database_search_placeholder": {
+    "message": "Voer een trefwoord in om de database te zoeken"
+  },
+  "save_path_none": {
+    "message": "Leeg"
+  },
+  "database_none": {
+    "message": "Leeg"
+  }
+}
