@@ -756,9 +756,26 @@ function siyuanTranslateDOM(translations) {
         }
     });
 
+    const rtlLangs = ['ar', 'he'];
+    document.documentElement.dir = rtlLangs.includes(siyuanLangCode) ? 'rtl' : 'ltr';
+    document.documentElement.lang = siyuanLangCode;
+
     const templateHelp = document.getElementById('templateHelp');
     if (templateHelp && t.template_help && t.template_help.message) {
         templateHelp.innerHTML = t.template_help.message;
+    }
+
+    const langWidth = {
+        'zh_CN': 360, 'zh_TW': 360, 'ja': 360, 'ko': 360,
+        'en': 380, 'es': 380, 'pt_BR': 380, 'id': 380,
+        'fr': 420, 'it': 420, 'pl': 420, 'sk': 420,
+        'tr': 420, 'nl': 420, 'ar': 420, 'he': 420,
+        'hi': 420, 'th': 420,
+        'de': 480, 'ru': 480, 'uk': 480,
+    };
+    const container = document.getElementById('mainContainer');
+    if (container) {
+        container.style.width = (langWidth[siyuanLangCode] || 420) + 'px';
     }
 }
 

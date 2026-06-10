@@ -9,7 +9,7 @@
             --b3-theme-primary-light: rgba(53, 117, 240, .54);
             --b3-theme-primary-lighter: rgba(53, 117, 240, .38);
             --b3-theme-primary-lightest: rgba(53, 117, 240, .12);
-            --b3-theme-secondary: #f3a92f;
+            --b3-theme-secondary: #ff9200;
             --b3-theme-background: #fff;
             --b3-theme-background-light: #dfe0e1;
             --b3-theme-surface: #f6f6f6;
@@ -38,7 +38,7 @@
             --b3-toolbar-background: var(--b3-theme-surface);
             --b3-toolbar-blur-background: #fcfcfc;
             --b3-toolbar-color: var(--b3-theme-on-surface);
-            --b3-toolbar-hover: var(--b3-theme-background-light);
+            --b3-toolbar-hover: rgba(255, 255, 255, .68);
             --b3-toolbar-left-mac: 69px;
 
             /* 线条 */
@@ -57,7 +57,7 @@
             --b3-menu-background: var(--b3-theme-surface);
 
             /* 提示 */
-            --b3-tooltips-background: rgba(0, 0, 0, .9);
+            --b3-tooltips-background: #312f35;
             --b3-tooltips-color: var(--b3-theme-background-light);
             --b3-tooltips-shadow: 0 2px 8px rgba(0, 0, 0, .1);
 
@@ -72,13 +72,13 @@
             --b3-mask-background: rgba(220, 220, 220, .4);
 
             /* 卡片背景 */
-            --b3-card-error-color: rgb(97, 26, 21);
+            --b3-card-error-color: #790600;
             --b3-card-error-background: #f5d1cf;
-            --b3-card-warning-color: rgb(102, 60, 0);
+            --b3-card-warning-color: #8a4f00;
             --b3-card-warning-background: #ffe8c8;
-            --b3-card-info-color: rgb(13, 60, 97);
+            --b3-card-info-color: #005599;
             --b3-card-info-background: #d6eaf9;
-            --b3-card-success-color: rgb(30, 70, 32);
+            --b3-card-success-color: #006b04;
             --b3-card-success-background: #d7eed8;
 
             /* 自定义文字 */
@@ -120,7 +120,7 @@
             /* 阴影 */
             --b3-point-shadow: 0 0 1px 0 rgba(0, 0, 0, .1), 0 0 2px 0 rgba(0, 0, 0, .2);
             --b3-dialog-shadow: 0 8px 24px rgba(0, 0, 0, .2);
-            --b3-button-shadow: 0 5px 5px -3px rgb(0 0 0 / .2), 0 8px 10px 1px rgb(0 0 0 / .14), 0 3px 14px 2px rgb(0 0 0 / .12);
+            --b3-button-shadow: 0 1px 2px 0 rgb(0 0 0 / .3), 0 1px 3px 1px rgb(0 0 0 / .15);
 
             /* 图表颜色 */
             --b3-graph-p-point: #076f7e;
@@ -155,9 +155,9 @@
             --b3-protyle-code-linenumber-hl: #b9d1f4;
 
             /* 所见即所得行内元素颜色 */
-            --b3-protyle-inline-strong-color: #202124;
-            --b3-protyle-inline-em-color: #202124;
-            --b3-protyle-inline-s-color: #202124;
+            --b3-protyle-inline-strong-color: inherit;
+            --b3-protyle-inline-em-color: inherit;
+            --b3-protyle-inline-s-color: inherit;
             --b3-protyle-inline-link-color: #4285f4;
             --b3-protyle-inline-mark-background: rgb(252, 212, 126);
             --b3-protyle-inline-mark-color: #202124;
@@ -177,6 +177,52 @@
             --b3-pdf-background6: #69B0F2;
             --b3-pdf-background7: #C885DA;
             --b3-pdf-dark: #212224;
+
+            /* 背景 */
+            --b3-body-background: #EBECF0;
+            --b3-body-background-hl: 219, 86%, 57%;
+            --b3-body-background-hl-opacity: 0.24;
+
+            /* 圆角 */
+            --b3-border-radius-s: 3px;
+
+            /* 字号 */
+            --b3-font-size: 14px;
+            --b3-font-family-kbd: var(--b3-font-family);
+
+            /* 动画 */
+            --b3-background-transition: background 20ms ease-in 0s;
+
+            /* 高亮 */
+            --b3-highlight-color: #222;
+            --b3-highlight-background: #ffff00;
+            --b3-highlight-current-background: #ff9632;
+
+            /* Switch */
+            --b3-switch-background: #e1e3e1;
+            --b3-switch-border: var(--b3-theme-on-surface-light);
+            --b3-switch-hover: rgba(31, 31, 31, 0.06);
+            --b3-switch-checked: #fff;
+            --b3-switch-checked-background: var(--b3-theme-primary);
+            --b3-switch-checked-hover: #d3e3fd;
+            --b3-switch-checked-hover2: rgba(31, 31, 31, .06);
+
+            /* 按钮 */
+            --b3-button-active-shadow: 0 2px 3px 1px rgb(0 0 0 / .3), 0 2px 4px 2px rgb(0 0 0 / .15);
+
+            /* 提示 */
+            --b3-tooltips-second-color: #7d7c7a;
+
+            /* Callout */
+            --b3-callout-note: var(--b3-theme-primary);
+            --b3-callout-tip: var(--b3-theme-success);
+            --b3-callout-caution: var(--b3-theme-error);
+            --b3-callout-important: var(--b3-protyle-inline-blockref-color);
+            --b3-callout-warning: var(--b3-highlight-current-background);
+
+            /* 块 */
+            --b3-embed-background: transparent;
+            --b3-bq-background: transparent;
         }
 
         /* https://github.com/siyuan-note/siyuan/issues/6440 */
@@ -199,34 +245,35 @@
 
         .b3-text-field {
             border: 0;
-            border-radius: 6px;
-            box-shadow: inset 0 0 0 0.6px #5f6368;
+            border-radius: var(--b3-border-radius);
+            box-shadow: inset 0 0 0 0.6px var(--b3-theme-on-surface-light);
             padding: 4px 8px;
             line-height: 20px;
             box-sizing: border-box;
-            color: #222;
+            color: var(--b3-theme-on-background);
             transition: box-shadow 120ms 0ms cubic-bezier(0, 0, 0.2, 1);
-            background-color: #fff;
+            background-color: var(--b3-theme-background);
             -webkit-appearance: none;
             font-variant-ligatures: none;
-            width: 256px;
+            font-size: var(--b3-font-size);
+            width: 100%;
         }
 
         .b3-text-field:hover {
-            box-shadow: inset 0 0 0 .6px #222;
+            box-shadow: inset 0 0 0 .6px var(--b3-theme-on-surface);
         }
 
         .b3-text-field:focus {
             outline: none;
-            box-shadow: inset 0 0 0 1px #3575f0, 0 0 0 3px rgba(53, 117, 240, .12);
+            box-shadow: inset 0 0 0 .6px var(--b3-theme-primary-light), 0 0 0 2px var(--b3-theme-primary-lighter);
         }
 
         .b3-switch {
             flex-shrink: 0;
             -webkit-appearance: none;
             box-sizing: border-box;
-            width: 28px;
-            height: 12px;
+            width: 24px;
+            height: 10px;
             border: 1px solid transparent;
             border-radius: var(--b3-border-radius-b);
             margin: 0;
@@ -234,56 +281,58 @@
             display: inline-block;
             position: relative;
             cursor: pointer;
-            background-color: var(--b3-theme-surface-lighter);
+            background-color: var(--b3-switch-border);
             overflow: inherit;
             user-select: none;
         }
 
         .b3-switch:after {
-            border: 1px solid var(--b3-theme-surface-lighter);
+            border: 1px solid var(--b3-switch-background);
             box-shadow: var(--b3-point-shadow);
             box-sizing: border-box;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             pointer-events: none;
             z-index: 1;
             content: '';
-            background-color: #fff;
-            left: -4px;
-            top: -3px;
+            background-color: var(--b3-switch-checked);
+            left: -3px;
+            top: 50%;
             display: block;
             position: absolute;
+            transform: translateY(-50%);
             transition: transform .3s ease, opacity .2s;
         }
 
         .b3-switch:before {
             content: '';
-            left: -14px;
+            left: -5px;
             right: initial;
-            top: -13px;
-            width: 36px;
-            height: 36px;
-            background-color: rgba(158, 158, 158, .12);
+            top: 50%;
+            width: 18px;
+            height: 18px;
+            background-color: var(--b3-switch-hover);
             display: none;
-            border-radius: 24px;
+            border-radius: 50%;
             position: absolute;
+            transform: translateY(-50%);
             transition: transform .3s ease, opacity .2s;
             opacity: .54;
         }
 
         .b3-switch:checked {
-            background-color: var(--b3-theme-primary-light);
+            background-color: var(--b3-switch-checked-background);
         }
 
         .b3-switch:checked:after {
-            background-color: var(--b3-theme-primary);
-            border-color: var(--b3-theme-primary);
+            background-color: var(--b3-switch-checked);
+            border-color: var(--b3-switch-checked-background);
         }
 
         .b3-switch:checked:before,
         .b3-switch:checked:after {
-            transform: translateX(19px);
+            transform: translate(13px, -50%);
             transition: transform .6s cubic-bezier(.2, .85, .32, 1.2), opacity .3s;
         }
 
@@ -298,7 +347,8 @@
         }
 
         .b3-switch:focus:not(:disabled):before {
-            background-color: var(--b3-theme-primary-lightest);
+            background-color: var(--b3-switch-checked-hover);
+            opacity: 1;
         }
 
         .b3-select {
@@ -316,7 +366,7 @@
             appearance: none;
             cursor: pointer;
             overflow: hidden;
-            width: 256px;
+            width: 100%;
         }
 
         .b3-select:hover {
@@ -330,7 +380,7 @@
         }
 
         .b3-button {
-            width: 256px;
+            width: 100%;
             cursor: pointer;
             color: var(--b3-theme-on-primary);
             border-radius: var(--b3-border-radius);
@@ -341,10 +391,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
+            transition: box-shadow 280ms ease;
             border: 0;
             box-sizing: border-box;
             text-align: center;
+            font-size: var(--b3-font-size);
         }
 
         .b3-button:hover,
@@ -354,16 +405,55 @@
         }
 
         .b3-button:active {
-            box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+            box-shadow: var(--b3-button-active-shadow);
         }
 
         .fn__hr {
             height: 8px;
         }
 
+        /* 全局渲染 */
+        ::selection {
+            background-color: var(--b3-theme-primary-lighter);
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-corner {
+            background-color: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            box-sizing: content-box;
+            border: 4px solid transparent;
+            border-radius: var(--b3-border-radius);
+            box-shadow: inset 0 0 5px 5px var(--b3-scroll-color);
+            cursor: default;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            border-width: 1px;
+        }
+
+        body {
+            text-rendering: optimizeLegibility;
+            margin: 0;
+            padding: 12px;
+            font-family: var(--b3-font-family);
+            font-size: var(--b3-font-size);
+            color: var(--b3-theme-on-background);
+            background-color: var(--b3-theme-background);
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: var(--b3-list-hover);
+        }
+
         .b3-label {
             color: var(--b3-theme-on-surface);
             margin-bottom: 4px;
+            font-size: var(--b3-font-size);
         }
 
         .b3-icon {
@@ -372,7 +462,6 @@
             top: 1px;
             height: 16px;
             width: 16px;
-            cursor: pointer;
             padding: 5px;
             fill: currentColor;
             display: inline-block;
@@ -547,7 +636,7 @@
 </head>
 
 <body>
-    <div style="max-width: 256px;">
+    <div id="mainContainer" style="width: 420px; max-width: 500px;">
         <div id="log" style="color: #d23f31;margin-bottom: 16px"></div>
         <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
             <div style="flex: 1" data-i18n="show_tip">Show tips</div>
@@ -589,8 +678,7 @@
                 <ul class="dropdown-options" id="databaseOptions"></ul>
             </div>
         </div>
-        <div class="fn__hr"></div>
-        <div class="fn__hr"></div>
+        <div style="height: 16px;"></div>
         <label style="display: flex;align-items: center;padding: 0 8px 16px 0;">
             <div style="flex: 1" data-i18n="assets">Download assets</div>
             <input class="b3-switch" id="assets" checked type="checkbox">
