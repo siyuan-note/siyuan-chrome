@@ -71,6 +71,12 @@
   "send": {
     "message": "ส่งไปยัง SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "คัดลอกข้อความที่เลือกไปยัง SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "คลิปทั้งหน้าไปยัง SiYuan"
+  },
   "tip_first_time": {
     "message": "หลังจากติดตั้งส่วนขยาย SiYuan ครั้งแรก โปรดรีเฟรชหน้าก่อนใช้งาน"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "ไม่ได้เลือกข้อความ โปรดเลือกเนื้อหาที่จะคัดลอกก่อน"
   },
+  "tip_readability_failed": {
+    "message": "ไม่สามารถดึงเนื้อหาบทความจากหน้านี้ได้"
+  },
   "template_config": {
     "message": "การตั้งค่าเทมเพลตการตัด"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "ยกเลิก"
-  },
-  "template_saved": {
-    "message": "บันทึกเทมเพลตสำเร็จ"
   },
   "template_help": {
     "message": "ตัวแปรที่ใช้ได้:<br>${title} - ชื่อหน้า<br>${url} - URL ของหน้า<br>${siteName} - ชื่อเว็บไซต์<br>${date} - วันที่ปัจจุบัน (yyyy-MM-dd)<br>${time} - เวลาปัจจุบัน (HH:mm)<br>${tags} - แท็ก<br>${excerpt} - ข้อความย่อของหน้า<br>${content} - เนื้อหาของหน้า"

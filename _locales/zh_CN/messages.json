@@ -71,6 +71,12 @@
   "send": {
     "message": "发送到思源(SiYuan)"
   },
+  "command_copy_to_siyuan": {
+    "message": "复制选中文本到思源(SiYuan)"
+  },
+  "command_send_to_siyuan": {
+    "message": "剪藏整个页面到思源(SiYuan)"
+  },
   "tip_first_time": {
     "message": "首次安装思源扩展后，请刷新页面后再使用"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "未选中文本，请先选择要复制的内容"
   },
+  "tip_readability_failed": {
+    "message": "无法从当前页面提取正文内容"
+  },
   "template_config": {
     "message": "剪藏模板配置"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "取消"
-  },
-  "template_saved": {
-    "message": "模板保存成功"
   },
   "template_help": {
     "message": "可用变量：<br>${title} - 页面标题<br>${url} - 页面URL<br>${siteName} - 网站名称<br>${date} - 当前日期 (yyyy-MM-dd)<br>${time} - 当前时间 (HH:mm)<br>${tags} - 标签<br>${excerpt} - 页面摘要<br>${content} - 页面内容"

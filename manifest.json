@@ -5,10 +5,17 @@
   "default_locale": "en",
   "action": {
     "default_title": "SiYuan",
-    "default_popup": "options.html"
+    "default_popup": "options.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "icons": {
-    "128": "icon.png"
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   "content_scripts": [
     {
@@ -17,6 +24,8 @@
         "<all_urls>"
       ],
       "js": [
+        "lib/siyuan-storage-defaults.js",
+        "lib/siyuan-i18n.js",
         "content.js",
         "lib/Readability.js"
       ]
@@ -26,10 +35,7 @@
     "service_worker": "background.js"
   },
   "permissions": [
-    "activeTab",
-    "scripting",
     "contextMenus",
-    "clipboardWrite",
     "storage",
     "commands"
   ],
@@ -39,20 +45,21 @@
         "default": "Ctrl+Shift+C",
         "mac": "Command+Shift+C"
       },
-      "description": "Copy selected text to SiYuan"
+      "description": "__MSG_command_copy_to_siyuan__"
     },
     "send-to-siyuan": {
       "suggested_key": {
         "default": "Ctrl+Shift+S",
         "mac": "Command+Shift+S"
       },
-      "description": "Clip entire page to SiYuan"
+      "description": "__MSG_command_send_to_siyuan__"
     }
   },
   "web_accessible_resources": [
     {
       "resources": [
-        "lib/mathjax.js"
+        "lib/mathjax.js",
+        "_locales/*/messages.json"
       ],
       "matches": [
         "<all_urls>"

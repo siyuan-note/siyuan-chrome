@@ -71,6 +71,12 @@
   "send": {
     "message": "Verzend naar SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Geselecteerde tekst naar SiYuan kopiëren"
+  },
+  "command_send_to_siyuan": {
+    "message": "Hele pagina naar SiYuan knippen"
+  },
   "tip_first_time": {
     "message": "Na de eerste installatie van de SiYuan extensie, vernieuw de pagina voor gebruik"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "Geen tekst geselecteerd, selecteer eerst de te kopiëren inhoud"
   },
+  "tip_readability_failed": {
+    "message": "Kan artikelinhoud niet uit deze pagina halen"
+  },
   "template_config": {
     "message": "Knipsjabloon configuratie"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "Annuleren"
-  },
-  "template_saved": {
-    "message": "Sjabloon succesvol opgeslagen"
   },
   "template_help": {
     "message": "Beschikbare variabelen:<br>${title} - Paginatitel<br>${url} - Pagina URL<br>${siteName} - Sitenaam<br>${date} - Huidige datum (jjjj-MM-dd)<br>${time} - Huidige tijd (UU:mm)<br>${tags} - Tags<br>${excerpt} - Pagina uittreksel<br>${content} - Pagina inhoud"

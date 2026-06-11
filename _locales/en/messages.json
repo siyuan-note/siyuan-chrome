@@ -71,6 +71,12 @@
   "send": {
     "message": "Send to SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Copy selected text to SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "Clip entire page to SiYuan"
+  },
   "tip_first_time": {
     "message": "After installing the SiYuan extension for the first time, please refresh the page before using it"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "No text selected, please select the content to copy"
   },
+  "tip_readability_failed": {
+    "message": "Failed to extract article content from this page"
+  },
   "template_config": {
     "message": "Clipping template"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "Cancel"
-  },
-  "template_saved": {
-    "message": "Template saved successfully"
   },
   "template_help": {
     "message": "Available variables:<br>${title} - Page title<br>${url} - Page URL<br>${siteName} - Site name<br>${date} - Current date (yyyy-MM-dd)<br>${time} - Current time (HH:mm)<br>${tags} - Tags<br>${excerpt} - Page excerpt<br>${content} - Page content"

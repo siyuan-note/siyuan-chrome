@@ -71,6 +71,12 @@
   "send": {
     "message": "Отправить в SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Копировать выделенный текст в SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "Вырезать всю страницу в SiYuan"
+  },
   "tip_first_time": {
     "message": "После первого установления расширения SiYuan, пожалуйста, обновите страницу перед использованием"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "Текст не выбран, пожалуйста, выделите содержимое для копирования"
   },
+  "tip_readability_failed": {
+    "message": "Не удалось извлечь содержимое статьи с этой страницы"
+  },
   "template_config": {
     "message": "Конфигурация шаблона"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "Отмена"
-  },
-  "template_saved": {
-    "message": "Шаблон успешно сохранен"
   },
   "template_help": {
     "message": "Доступные переменные:<br>${title} - Заголовок страницы<br>${url} - URL страницы<br>${siteName} - Имя сайта<br>${date} - Текущая дата (yyyy-MM-dd)<br>${time} - Текущее время (HH:mm)<br>${tags} - Теги<br>${excerpt} - Извлечение страницы<br>${content} - Содержимое страницы"

@@ -71,6 +71,12 @@
   "send": {
     "message": "Nach SiYuan senden"
   },
+  "command_copy_to_siyuan": {
+    "message": "Ausgewählten Text nach SiYuan kopieren"
+  },
+  "command_send_to_siyuan": {
+    "message": "Ganze Seite nach SiYuan ausschneiden"
+  },
   "tip_first_time": {
     "message": "Bitte laden Sie die Seite nach der ersten Installation der SiYuan-Erweiterung neu, bevor Sie sie verwenden"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "Kein Text ausgewählt, bitte wählen Sie zuerst den zu kopierenden Inhalt aus"
   },
+  "tip_readability_failed": {
+    "message": "Artikelinhalt konnte von dieser Seite nicht extrahiert werden"
+  },
   "template_config": {
     "message": "Clipping-Vorlagenkonfiguration"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "Abbrechen"
-  },
-  "template_saved": {
-    "message": "Vorlage erfolgreich gespeichert"
   },
   "template_help": {
     "message": "Verfügbare Variablen:<br>${title} - Seitentitel<br>${url} - Seiten-URL<br>${siteName} - Website-Name<br>${date} - Aktuelles Datum (yyyy-MM-dd)<br>${time} - Aktuelle Zeit (HH:mm)<br>${tags} - Tags<br>${excerpt} - Seitenauszug<br>${content} - Seiteninhalt"

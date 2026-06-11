@@ -1,787 +1,757 @@
-// 默认剪藏模板（用于首次加载与恢复默认）
-function getDefaultTemplate() {
-    return '---\n' +
-        '\n' +
-        '- ${title}${siteName ? " - " + siteName : ""}\n' +
-        '- [${urlDecoded}](${url}) \n' +
-        '${excerpt ? "- " + excerpt : ""}\n' +
-        '- ${date} ${time}\n' +
-        '\n' +
-        '---\n' +
-        '\n' +
-        '${content}';
+function svgIcon(symbolId, className) {
+    return `<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true"><use href="#${symbolId}"></use></svg>`;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const ipElement = document.getElementById('ip')
-    const tokenElement = document.getElementById('token')
-    const showTipElement = document.getElementById('showTip')
-    const tagsElement = document.getElementById('tags')
-    const assetsElement = document.getElementById('assets')
-    const dirsFirstElement = document.getElementById('dirsFirst')
-    const expOpenAfterClipElement = document.getElementById('expOpenAfterClip')
-    const expElement = document.getElementById('exp')
-    const expGroupElement = document.getElementById('expGroup')
-    const expSpanElement = document.getElementById('expSpan')
-    const expBoldElement = document.getElementById('expBold')
-    const expItalicElement = document.getElementById('expItalic')
-    const expUnderlineElement = document.getElementById('expUnderline')
-    const expRemoveImgLinkElement = document.getElementById('expRemoveImgLink')
-    const expListDocTreeElement = document.getElementById('expListDocTree')
-    const expSvgToImgElement = document.getElementById('expSvgToImg')
-    const languageElement = document.getElementById('language')
-
-    // 新增下拉菜单元素
-    const savePathDisplay = document.getElementById('savePathDisplay')
-    const savePathInput = document.getElementById('savePathInput')
-    const savePathOptions = document.getElementById('savePathOptions')
-    const databaseDisplay = document.getElementById('databaseDisplay')
-    const databaseInput = document.getElementById('databaseInput')
-    const databaseOptions = document.getElementById('databaseOptions')
-
-    ipElement.addEventListener('change', () => {
-        let ip = ipElement.value;
-        // 去掉结尾的斜杆 https://github.com/siyuan-note/siyuan/issues/11478
-        for (let i = ip.length - 1; i >= 0; i--) {
-            if ('/' === ip[i]) {
-                ip = ip.substring(0, i)
-            } else {
-                break
-            }
-        }
-        ipElement.value = ip
-
-        chrome.storage.sync.set({
-            ip: ipElement.value,
-        })
-    })
-    tokenElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            token: tokenElement.value,
-        })
-        updateSearch()
-    })
-    showTipElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            showTip: showTipElement.checked,
-        })
-    })
-    tagsElement.addEventListener('change', () => {
-        tagsElement.value = tagsElement.value.replace(/#/g, '')
-        chrome.storage.sync.set({
-            tags: tagsElement.value,
-        })
-    })
-
-    // 保存路径下拉菜单事件
-    savePathDisplay.addEventListener('click', () => {
-        const menu = document.getElementById('savePathMenu')
-        const isOpen = menu.classList.contains('open')
-        closeAllDropdowns()
-        if (!isOpen) {
-            menu.classList.add('open')
-            savePathInput.focus()
-        }
-    })
-
-    savePathInput.addEventListener('input', () => {
-        chrome.storage.sync.set({
-            searchKey: savePathInput.value,
-        })
-        updateSearch()
-    })
-
-    savePathOptions.addEventListener('click', (e) => {
-        if (e.target.tagName === 'LI') {
-            const notebook = e.target.getAttribute('data-notebook')
-            const parentDoc = e.target.getAttribute('data-parent')
-            const hPath = e.target.textContent
-
-            savePathDisplay.textContent = hPath
-            chrome.storage.sync.set({
-                notebook: notebook,
-                parentDoc: parentDoc,
-                parentHPath: hPath,
-            })
-            document.getElementById('savePathMenu').classList.remove('open')
-        }
-    })
-
-    // 数据库下拉菜单事件
-    databaseDisplay.addEventListener('click', () => {
-        const menu = document.getElementById('databaseMenu')
-        const isOpen = menu.classList.contains('open')
-        closeAllDropdowns()
-        if (!isOpen) {
-            menu.classList.add('open')
-            databaseInput.focus()
-        }
-    })
-
-    databaseInput.addEventListener('input', () => {
-        chrome.storage.sync.set({
-            searchDatabaseKey: databaseInput.value,
-        })
-        updateDatabaseSearch()
-    })
-
-    databaseOptions.addEventListener('click', (e) => {
-        if (e.target.tagName === 'LI') {
-            const dbID = e.target.getAttribute('data-id')
-            const dbName = e.target.textContent
-            databaseDisplay.textContent = dbName
-            chrome.storage.sync.set({
-                selectedDatabaseID: dbID,
-                selectedDatabaseName: dbName,
-            })
-            document.getElementById('databaseMenu').classList.remove('open')
-        }
-    })
-
-    // 点击其他地方关闭下拉菜单
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.custom-dropdown')) {
-            closeAllDropdowns()
-        }
-    })
-
-    // 添加模板配置按钮点击事件
-    const templateConfigBtn = document.getElementById('templateConfig')
-    if (templateConfigBtn) {
-        templateConfigBtn.addEventListener('click', () => {
-            // 打开模板配置弹窗
-            const templateModal = document.getElementById('templateModal')
-            if (templateModal) {
-                // 打开时预填充当前模板（无则回退默认）
-                const templateTextArea = document.getElementById('templateText')
-                if (templateTextArea) {
-                    chrome.storage.sync.get({
-                        clipTemplate: getDefaultTemplate(),
-                    }, (t) => {
-                        templateTextArea.value = t.clipTemplate || getDefaultTemplate()
-                    })
-                }
-                templateModal.style.display = 'block'
-            }
-        })
-    }
-
-    // 添加模板保存按钮事件
-    const saveTemplateBtn = document.getElementById('saveTemplate')
-    if (saveTemplateBtn) {
-        saveTemplateBtn.addEventListener('click', () => {
-            const templateText = document.getElementById('templateText').value
-            chrome.storage.sync.set({
-                clipTemplate: templateText,
-            }, () => {
-                const templateModal = document.getElementById('templateModal')
-                if (templateModal) {
-                    templateModal.style.display = 'none'
-
-                    // 显示保存成功提示
-                    const templateSavedMsg = document.getElementById('templateSavedMsg')
-                    if (templateSavedMsg) {
-                        templateSavedMsg.style.display = 'block'
-                        setTimeout(() => {
-                            templateSavedMsg.style.display = 'none'
-                        }, 2000)
-                    }
-                }
-            })
-        })
-    }
-
-    // 添加模板恢复默认按钮事件
-    const restoreTemplateBtn = document.getElementById('restoreTemplate')
-    if (restoreTemplateBtn) {
-        restoreTemplateBtn.addEventListener('click', () => {
-            const templateTextArea = document.getElementById('templateText')
-            const def = getDefaultTemplate()
-            if (templateTextArea) templateTextArea.value = def
-            chrome.storage.sync.set({clipTemplate: def}, () => {
-                const templateSavedMsg = document.getElementById('templateSavedMsg')
-                if (templateSavedMsg) {
-                    templateSavedMsg.style.display = 'block'
-                    setTimeout(() => {
-                        templateSavedMsg.style.display = 'none'
-                    }, 2000)
-                }
-            })
-        })
-    }
-
-    // 添加模板取消按钮事件
-    const cancelTemplateBtn = document.getElementById('cancelTemplate')
-    if (cancelTemplateBtn) {
-        cancelTemplateBtn.addEventListener('click', () => {
-            const templateModal = document.getElementById('templateModal')
-            if (templateModal) {
-                templateModal.style.display = 'none'
-            }
-        })
-    }
-
-    // 添加关闭模板配置弹窗按钮事件
-    const closeTemplateBtn = document.getElementById('closeTemplate')
-    if (closeTemplateBtn) {
-        closeTemplateBtn.addEventListener('click', () => {
-            const templateModal = document.getElementById('templateModal')
-            if (templateModal) {
-                templateModal.style.display = 'none'
-            }
-        })
-    }
-
-    assetsElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            assets: assetsElement.checked,
-        })
-    })
-    dirsFirstElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            dirsFirst: dirsFirstElement.checked,
-        })
-    })
-    expOpenAfterClipElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expOpenAfterClip: expOpenAfterClipElement.checked,
-        })
-    })
-    expSpanElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expSpan: expSpanElement.checked,
-        })
-    })
-    expBoldElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expBold: expBoldElement.checked,
-        })
-    })
-    expItalicElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expItalic: expItalicElement.checked,
-        })
-    })
-    expUnderlineElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expUnderline: expUnderlineElement.checked,
-        })
-    })
-    expRemoveImgLinkElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expRemoveImgLink: expRemoveImgLinkElement.checked,
-        })
-    })
-    expListDocTreeElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expListDocTree: expListDocTreeElement.checked,
-        })
-    })
-    expSvgToImgElement.addEventListener('change', () => {
-        chrome.storage.sync.set({
-            expSvgToImg: expSvgToImgElement.checked,
-        })
-    })
-    expElement.addEventListener('change', function () {
-        if (expElement.checked) {
-            expGroupElement.style.display = 'block';
-        } else {
-            expGroupElement.style.display = 'none';
-        }
-    });
-    languageElement.addEventListener('change', () => {
-        const langCode = languageElement.value;
-        console.log("langCode=" + langCode);
-
-        siyuanLoadLanguageFile(langCode, (data) => {
-            siyuanTranslateDOM(data);
-        });
-        chrome.storage.sync.set({
-            langCode: langCode,
-        })
-    })
-
-    const eyeElement = document.querySelector('.b3-icon')
-    eyeElement.addEventListener('click', () => {
-        if (tokenElement.getAttribute("type") === "password") {
-            tokenElement.setAttribute("type", "text")
-            eyeElement.innerHTML = '<path d="M21.418 17.655l-1.6-1.6q0.945-2.582-0.982-4.291t-4.182-0.873l-1.6-1.6q0.618-0.4 1.382-0.582t1.564-0.182q2.582 0 4.382 1.8t1.8 4.382q0 0.8-0.2 1.582t-0.564 1.364zM26.109 22.346l-1.455-1.455q1.782-1.309 3.109-2.927t1.945-3.255q-1.818-4.036-5.455-6.382t-7.891-2.345q-1.527 0-3.127 0.291t-2.509 0.691l-1.673-1.709q1.273-0.582 3.255-1.018t3.873-0.436q5.2 0 9.509 2.964t6.309 7.945q-0.945 2.327-2.436 4.255t-3.455 3.382zM28.218 30.564l-6.109-6q-1.273 0.509-2.873 0.782t-3.236 0.273q-5.309 0-9.636-2.964t-6.364-7.945q0.727-1.891 2.018-3.691t3.145-3.436l-4.582-4.582 1.527-1.564 27.527 27.527zM6.655 9.109q-1.345 0.982-2.6 2.582t-1.8 3.018q1.855 4.036 5.582 6.382t8.455 2.345q1.2 0 2.364-0.145t1.745-0.436l-2.327-2.327q-0.4 0.182-0.982 0.273t-1.091 0.091q-2.545 0-4.364-1.782t-1.818-4.4q0-0.545 0.091-1.091t0.273-0.982z"></path>'
-        } else {
-            tokenElement.setAttribute("type", "password")
-            eyeElement.innerHTML = '<path d="M16 22.182q2.582 0 4.382-1.8t1.8-4.382-1.8-4.382-4.382-1.8-4.382 1.8-1.8 4.382 1.8 4.382 4.382 1.8zM16 20.073q-1.709 0-2.891-1.182t-1.182-2.891 1.182-2.891 2.891-1.182 2.891 1.182 1.182 2.891-1.182 2.891-2.891 1.182zM16 26.909q-5.309 0-9.6-3.018t-6.4-7.891q2.109-4.873 6.4-7.891t9.6-3.018 9.6 3.018 6.4 7.891q-2.109 4.873-6.4 7.891t-9.6 3.018zM16 24.727q4.4 0 8.091-2.382t5.618-6.345q-1.927-3.964-5.618-6.345t-8.091-2.382-8.091 2.382-5.655 6.345q1.964 3.964 5.655 6.345t8.091 2.382z"></path>'
-        }
-    })
-
-    const sendElement = document.getElementById('send')
-    sendElement.addEventListener('click', () => {
-        chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {func: "siyuanGetReadability", tabId: tabs[0].id});
-        });
-    })
-
-    chrome.storage.sync.get({
-        langCode: siyuanGetDefaultLangCode(),
-        ip: 'http://127.0.0.1:6806',
-        showTip: true,
-        token: '',
-        searchKey: '',
-        notebook: '',
-        parentDoc: '',
-        parentHPath: '',
-        tags: '',
-        searchDatabaseKey: '',
-        selectedDatabaseID: '',
-        selectedDatabaseName: '',
-        assets: true,
-        dirsFirst: true,
-        expOpenAfterClip: false,
-        expSpan: false,
-        expBold: false,
-        expItalic: false,
-        expUnderline: false,
-        expRemoveImgLink: false,
-        expListDocTree: false,
-        expSvgToImg: false,
-        clipTemplate: getDefaultTemplate(),
-    }, async function (items) {
-        siyuanLoadLanguageFile(items.langCode, (data) => {
-            siyuanTranslateDOM(data); // 在这里使用加载的i18n数据
-            languageElement.value = items.langCode;
-
-            // 更新模板文本框的值
-            const templateText = document.getElementById('templateText')
-            if (templateText) {
-                templateText.value = items.clipTemplate
-
-                // 添加模板变量帮助提示
-                const templateHelp = document.getElementById('templateHelp')
-                if (templateHelp) {
-                    templateHelp.innerHTML = data.template_help ? data.template_help.message : ''
-                }
-            }
-        });
-        ipElement.value = items.ip || 'http://127.0.0.1:6806'
-        tokenElement.value = items.token || ''
-        showTipElement.checked = items.showTip
-        savePathInput.value = items.searchKey || ''
-        savePathDisplay.dataset.notebook = items.notebook
-        savePathDisplay.dataset.parent = items.parentDoc
-        savePathDisplay.dataset.parenthpath = items.parentHPath
-        if (items.parentHPath) {
-            savePathDisplay.textContent = items.parentHPath
-        }
-        tagsElement.value = items.tags || ''
-        assetsElement.checked = items.assets
-        dirsFirstElement.checked = items.dirsFirst
-        databaseInput.value = items.searchDatabaseKey || ''
-        databaseDisplay.dataset.selectedId = items.selectedDatabaseID
-        if (items.selectedDatabaseName) {
-            databaseDisplay.textContent = items.selectedDatabaseName
-        } else {
-            databaseDisplay.textContent = chrome.i18n.getMessage('database_none') || 'None'
-        }
-        expOpenAfterClipElement.checked = items.expOpenAfterClip
-        expSpanElement.checked = items.expSpan
-        expBoldElement.checked = items.expBold
-        expItalicElement.checked = items.expItalic
-        expUnderlineElement.checked = items.expUnderline
-        expRemoveImgLinkElement.checked = items.expRemoveImgLink
-        expListDocTreeElement.checked = items.expListDocTree
-        expSvgToImgElement.checked = items.expSvgToImg
-        updateSearch()
-        updateDatabaseSearch()
-    })
-})
-
-const querySql = async (sql) => {
-    const ipElement = document.getElementById('ip')
-    const tokenElement = document.getElementById('token')
-    let base = (ipElement.value || '').trim()
-    if (!base) base = 'http://127.0.0.1:6806'
-    if (!/^https?:\/\//i.test(base)) base = 'http://' + base
-    while (base.endsWith('/')) base = base.slice(0, -1)
-    try {
-        const response = await fetch(base + '/api/query/sql', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Token ' + tokenElement.value,
-                'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: JSON.stringify({"stmt": sql || ''})
-        })
-        if (response.status === 401 || response.status === 403) {
-            const msg = chrome.i18n.getMessage('tip_token_invalid') || 'Invalid API token'
-            document.getElementById('log').innerHTML = msg
-            return []
-        }
-        if (response.status !== 200) {
-            const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
-            document.getElementById('log').innerHTML = msg
-            return []
-        }
-        document.getElementById('log').innerHTML = ''
-        let data
-        try {
-            data = await response.json()
-        } catch (e) {
-            const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
-            document.getElementById('log').innerHTML = msg
-            return []
-        }
-        if (!data || data.code !== 0 || !Array.isArray(data.data)) {
-            return []
-        }
-        return data.data
-    } catch (e) {
-        const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
-        document.getElementById('log').innerHTML = msg
-        return [];
-    }
-}
-
-const getSubDocNumByPaths = async (paths) => {
-    const normalizedPaths = paths.map(p => p.startsWith('/') ? p : '/' + p);
-    const caseFields = normalizedPaths.map(p =>
-        `SUM(CASE WHEN path LIKE '${p.replace(/'/g, "''")}%' THEN 1 ELSE 0 END) AS '${p}.sy'`
-    ).join(', ');
-    const likeConditions = normalizedPaths.map(p =>
-        `path LIKE '${p.replace(/'/g, "''")}%'`
-    ).join(' OR ');
-    const excludeConditions = normalizedPaths.map(p =>
-        `path <> '${p.replace(/'/g, "''")}.sy'`
-    ).join(' AND ');
-    // 拼成单行 SQL，避免模板字符串换行问题
-    const sql = 'SELECT ' + caseFields + ', box FROM blocks WHERE type = \'d\' AND (' + excludeConditions + ') AND (' + likeConditions + ') GROUP BY box;';
-    const res = await querySql(sql);
-    const result = {};
-    for (const row of res) {
-        const {box, ...counts} = row;
-        result[box] = counts;
-    }
-    return result;
-}
-
-// 算法 复杂度O(n)
-// 1 获取sql查询所有path和子文档的映射，格式化成 {"<box>": {"<path>": <num>}} 格式
-// 2 将api结果中的path和映射对比，如果path子文档数>0则是目录，前置
-const sortSearchResults = async (data) => {
-    if (!data || !Array.isArray(data) || data.length === 0) {
-        return data;
-    }
-    // 未开启目录优先则返回原始数据
-    const dirsFirstElement = document.getElementById('dirsFirst');
-    if (!dirsFirstElement.checked) return data;
-    // 获取所有文档path
-    const paths = data.map(item => item.path.replace('.sy', ''));
-    // 获取path子文档数映射
-    const pathMap = await getSubDocNumByPaths(paths);
-    // 前置所有匹配到的目录
-    const front = [];  // 存放前置目录
-    const rest = [];   // 其他保留原序
-    for (const item of data) {
-        const path = item.path.trim();
-        if ((pathMap[item?.box]?.[path] || 0) > 0) {
-            front.push(item);
-        } else {
-            rest.push(item);
-        }
-    }
-    // 合并：前置项 + 剩余项，均保持原始顺序
-    return front.concat(rest);
-}
-
-const updateSearch = async () => {
-    const ipElement = document.getElementById('ip')
-    const tokenElement = document.getElementById('token')
-    const savePathInput = document.getElementById('savePathInput')
-    const savePathOptions = document.getElementById('savePathOptions')
-    const savePathDisplay = document.getElementById('savePathDisplay')
-
-    // Validate token
-    if (!tokenElement.value || tokenElement.value.trim() === '') {
-        const msg = chrome.i18n.getMessage('tip_token_miss') || 'Please configure the API token before clipping content'
-        document.getElementById('log').innerHTML = msg
-        return
-    }
-
-    // Validate token
-    if (!tokenElement.value || tokenElement.value.trim() === '') {
-        const msg = chrome.i18n.getMessage('tip_token_miss') || 'Please configure the API token before clipping content'
-        document.getElementById('log').innerHTML = msg
-        return
-    }
-
-    // Normalize base URL
-    let base = (ipElement.value || '').trim()
-    if (!base) base = 'http://127.0.0.1:6806'
-    if (!/^https?:\/\//i.test(base)) base = 'http://' + base
-    while (base.endsWith('/')) base = base.slice(0, -1)
-
-    try {
-        const response = await fetch(base + '/api/filetree/searchDocs', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Token ' + tokenElement.value,
-                'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: JSON.stringify({
-                k: savePathInput.value || '',
-                flashcard: false,
-            })
-        })
-        if (response.status === 401 || response.status === 403) {
-            const msg = chrome.i18n.getMessage('tip_token_invalid') || 'Invalid API token'
-            document.getElementById('log').innerHTML = msg
-            return
-        }
-        if (response.status !== 200) {
-            const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
-            document.getElementById('log').innerHTML = msg
-            return
-        }
-        document.getElementById('log').innerHTML = ''
-        let data
-        try {
-            data = await response.json()
-        } catch (e) {
-            const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
-            document.getElementById('log').innerHTML = msg
-            return
-        }
-        if (!data || data.code !== 0 || !Array.isArray(data.data)) {
-            return
-        }
-        let optionsHTML = ''
-        let selectedHPath = ''
-
-        const searchList = await sortSearchResults(data.data, savePathInput.value || '');
-        searchList.forEach(doc => {
-            const parentDoc = String(doc.path).substring(String(doc.path).lastIndexOf('/') + 1).replace('.sy', '')
-            let selectedClass = ""
-            if (savePathDisplay.dataset.notebook === doc.box && savePathDisplay.dataset.parent === parentDoc &&
-                savePathDisplay.dataset.parenthpath === doc.hPath) {
-                selectedClass = "selected";
-                selectedHPath = doc.hPath
-            }
-            optionsHTML += `<li ${selectedClass} data-notebook="${doc.box}" data-parent="${parentDoc}">${escapeHtml(doc.hPath)}</li>`
-        })
-        savePathOptions.innerHTML = optionsHTML
-
-        // 如果有选中的，更新显示
-        if (selectedHPath) {
-            savePathDisplay.textContent = selectedHPath
-        }
-    } catch (e) {
-        const msg = chrome.i18n.getMessage('tip_siyuan_kernel_unavailable') || 'Please start SiYuan and ensure network connectivity before trying again'
-        document.getElementById('log').innerHTML = msg
-    }
-}
-
-const updateDatabaseSearch = () => {
-    const ipElement = document.getElementById('ip')
-    const tokenElement = document.getElementById('token')
-    const databaseInput = document.getElementById('databaseInput')
-    const databaseOptions = document.getElementById('databaseOptions')
-    const databaseDisplay = document.getElementById('databaseDisplay')
-
-    fetch(ipElement.value + '/api/av/searchAttributeView', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Token ' + tokenElement.value,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            avID: "", // Search in all AVs
-            keyword: databaseInput.value,
-        })
-    }).then((response) => {
-        if (response.status !== 200) {
-            document.getElementById('log').innerHTML = "Database search: Authentication failed or API error."
-            return null
-        }
-        document.getElementById('log').innerHTML = ""
-        return response.json()
-    }).then((response) => {
-        if (!response || response.code !== 0) {
-            if (response && response.msg) {
-                document.getElementById('log').innerHTML = "Database search: " + response.msg
-            } else {
-                document.getElementById('log').innerHTML = "Database search (nil resp): Authentication failed or API error."
-            }
-            return
-        }
-
-        let optionsHTML = ''
-        if (!databaseInput.value.trim()) {
-            optionsHTML = `<li data-id="">${siyuanLangData.database_none.message}</li>`
-        }
-        let selectedName = '-- Select Database --'
-        if (response.data && response.data.results) {
-            response.data.results.forEach(db => {
-                if (!db.avName) {
-                    return;
-                }
-
-                let selectedClass = ""
-                if (databaseDisplay.dataset.selectedId === db.avID) {
-                    selectedClass = "selected";
-                    selectedName = db.avName
-                }
-                optionsHTML += `<li ${selectedClass} data-id="${db.avID}">${escapeHtml(db.avName)}</li>`
-            })
-        }
-        databaseOptions.innerHTML = optionsHTML
-
-        // 如果有选中的，更新显示
-        if (selectedName !== '-- Select Database --') {
-            databaseDisplay.textContent = selectedName
-        }
-    }).catch(e => {
-        console.error("Database search fetch error:", e)
-        document.getElementById('log').innerHTML = "Database search: Network error or SiYuan not available."
-    })
-}
+const SETTINGS_SVG = svgIcon("iconSettings", "popup__icon");
 
 const escapeHtml = (unsafe) => {
-    if (unsafe == null) return ''
-    const s = String(unsafe)
+    if (unsafe == null) return "";
+    const s = String(unsafe);
     return s
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+};
+
+function t(key) {
+    return escapeHtml(siyuanGetMessage(key));
 }
 
-// Add i18n support https://github.com/siyuan-note/siyuan/issues/13559
-let siyuanLangData = null;
-let siyuanLangCode = null;
-
-function siyuanResolveLocale(lang) {
-    try {
-        const available = ['ar', 'de', 'en', 'es', 'fr', 'he', 'hi', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt_BR', 'ru', 'sk', 'th', 'tr', 'uk', 'zh_CN', 'zh_TW'];
-        if (!lang) return 'en';
-        let code = String(lang).replace('-', '_');
-        if (code.toLowerCase().startsWith('zh')) {
-            const lower = code.toLowerCase();
-            if (lower.includes('tw') || lower.includes('hk') || lower.includes('mo') || lower.includes('hant')) {
-                return 'zh_TW';
-            }
-            return 'zh_CN';
-        }
-        if (available.includes(code)) return code;
-        const base = code.split('_')[0];
-        if (available.includes(base)) return base;
-        return 'en';
-    } catch (e) {
-        return 'en';
-    }
+function switchRowHtml(key, id) {
+    return `<div class="popup__row">
+        <span class="popup__row-label u-text-body u-selectable">${t(key)}</span>
+        <label class="popup__toggle-wrap">
+            <input class="popup__toggle u-focus-ring" id="${id}" type="checkbox">
+        </label>
+    </div>`;
 }
 
-function siyuanGetDefaultLangCode() {
-    const raw = chrome.i18n.getUILanguage() || navigator.language || navigator.userLanguage || 'en';
-    return siyuanResolveLocale(raw);
+function fieldHtml(labelKey, inputHtml) {
+    return `<div class="popup__field">
+        <label class="popup__label u-text-body u-selectable">${t(labelKey)}</label>
+        ${inputHtml}
+    </div>`;
 }
 
-// 合并当前语言和英语（en）翻译的函数
-async function siyuanMergeTranslations(translations, langCode) {
-    // 默认语言是英语（en）
-    const defaultLangCode = 'en';
-
-    // 加载英语（en）翻译文件
-    let defaultTranslations = {};
-
-    // 如果当前语言不是英语，则加载英语翻译文件
-    if (langCode !== defaultLangCode) {
-        const enTranslationFile = chrome.runtime.getURL(`_locales/${defaultLangCode}/messages.json`);
-        try {
-            const response = await fetch(enTranslationFile);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const enData = await response.json();
-            defaultTranslations = enData;
-        } catch (err) {
-            console.error("Failed to load English translation:", err);
-        }
-    }
-
-    // 合并当前语言翻译和英语翻译，缺失的字段使用英语翻译
-    const merged = {...defaultTranslations, ...translations};
-    return merged;
+function searchListHtml({ searchId, listId, placeholder }) {
+    return `<div class="popup__search-list">
+        <input class="popup__search-list-input" id="${searchId}" type="text" placeholder="${placeholder}">
+        <ul class="popup__search-list-options" id="${listId}" role="listbox"></ul>
+    </div>`;
 }
 
-async function siyuanLoadLanguageFile(langCode, callback) {
-    const normalized = (typeof siyuanResolveLocale === 'function') ? siyuanResolveLocale(langCode) : (langCode || 'en');
+function dropdownHtml({ dropdownId, triggerId, panelId, searchId, listId, placeholder }) {
+    return `<div class="popup__dropdown" id="${dropdownId}">
+        <div class="popup__dropdown-trigger u-surface" id="${triggerId}" tabindex="0" role="button" aria-haspopup="listbox"></div>
+        <div class="popup__dropdown-panel" id="${panelId}">
+            ${searchListHtml({ searchId, listId, placeholder })}
+        </div>
+    </div>`;
+}
 
-    if (siyuanLangData && siyuanLangCode === normalized) {
-        callback(siyuanLangData);
-        return;
-    }
+function dropdownFieldHtml(labelKey, options) {
+    return fieldHtml(labelKey, dropdownHtml(options));
+}
 
-    const tryLoad = async (code) => {
-        try {
-            const translationFile = chrome.runtime.getURL(`_locales/${code}/messages.json`);
-            const response = await fetch(translationFile);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.json();
-        } catch (e) {
-            return null;
-        }
+function passwordFieldHtml(labelKey, { inputId, toggleId }) {
+    return `<div class="popup__field">
+        <label class="popup__label u-text-body u-selectable">${t(labelKey)}</label>
+        <div class="popup__input-wrap">
+            <input class="popup__input u-surface popup__input--icon-end" id="${inputId}" type="password">
+            <button type="button" class="popup__icon-btn u-icon-btn u-focus-ring popup__input-action" id="${toggleId}" aria-label="Toggle token visibility">
+                ${svgIcon("iconEye", "popup__icon")}
+            </button>
+        </div>
+    </div>`;
+}
+
+function actionRowHtml(labelKey, buttonId, buttonContent) {
+    return `<div class="popup__row">
+        <span class="popup__row-label u-text-body u-selectable">${t(labelKey)}</span>
+        <button type="button" class="popup__icon-btn u-icon-btn u-focus-ring" id="${buttonId}">${buttonContent}</button>
+    </div>`;
+}
+
+const syncInputFlushes = [];
+
+function flushSyncInputs() {
+    syncInputFlushes.forEach((flush) => flush());
+}
+
+function debounce(fn, ms) {
+    let timer;
+    const debounced = (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), ms);
     };
-
-    let data = await tryLoad(normalized);
-    if (!data) data = await tryLoad('en');
-    if (!data) data = {};
-
-    const mergedData = await siyuanMergeTranslations(data, normalized);
-    siyuanLangData = mergedData;
-    siyuanLangCode = normalized;
-    callback(mergedData);
+    debounced.cancel = () => clearTimeout(timer);
+    return debounced;
 }
 
-function siyuanTranslateDOM(translations) {
-    const t = translations || {};
-    const elements = document.querySelectorAll('[data-i18n]');
-    elements.forEach(element => {
-        const key = element.getAttribute('data-i18n');
-        const msg = t[key] && t[key].message ? t[key].message : null;
-        if (!msg) {
-            return;
-        }
-        if ('placeholder' in element) {
-            element.placeholder = msg;
-        } else {
-            element.textContent = msg;
-        }
+function bindSyncInput(el, storageKey, { normalize, normalizeOnFlush, onSaved } = {}) {
+    const saveDraft = () => {
+        chrome.storage.sync.set({ [storageKey]: el.value });
+    };
+    const commit = (normalizeFn) => {
+        let value = el.value;
+        const fn = normalizeFn || normalize;
+        if (fn) value = fn(value);
+        if (el.value !== value) el.value = value;
+        chrome.storage.sync.set({ [storageKey]: value });
+        onSaved?.(value);
+    };
+    const debouncedSaveDraft = debounce(saveDraft, 300);
+    el.addEventListener("input", debouncedSaveDraft);
+    el.addEventListener("change", () => commit());
+    syncInputFlushes.push(() => {
+        debouncedSaveDraft.cancel();
+        commit(normalizeOnFlush || normalize);
     });
+}
 
-    const rtlLangs = ['ar', 'he'];
-    document.documentElement.dir = rtlLangs.includes(siyuanLangCode) ? 'rtl' : 'ltr';
-    document.documentElement.lang = siyuanLangCode;
+function setSendBlock(message) {
+    const alert = document.getElementById("popupAlert");
+    const send = document.getElementById("send");
+    if (!alert || !send) return;
+    const blocked = !!message;
+    alert.textContent = message || "";
+    send.hidden = blocked;
+    alert.hidden = !blocked;
+}
 
-    const templateHelp = document.getElementById('templateHelp');
-    if (templateHelp && t.template_help && t.template_help.message) {
-        templateHelp.innerHTML = t.template_help.message;
+function setSendBlockKey(key) {
+    setSendBlock(key ? siyuanGetMessage(key) : "");
+}
+
+function syncSendBlockFromLocal() {
+    const token = document.getElementById("token")?.value.trim();
+    const notebook = document.getElementById("savePathDisplay")?.dataset.notebook;
+    const result = siyuanValidateClipPrereqs({ token, notebook });
+    if (!result.ok) {
+        setSendBlockKey(result.error);
+        return false;
     }
+    return true;
+}
 
-    const langWidth = {
-        'zh_CN': 360, 'zh_TW': 360, 'ja': 360, 'ko': 360,
-        'en': 380, 'es': 380, 'pt_BR': 380, 'id': 380,
-        'fr': 420, 'it': 420, 'pl': 420, 'sk': 420,
-        'tr': 420, 'nl': 420, 'ar': 420, 'he': 420,
-        'hi': 420, 'th': 420,
-        'de': 480, 'ru': 480, 'uk': 480,
-    };
-    const container = document.getElementById('mainContainer');
-    if (container) {
-        container.style.width = (langWidth[siyuanLangCode] || 420) + 'px';
+function setSavePathDisplay(el, hPath) {
+    const path = hPath || "";
+    el.dataset.parentHPath = path;
+    if (path) {
+        el.textContent = path;
+        el.classList.remove("popup__dropdown-trigger--placeholder");
+    } else {
+        el.textContent = siyuanGetMessage("save_path_placeholder");
+        el.classList.add("popup__dropdown-trigger--placeholder");
     }
+}
+
+let savePathSearchGen = 0;
+let databaseSearchGen = 0;
+
+async function reloadPopup(langCode) {
+    flushSyncInputs();
+    const scrollTop = document.querySelector(".popup__scroll")?.scrollTop ?? 0;
+    await siyuanLoadLanguageFile(langCode);
+    await new Promise((resolve) => chrome.storage.sync.set({ langCode }, resolve));
+    document.getElementById("mainContainer")?.remove();
+    document.getElementById("templateModal")?.remove();
+    const items = await chrome.storage.sync.get({
+        ...SIYUAN_STORAGE_DEFAULTS,
+        langCode,
+        clipTemplate: SIYUAN_DEFAULT_CLIP_TEMPLATE,
+    });
+    renderPopup({ ...items, langCode });
+    const scroll = document.querySelector(".popup__scroll");
+    if (scroll) scroll.scrollTop = scrollTop;
+    if (items.token?.trim()) void updateSearch({ quiet: true });
+    void updateDatabaseSearch({ quiet: true });
+}
+
+function applyPopupLayout() {
+    const langCode = siyuanGetLangCode();
+    document.documentElement.dir = ["ar", "he"].includes(langCode) ? "rtl" : "ltr";
+    document.documentElement.lang = langCode;
 }
 
 // 关闭所有下拉菜单
 function closeAllDropdowns() {
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        menu.classList.remove('open')
-    })
+    document.querySelectorAll(".popup__dropdown-panel--open").forEach((menu) => {
+        menu.classList.remove("popup__dropdown-panel--open");
+    });
 }
+
+function closeTemplateModal() {
+    document.getElementById("templateModal")?.classList.remove("modal--open");
+}
+
+function renderPopup(items) {
+    syncInputFlushes.length = 0;
+
+    document.body.insertAdjacentHTML("beforeend", `<div id="mainContainer" class="popup"></div>`);
+    const root = document.getElementById("mainContainer");
+
+    root.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="popup__send-wrap">
+            <button type="button" class="popup__send u-btn u-btn--header u-btn--lg" id="send">${t("send")}</button>
+            <div id="popupAlert" class="popup__alert u-selectable" role="alert" hidden aria-live="polite"></div>
+        </div>
+    `,
+    );
+    const sendBtn = root.querySelector("#send");
+    sendBtn.addEventListener("click", () => {
+        if (sendBtn.disabled) return;
+        sendBtn.disabled = true;
+        flushSyncInputs();
+        chrome.tabs.query({ currentWindow: true, active: true }, (tabs) => {
+            const tab = tabs[0];
+            if (!tab?.id) {
+                sendBtn.disabled = false;
+                return;
+            }
+            chrome.tabs.sendMessage(tab.id, { func: "siyuanGetReadability", tabId: tab.id });
+            setTimeout(() => {
+                sendBtn.disabled = false;
+            }, 600);
+        });
+    });
+
+    root.insertAdjacentHTML("beforeend", `<div class="popup__scroll"></div>`);
+    const scroll = root.querySelector(".popup__scroll");
+
+    scroll.insertAdjacentHTML("beforeend", `<section class="popup__section popup__section--before-divide"></section>`);
+    const savePathSection = scroll.lastElementChild;
+
+    savePathSection.insertAdjacentHTML(
+        "beforeend",
+        `<h2 class="popup__section-title u-text-body u-selectable">${t("save_path")}</h2>`,
+    );
+
+    // 新增下拉菜单元素
+    savePathSection.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="popup__field">
+            ${dropdownHtml({
+                dropdownId: "savePathDropdown",
+                triggerId: "savePathDisplay",
+                panelId: "savePathMenu",
+                searchId: "savePathInput",
+                listId: "savePathOptions",
+                placeholder: t("save_path_placeholder"),
+            })}
+        </div>
+    `,
+    );
+    const savePathDisplay = savePathSection.querySelector("#savePathDisplay");
+    const savePathInput = savePathSection.querySelector("#savePathInput");
+    const savePathOptions = savePathSection.querySelector("#savePathOptions");
+    const savePathMenu = savePathSection.querySelector("#savePathMenu");
+    setSavePathDisplay(savePathDisplay, items.parentHPath || "");
+    savePathDisplay.dataset.notebook = items.notebook || "";
+    savePathDisplay.dataset.parent = items.parentDoc || "";
+    savePathInput.value = items.searchKey || "";
+    // 保存路径下拉菜单事件
+    const toggleSavePathMenu = () => {
+        const isOpen = savePathMenu.classList.contains("popup__dropdown-panel--open");
+        closeAllDropdowns();
+        if (!isOpen) {
+            savePathMenu.classList.add("popup__dropdown-panel--open");
+            savePathInput.focus();
+            void updateSearch();
+        }
+    };
+    savePathDisplay.addEventListener("click", toggleSavePathMenu);
+    savePathDisplay.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleSavePathMenu();
+        }
+    });
+    savePathInput.addEventListener("input", () => {
+        chrome.storage.sync.set({ searchKey: savePathInput.value });
+        void updateSearch();
+    });
+    savePathOptions.addEventListener("click", (e) => {
+        const item = e.target.closest(".popup__search-list-item[data-notebook]");
+        if (!item) return;
+        setSavePathDisplay(savePathDisplay, item.textContent);
+        savePathDisplay.dataset.notebook = item.getAttribute("data-notebook");
+        savePathDisplay.dataset.parent = item.getAttribute("data-parent");
+        chrome.storage.sync.set({
+            notebook: item.getAttribute("data-notebook"),
+            parentDoc: item.getAttribute("data-parent"),
+            parentHPath: item.textContent,
+        });
+        if (syncSendBlockFromLocal()) void updateSearch({ quiet: true });
+        savePathMenu.classList.remove("popup__dropdown-panel--open");
+    });
+
+    savePathSection.insertAdjacentHTML(
+        "beforeend",
+        dropdownFieldHtml("database_label", {
+            dropdownId: "databaseDropdown",
+            triggerId: "databaseDisplay",
+            panelId: "databaseMenu",
+            searchId: "databaseInput",
+            listId: "databaseOptions",
+            placeholder: t("database_search_placeholder"),
+        }),
+    );
+    const databaseDisplay = savePathSection.querySelector("#databaseDisplay");
+    const databaseInput = savePathSection.querySelector("#databaseInput");
+    const databaseOptions = savePathSection.querySelector("#databaseOptions");
+    const databaseMenu = savePathSection.querySelector("#databaseMenu");
+    databaseDisplay.textContent = items.selectedDatabaseID
+        ? items.selectedDatabaseName || ""
+        : siyuanGetMessage("database_none");
+    databaseDisplay.dataset.selectedId = items.selectedDatabaseID || "";
+    databaseInput.value = items.searchDatabaseKey || "";
+    // 数据库下拉菜单事件
+    const toggleDatabaseMenu = () => {
+        const isOpen = databaseMenu.classList.contains("popup__dropdown-panel--open");
+        closeAllDropdowns();
+        if (!isOpen) {
+            databaseMenu.classList.add("popup__dropdown-panel--open");
+            databaseInput.focus();
+            void updateDatabaseSearch();
+        }
+    };
+    databaseDisplay.addEventListener("click", toggleDatabaseMenu);
+    databaseDisplay.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleDatabaseMenu();
+        }
+    });
+    databaseInput.addEventListener("input", () => {
+        chrome.storage.sync.set({ searchDatabaseKey: databaseInput.value });
+        void updateDatabaseSearch();
+    });
+    databaseOptions.addEventListener("click", (e) => {
+        const item = e.target.closest(".popup__search-list-item[data-id]");
+        if (!item) return;
+        databaseDisplay.textContent = item.textContent;
+        chrome.storage.sync.set({
+            selectedDatabaseID: item.getAttribute("data-id"),
+            selectedDatabaseName: item.textContent,
+        });
+        databaseMenu.classList.remove("popup__dropdown-panel--open");
+    });
+
+    savePathSection.insertAdjacentHTML(
+        "beforeend",
+        fieldHtml("tags", `<input class="popup__input u-surface" id="tags" placeholder="${t("tags_placeholder")}">`),
+    );
+    const tags = savePathSection.querySelector("#tags");
+    tags.value = items.tags || "";
+    bindSyncInput(tags, "tags", {
+        normalize: (value) => value.replace(/#/g, ""),
+    });
+
+    savePathSection.insertAdjacentHTML("beforeend", switchRowHtml("assets", "assets"));
+    const assets = savePathSection.querySelector("#assets");
+    assets.checked = !!items.assets;
+    assets.addEventListener("change", () => chrome.storage.sync.set({ assets: assets.checked }));
+
+    const expOn = !!items.exp;
+
+    savePathSection.insertAdjacentHTML("beforeend", switchRowHtml("exp", "exp"));
+    const exp = savePathSection.querySelector("#exp");
+    exp.checked = expOn;
+    exp.addEventListener("change", () => {
+        savePathSection.querySelector("#expGroup").classList.toggle("popup__group--hidden", !exp.checked);
+        chrome.storage.sync.set({ exp: exp.checked });
+    });
+
+    savePathSection.insertAdjacentHTML(
+        "beforeend",
+        `<div id="expGroup" class="popup__group${expOn ? "" : " popup__group--hidden"}"></div>`,
+    );
+    const expGroup = savePathSection.querySelector("#expGroup");
+    expGroup.insertAdjacentHTML(
+        "beforeend",
+        `<p class="popup__section-caption u-text-caption u-selectable">${t("exp_tips")}</p>`,
+    );
+    for (const [labelKey, id] of [
+        ["exp_span", "expSpan"],
+        ["exp_bold", "expBold"],
+        ["exp_italic", "expItalic"],
+        ["exp_underline", "expUnderline"],
+        ["exp_remove_img_link", "expRemoveImgLink"],
+        ["exp_list_doc_tree", "expListDocTree"],
+        ["exp_open_after_clip", "expOpenAfterClip"],
+        ["exp_svg_to_img", "expSvgToImg"],
+    ]) {
+        expGroup.insertAdjacentHTML("beforeend", switchRowHtml(labelKey, id));
+        const input = expGroup.querySelector("#" + id);
+        input.checked = !!items[id];
+        input.addEventListener("change", () => chrome.storage.sync.set({ [id]: input.checked }));
+    }
+
+    savePathSection.insertAdjacentHTML("beforeend", actionRowHtml("template_config", "templateConfig", SETTINGS_SVG));
+    // 添加模板配置按钮点击事件
+    savePathSection.querySelector("#templateConfig").addEventListener("click", () => {
+        // 打开模板配置弹窗
+        chrome.storage.sync.get({ clipTemplate: SIYUAN_DEFAULT_CLIP_TEMPLATE }, (stored) => {
+            // 打开时预填充当前模板（无则回退默认）
+            document.getElementById("templateText").value = stored.clipTemplate || SIYUAN_DEFAULT_CLIP_TEMPLATE;
+        });
+        document.getElementById("templateModal").classList.add("modal--open");
+    });
+
+    scroll.insertAdjacentHTML(
+        "beforeend",
+        `<section class="popup__section popup__section--divided popup__section--before-divide"></section>`,
+    );
+    const connSection = scroll.lastElementChild;
+
+    connSection.insertAdjacentHTML(
+        "beforeend",
+        fieldHtml(
+            "siyuan_url",
+            `<input class="popup__input u-surface" id="ip" placeholder="${escapeHtml(SIYUAN_DEFAULT_KERNEL_IP)}">`,
+        ),
+    );
+    const ip = connSection.querySelector("#ip");
+    ip.value = items.ip?.trim() ? siyuanNormalizeBaseInput(items.ip) : "";
+    bindSyncInput(ip, "ip", {
+        normalize: siyuanNormalizeBaseInput,
+        normalizeOnFlush: siyuanNormalizeBase,
+        onSaved: () => {
+            if (syncSendBlockFromLocal()) void updateSearch({ quiet: true });
+        },
+    });
+
+    connSection.insertAdjacentHTML(
+        "beforeend",
+        passwordFieldHtml("api_token", { inputId: "token", toggleId: "tokenToggle" }),
+    );
+    const token = connSection.querySelector("#token");
+    const tokenToggle = connSection.querySelector("#tokenToggle");
+    token.value = items.token || "";
+    bindSyncInput(token, "token", {
+        onSaved: () => {
+            if (syncSendBlockFromLocal()) void updateSearch({ quiet: true });
+        },
+    });
+    tokenToggle.addEventListener("click", () => {
+        if (token.type === "password") {
+            token.type = "text";
+            tokenToggle.innerHTML = svgIcon("iconEyeoff", "popup__icon");
+        } else {
+            token.type = "password";
+            tokenToggle.innerHTML = svgIcon("iconEye", "popup__icon");
+        }
+    });
+
+    scroll.insertAdjacentHTML("beforeend", `<section class="popup__section popup__section--divided"></section>`);
+    const settingsSection = scroll.lastElementChild;
+
+    settingsSection.insertAdjacentHTML("beforeend", switchRowHtml("dirsFirst", "dirsFirst"));
+    const dirsFirst = settingsSection.querySelector("#dirsFirst");
+    dirsFirst.checked = !!items.dirsFirst;
+    dirsFirst.addEventListener("change", () => {
+        chrome.storage.sync.set({ dirsFirst: dirsFirst.checked });
+        if (savePathMenu.classList.contains("popup__dropdown-panel--open")) void updateSearch();
+    });
+
+    settingsSection.insertAdjacentHTML("beforeend", switchRowHtml("show_tip", "showTip"));
+    const showTip = settingsSection.querySelector("#showTip");
+    showTip.checked = !!items.showTip;
+    showTip.addEventListener("change", () => chrome.storage.sync.set({ showTip: showTip.checked }));
+
+    settingsSection.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="popup__row">
+            <span class="popup__row-label u-text-body u-selectable">${t("language")}</span>
+            <select class="popup__select u-surface" id="language"></select>
+        </div>
+    `,
+    );
+    const language = settingsSection.querySelector("#language");
+    SIYUAN_LANG_OPTIONS.forEach(([value, label]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        if (value === items.langCode) option.selected = true;
+        language.appendChild(option);
+    });
+    language.addEventListener("change", () => {
+        void reloadPopup(language.value);
+    });
+
+    document.body.insertAdjacentHTML("beforeend", `<div class="modal" id="templateModal"></div>`);
+    const templateModal = document.getElementById("templateModal");
+
+    // 添加模板变量帮助提示
+    templateModal.insertAdjacentHTML(
+        "beforeend",
+        `
+        <div class="modal__panel">
+            <button type="button" class="modal__close u-icon-btn u-focus-ring" id="closeTemplate" aria-label="Close">×</button>
+            <h2 class="modal__title u-text-heading u-selectable">${t("template_config")}</h2>
+            <div class="modal__body">
+                <textarea class="modal__textarea u-surface" id="templateText"></textarea>
+                <p class="modal__help u-text-caption u-selectable" id="templateHelp">${siyuanLangData?.template_help?.message || ""}</p>
+            </div>
+            <div class="modal__actions">
+                <button type="button" class="popup__btn u-btn u-btn--secondary" id="restoreTemplate">${t("template_restore_default")}</button>
+                <button type="button" class="popup__btn u-btn u-btn--secondary" id="cancelTemplate">${t("template_cancel")}</button>
+                <button type="button" class="popup__btn u-btn u-btn--primary" id="saveTemplate">${t("template_save")}</button>
+            </div>
+        </div>
+    `,
+    );
+    const templateText = templateModal.querySelector("#templateText");
+    templateText.value = items.clipTemplate || "";
+    // 添加模板保存按钮事件
+    templateModal.querySelector("#saveTemplate").addEventListener("click", () => {
+        chrome.storage.sync.set({ clipTemplate: templateText.value }, closeTemplateModal);
+    });
+    // 添加模板恢复默认按钮事件
+    templateModal.querySelector("#restoreTemplate").addEventListener("click", () => {
+        templateText.value = SIYUAN_DEFAULT_CLIP_TEMPLATE;
+        chrome.storage.sync.set({ clipTemplate: SIYUAN_DEFAULT_CLIP_TEMPLATE });
+    });
+    // 添加模板取消按钮事件
+    templateModal.querySelector("#cancelTemplate").addEventListener("click", closeTemplateModal);
+    // 添加关闭模板配置弹窗按钮事件
+    templateModal.querySelector("#closeTemplate").addEventListener("click", closeTemplateModal);
+    templateModal.addEventListener("click", (e) => {
+        if (e.target === templateModal) closeTemplateModal();
+    });
+
+    applyPopupLayout();
+    syncSendBlockFromLocal();
+}
+
+async function bootstrapPopup() {
+    try {
+        const items = await chrome.storage.sync.get({
+            ...SIYUAN_STORAGE_DEFAULTS,
+            langCode: siyuanGetDefaultLangCode(),
+            clipTemplate: SIYUAN_DEFAULT_CLIP_TEMPLATE,
+        });
+        await siyuanLoadLanguageFile(items.langCode);
+        renderPopup(items);
+        // 点击其他地方关闭下拉菜单
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest(".popup__dropdown")) closeAllDropdowns();
+        });
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closeAllDropdowns();
+                closeTemplateModal();
+            }
+        });
+        if (items.token?.trim()) void updateSearch({ quiet: true });
+        void updateDatabaseSearch({ quiet: true });
+    } catch (e) {
+        console.error(e);
+    } finally {
+        document.body.classList.add("popup-ready");
+    }
+}
+
+void bootstrapPopup();
+
+const querySql = async (sql) => {
+    const ipElement = document.getElementById("ip");
+    const tokenElement = document.getElementById("token");
+    const result = await siyuanKernelFetch({
+        ip: ipElement.value,
+        token: tokenElement.value,
+        path: "/api/query/sql",
+        body: { stmt: sql || "" },
+    });
+    if (!result.ok) {
+        setSendBlockKey(result.error);
+        return [];
+    }
+    if (syncSendBlockFromLocal()) setSendBlock("");
+    if (!result.data || result.data.code !== 0 || !Array.isArray(result.data.data)) {
+        return [];
+    }
+    return result.data.data;
+};
+
+const getSubDocNumByPaths = async (paths) => {
+    const normalizedPaths = paths.map((p) => (p.startsWith("/") ? p : "/" + p));
+    // 路径来自内核搜索结果，拼接 SQL 时需转义单引号
+    const caseFields = normalizedPaths
+        .map((p) => `SUM(CASE WHEN path LIKE '${p.replace(/'/g, "''")}%' THEN 1 ELSE 0 END) AS '${p}.sy'`)
+        .join(", ");
+    const likeConditions = normalizedPaths.map((p) => `path LIKE '${p.replace(/'/g, "''")}%'`).join(" OR ");
+    const excludeConditions = normalizedPaths.map((p) => `path <> '${p.replace(/'/g, "''")}.sy'`).join(" AND ");
+    // 拼成单行 SQL，避免模板字符串换行问题
+    const sql =
+        "SELECT " +
+        caseFields +
+        ", box FROM blocks WHERE type = 'd' AND (" +
+        excludeConditions +
+        ") AND (" +
+        likeConditions +
+        ") GROUP BY box;";
+    const res = await querySql(sql);
+    const result = {};
+    for (const row of res) {
+        const { box, ...counts } = row;
+        result[box] = counts;
+    }
+    return result;
+};
+
+/** 统一搜索结果 path 键格式（前导 `/` + `.sy` 后缀），与 SQL 别名对齐 */
+function normalizeSearchResultPath(path) {
+    let p = String(path || "").trim();
+    if (!p) return "";
+    if (!p.endsWith(".sy")) p += ".sy";
+    if (!p.startsWith("/")) p = "/" + p;
+    return p;
+}
+
+// 算法 复杂度O(n)
+// 1 获取sql查询所有path和子文档的映射，格式化成 {"<box>": {"<path>": <num>}} 格式
+// 2 将api结果中的path和映射对比，如果path子文档数>0则是目录，前置
+const sortSearchResults = async (data) => {
+    if (!data || !Array.isArray(data) || data.length === 0) return data;
+    // 未开启目录优先则返回原始数据
+    const dirsFirstElement = document.getElementById("dirsFirst");
+    if (!dirsFirstElement.checked) return data;
+    // 获取所有文档path
+    const paths = data.map((item) => item.path.replace(".sy", ""));
+    // 获取path子文档数映射
+    const pathMap = await getSubDocNumByPaths(paths);
+    // 前置所有匹配到的目录
+    const front = []; // 存放前置目录
+    const rest = []; // 其他保留原序
+    for (const item of data) {
+        const pathKey = normalizeSearchResultPath(item.path);
+        if ((pathMap[item?.box]?.[pathKey] || 0) > 0) front.push(item);
+        else rest.push(item);
+    }
+    // 合并：前置项 + 剩余项，均保持原始顺序
+    return front.concat(rest);
+};
+
+const updateSearch = async ({ quiet = false } = {}) => {
+    const ipElement = document.getElementById("ip");
+    const tokenElement = document.getElementById("token");
+    const savePathInput = document.getElementById("savePathInput");
+    const savePathOptions = document.getElementById("savePathOptions");
+    const savePathDisplay = document.getElementById("savePathDisplay");
+    if (!ipElement || !tokenElement || !savePathOptions) return;
+
+    const gen = ++savePathSearchGen;
+    const token = tokenElement.value.trim();
+    if (!token) {
+        savePathOptions.innerHTML = "";
+        syncSendBlockFromLocal();
+        return;
+    }
+
+    const result = await siyuanKernelFetch({
+        ip: ipElement.value,
+        token: tokenElement.value,
+        path: "/api/filetree/searchDocs",
+        body: { k: savePathInput.value || "", flashcard: false },
+    });
+    if (gen !== savePathSearchGen) return;
+
+    if (!result.ok) {
+        savePathOptions.innerHTML = "";
+        setSendBlockKey(result.error);
+        return;
+    }
+    if (syncSendBlockFromLocal()) setSendBlock("");
+    if (!result.data || result.data.code !== 0 || !Array.isArray(result.data.data)) {
+        savePathOptions.innerHTML = "";
+        return;
+    }
+
+    let optionsHTML = "";
+    let selectedHPath = "";
+    const searchList = await sortSearchResults(result.data.data);
+    if (gen !== savePathSearchGen) return;
+
+    searchList.forEach((doc) => {
+        const parentDoc = String(doc.path)
+            .substring(String(doc.path).lastIndexOf("/") + 1)
+            .replace(".sy", "");
+        if (
+            savePathDisplay.dataset.notebook === doc.box &&
+            savePathDisplay.dataset.parent === parentDoc &&
+            savePathDisplay.dataset.parentHPath === doc.hPath
+        ) {
+            selectedHPath = doc.hPath;
+        }
+        optionsHTML += `<li class="popup__search-list-item" data-notebook="${doc.box}" data-parent="${parentDoc}">${escapeHtml(doc.hPath)}</li>`;
+    });
+    savePathOptions.innerHTML =
+        optionsHTML || `<li class="popup__search-list-item popup__search-list-item--hint">${t("save_path_none")}</li>`;
+    // 如果有选中的，更新显示
+    if (selectedHPath) setSavePathDisplay(savePathDisplay, selectedHPath);
+};
+
+const updateDatabaseSearch = async ({ quiet = false } = {}) => {
+    const ipElement = document.getElementById("ip");
+    const tokenElement = document.getElementById("token");
+    const databaseInput = document.getElementById("databaseInput");
+    const databaseOptions = document.getElementById("databaseOptions");
+    const databaseDisplay = document.getElementById("databaseDisplay");
+    if (!ipElement || !tokenElement || !databaseOptions) return;
+
+    const gen = ++databaseSearchGen;
+    const token = tokenElement.value.trim();
+    if (!token) {
+        databaseOptions.innerHTML = "";
+        return;
+    }
+
+    const result = await siyuanKernelFetch({
+        ip: ipElement.value,
+        token: tokenElement.value,
+        path: "/api/av/searchAttributeView",
+        body: { avID: "", keyword: databaseInput.value }, // Search in all AVs
+    });
+    if (gen !== databaseSearchGen) return;
+
+    if (!result.ok) {
+        databaseOptions.innerHTML = "";
+        if (!quiet && (result.error === "tip_token_invalid" || result.error === "tip_siyuan_kernel_unavailable")) {
+            setSendBlockKey(result.error);
+        }
+        return;
+    }
+
+    const response = result.data;
+    if (!response || response.code !== 0) {
+        databaseOptions.innerHTML = "";
+        return;
+    }
+
+    let optionsHTML = "";
+    if (!databaseInput.value.trim()) {
+        optionsHTML = `<li class="popup__search-list-item" data-id="">${escapeHtml(siyuanGetMessage("database_none"))}</li>`;
+    }
+    let selectedName = "";
+    if (response.data && response.data.results) {
+        response.data.results.forEach((db) => {
+            if (!db.avName) return;
+            if (databaseDisplay.dataset.selectedId === db.avID) {
+                selectedName = db.avName;
+            }
+            optionsHTML += `<li class="popup__search-list-item" data-id="${db.avID}">${escapeHtml(db.avName)}</li>`;
+        });
+    }
+    databaseOptions.innerHTML =
+        optionsHTML || `<li class="popup__search-list-item popup__search-list-item--hint">${t("save_path_none")}</li>`;
+    // 如果有选中的，更新显示
+    if (selectedName) databaseDisplay.textContent = selectedName;
+};

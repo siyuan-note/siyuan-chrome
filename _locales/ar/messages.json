@@ -71,6 +71,12 @@
   "send": {
     "message": "إرسال إلى سييوان"
   },
+  "command_copy_to_siyuan": {
+    "message": "نسخ النص المحدد إلى SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "قص الصفحة بأكملها إلى SiYuan"
+  },
   "tip_first_time": {
     "message": "بعد تثبيت الإضافة لأول مرة، يُرجى تحديث الصفحة قبل استخدامها"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "لم يتم تحديد أي نص، يرجى تحديد المحتوى الذي تريد نسخه"
   },
+  "tip_readability_failed": {
+    "message": "تعذر استخراج محتوى المقال من هذه الصفحة"
+  },
   "template_config": {
     "message": "إعداد قالب القص"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "إلغاء"
-  },
-  "template_saved": {
-    "message": "تم حفظ القالب بنجاح"
   },
   "template_help": {
     "message": "المتغيرات المتاحة:<br>${title} - عنوان الصفحة<br>${url} - رابط الصفحة<br>${siteName} - اسم الموقع<br>${date} - التاريخ الحالي (yyyy-MM-dd)<br>${time} - الوقت الحالي (HH:mm)<br>${tags} - العلامات<br>${excerpt} - مقتطف من الصفحة<br>${content} - محتوى الصفحة"

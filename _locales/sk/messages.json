@@ -71,6 +71,12 @@
   "send": {
     "message": "Odoslať do SiYuan"
   },
+  "command_copy_to_siyuan": {
+    "message": "Kopírovať vybraný text do SiYuan"
+  },
+  "command_send_to_siyuan": {
+    "message": "Orezať celú stránku do SiYuan"
+  },
   "tip_first_time": {
     "message": "Po prvej inštalácii rozšírenia SiYuan obnovte stránku pred použitím"
   },
@@ -98,6 +104,9 @@
   "tip_no_selection": {
     "message": "Nie je vybratý žiadny text, najprv vyberte obsah na skopírovanie"
   },
+  "tip_readability_failed": {
+    "message": "Nepodarilo sa extrahovať obsah článku z tejto stránky"
+  },
   "template_config": {
     "message": "Konfigurácia šablóny orezávania"
   },
@@ -106,9 +115,6 @@
   },
   "template_cancel": {
     "message": "Zrušiť"
-  },
-  "template_saved": {
-    "message": "Šablóna bola úspešne uložená"
   },
   "template_help": {
     "message": "Dostupné premenné:<br>${title} - Názov stránky<br>${url} - URL stránky<br>${siteName} - Názov webu<br>${date} - Aktuálny dátum (rrrr-MM-dd)<br>${time} - Aktuálny čas (HH:mm)<br>${tags} - Tagy<br>${excerpt} - Úryvok stránky<br>${content} - Obsah stránky"
