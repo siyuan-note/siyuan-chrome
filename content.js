@@ -561,7 +561,7 @@ async function siyuanSvgToBase64(svgNode) {
         svgStr = '<?xml version="1.0" encoding="UTF-8"?>' + svgStr;
     }
 
-    const svgBlob = new Blob([svgStr], { type: "image/svg+xml" });
+    const svgBlob = new Blob([svgStr], {type: "image/svg+xml"});
 
     const dataUrl = await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -706,11 +706,6 @@ async function siyuanGetCloneNode(tempDoc) {
     simplifyNestedTags(tempDoc, "B");
     simplifyNestedTags(tempDoc, "I");
     simplifyNestedTags(tempDoc, "EM");
-    simplifyNestedTags(tempDoc, "DIV");
-    simplifyNestedTags(tempDoc, "SPAN");
-    simplifyNestedTags(tempDoc, "SECTION");
-    simplifyNestedTags(tempDoc, "ARTICLE");
-    simplifyNestedTags(tempDoc, "P");
 
     // 如果公式被嵌套包裹，则去掉外层包裹 https://github.com/siyuan-note/siyuan/issues/14382
     const mathElements = tempDoc.querySelectorAll(".ztext-math");
@@ -800,7 +795,8 @@ const setMathJaxDataFormula = () => {
         const cleanUp = () => {
             try {
                 script.remove();
-            } catch (e) {}
+            } catch (e) {
+            }
             resolve();
         };
 
@@ -832,7 +828,7 @@ const siyuanEnsureClipReady = async () => {
             },
         });
     } catch (e) {
-        result = { ok: false, error: "tip_siyuan_kernel_unavailable" };
+        result = {ok: false, error: "tip_siyuan_kernel_unavailable"};
     }
 
     if (!result.ok) {
@@ -990,7 +986,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href,
     if (srcList.length > 0) {
         void siyuanShowTipByKey("tip_clipping");
     }
-    chrome.runtime.sendMessage({ func: "upload-copy", data: msgJSON });
+    chrome.runtime.sendMessage({func: "upload-copy", data: msgJSON});
 };
 
 const copyToClipboard = async (textToCopy) => {
