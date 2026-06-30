@@ -364,6 +364,8 @@ async function handleUploadCopy(requestData) {
     formData.append("href", requestData.href);
     formData.append("tags", requestData.tags);
     formData.append("clipType", requestData.type);
+    // 透传“下载资源”开关，链滴/流云整页剪藏时由内核按此开关决定是否下载网络资源到本地
+    formData.append("assets", requestData.assets);
 
     try {
         const copyHttpResponse = await fetch(apiBase + "/api/extension/copy", {
