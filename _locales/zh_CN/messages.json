@@ -20,8 +20,23 @@
   "save_path": {
     "message": "保存路径"
   },
-  "save_path_placeholder": {
-    "message": "输入关键字搜索保存路径"
+  "notebook_label": {
+    "message": "笔记本"
+  },
+  "notebook_placeholder": {
+    "message": "请选择笔记本"
+  },
+  "save_path_template": {
+    "message": "模板路径"
+  },
+  "save_path_template_help": {
+    "message": "例如：/剪藏/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "保存位置预览"
+  },
+  "save_path_preview_title": {
+    "message": "文章标题"
   },
   "tags": {
     "message": "标签"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "下载资源"
-  },
-  "dirsFirst": {
-    "message": "路径搜索时目录优先显示"
   },
   "exp": {
     "message": "显示实验性特性"

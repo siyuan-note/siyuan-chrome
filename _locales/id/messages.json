@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Jalur simpan"
   },
-  "save_path_placeholder": {
-    "message": "Masukkan kata kunci untuk mencari jalur simpan"
+  "notebook_label": {
+    "message": "Buku catatan"
+  },
+  "notebook_placeholder": {
+    "message": "Pilih buku catatan"
+  },
+  "save_path_template": {
+    "message": "Templat jalur"
+  },
+  "save_path_template_help": {
+    "message": "Contoh: /Kliping/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Pratinjau lokasi penyimpanan"
+  },
+  "save_path_preview_title": {
+    "message": "Judul artikel"
   },
   "tags": {
     "message": "Tag"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Aset"
-  },
-  "dirsFirst": {
-    "message": "Tampilkan direktori terlebih dahulu dalam pencarian jalur"
   },
   "exp": {
     "message": "Tampilkan fitur eksperimental"

@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Speicherort"
   },
-  "save_path_placeholder": {
-    "message": "Geben Sie ein Stichwort ein, um den Speicherpfad zu suchen"
+  "notebook_label": {
+    "message": "Notizbuch"
+  },
+  "notebook_placeholder": {
+    "message": "Notizbuch auswählen"
+  },
+  "save_path_template": {
+    "message": "Pfadvorlage"
+  },
+  "save_path_template_help": {
+    "message": "Beispiel: /Ausschnitte/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Vorschau des Speicherorts"
+  },
+  "save_path_preview_title": {
+    "message": "Artikeltitel"
   },
   "tags": {
     "message": "Tags"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Assets herunterladen"
-  },
-  "dirsFirst": {
-    "message": "Ordner zuerst bei der Pfadsuche"
   },
   "exp": {
     "message": "Experimentelle Funktionen anzeigen"

@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Opslagpad"
   },
-  "save_path_placeholder": {
-    "message": "Voer een trefwoord in om het opslagpad te zoeken"
+  "notebook_label": {
+    "message": "Notitieboek"
+  },
+  "notebook_placeholder": {
+    "message": "Selecteer een notitieboek"
+  },
+  "save_path_template": {
+    "message": "Padsjabloon"
+  },
+  "save_path_template_help": {
+    "message": "Voorbeeld: /Knipsels/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Voorbeeld van opslaglocatie"
+  },
+  "save_path_preview_title": {
+    "message": "Artikeltitel"
   },
   "tags": {
     "message": "Tags"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Assets"
-  },
-  "dirsFirst": {
-    "message": "Toon mappen eerst bij pad zoeken"
   },
   "exp": {
     "message": "Toon experimentele functies"

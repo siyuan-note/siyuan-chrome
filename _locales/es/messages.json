@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Ruta de guardado"
   },
-  "save_path_placeholder": {
-    "message": "Ingrese una palabra clave para buscar la ruta de guardado"
+  "notebook_label": {
+    "message": "Cuaderno"
+  },
+  "notebook_placeholder": {
+    "message": "Selecciona un cuaderno"
+  },
+  "save_path_template": {
+    "message": "Plantilla de ruta"
+  },
+  "save_path_template_help": {
+    "message": "Ejemplo: /Recortes/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Vista previa de la ubicación"
+  },
+  "save_path_preview_title": {
+    "message": "Título del artículo"
   },
   "tags": {
     "message": "Etiquetas"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Descargar recursos"
-  },
-  "dirsFirst": {
-    "message": "Carpetas primero en búsqueda de rutas"
   },
   "exp": {
     "message": "Mostrar características experimentales"

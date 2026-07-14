@@ -219,16 +219,40 @@ async function siyuanCheckKernel({ ip, token, notebook }) {
     const result = await siyuanKernelFetch({
         ip,
         token,
-        path: "/api/filetree/searchDocs",
-        body: {
-            k: "",
-            flashcard: false,
-        },
+        path: "/api/notebook/lsNotebooks",
+        body: {},
     });
     if (!result.ok) {
         return result;
     }
+    const notebooks = result.data?.data?.notebooks;
+    if (!Array.isArray(notebooks) || !notebooks.some((item) => item.id === notebook && !item.closed)) {
+        return { ok: false, error: "tip_save_path_miss" };
+    }
     return { ok: true };
+}
+
+function normalizeClipDocumentPath(parentPath, title) {
+    let path = String(parentPath || "").trim().replaceAll("\\", "/");
+    path = path.replace(/\/{2,}/g, "/");
+    if (!path.startsWith("/")) path = "/" + path;
+    if (path.length > 1) path = path.replace(/\/+$/, "");
+    return (path === "/" ? "" : path) + "/" + title;
+}
+
+async function renderClipDocumentPath(requestData, title) {
+    const result = await siyuanKernelFetch({
+        ip: requestData.api,
+        token: requestData.token,
+        path: "/api/template/renderSprig",
+        body: { template: requestData.savePathTemplate || SIYUAN_DEFAULT_SAVE_PATH_TEMPLATE },
+    });
+    if (!result.ok) return result;
+    if (!result.data || result.data.code !== 0) {
+        if (result.data?.msg) return { ok: false, message: result.data.msg };
+        return { ok: false, error: "tip_siyuan_kernel_unavailable" };
+    }
+    return { ok: true, path: normalizeClipDocumentPath(result.data.data, title) };
 }
 
 function storageSyncGet(defaults) {
@@ -269,7 +293,21 @@ async function addClippedDocToDatabase(apiBase, token, docId, databaseID) {
 
 async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
     let title = requestData.title ? requestData.title : "Untitled";
-    title = title.replaceAll("/", "／");
+    title = title.replace(/[\\/]/g, "／");
+
+    const renderedPath = await renderClipDocumentPath(requestData, title);
+    if (!renderedPath.ok) {
+        safeTabsSendMessage(requestData.tabId, renderedPath.error ? {
+            func: "tipKey",
+            msg: renderedPath.error,
+            tip: requestData.tip,
+        } : {
+            func: "tip",
+            msg: renderedPath.message,
+            tip: requestData.tip,
+        });
+        return;
+    }
 
     const { clipTemplate } = await storageSyncGet({ clipTemplate: SIYUAN_DEFAULT_CLIP_TEMPLATE });
     const markdown = buildClipMarkdown(requestData, copyData.md, clipTemplate);
@@ -280,9 +318,8 @@ async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
         path: "/api/filetree/createDocWithMd",
         body: {
             notebook: requestData.notebook,
-            parentID: requestData.parentDoc,
             tags: requestData.tags,
-            path: requestData.parentHPath + "/" + title,
+            path: renderedPath.path,
             markdown: markdown,
             withMath: copyData.withMath,
             clippingHref: requestData.href,
@@ -359,8 +396,6 @@ async function handleUploadCopy(requestData) {
         formData.append(key, await base64Response.blob());
     }
     formData.append("notebook", requestData.notebook);
-    formData.append("parentID", requestData.parentDoc);
-    formData.append("parentHPath", requestData.parentHPath);
     formData.append("href", requestData.href);
     formData.append("tags", requestData.tags);
     formData.append("clipType", requestData.type);

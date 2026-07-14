@@ -20,8 +20,23 @@
   "save_path": {
     "message": "נתיב שמירה"
   },
-  "save_path_placeholder": {
-    "message": "הזן מילת מפתח לחיפוש נתיב שמירה"
+  "notebook_label": {
+    "message": "מחברת"
+  },
+  "notebook_placeholder": {
+    "message": "בחר מחברת"
+  },
+  "save_path_template": {
+    "message": "תבנית נתיב"
+  },
+  "save_path_template_help": {
+    "message": "דוגמה: /קטעים/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "תצוגה מקדימה של מיקום השמירה"
+  },
+  "save_path_preview_title": {
+    "message": "כותרת המאמר"
   },
   "tags": {
     "message": "תגים"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "הורד משאבים"
-  },
-  "dirsFirst": {
-    "message": "הצג תיקיות תחילה בחיפוש נתיב"
   },
   "exp": {
     "message": "הצג תכונות ניסיוניות"

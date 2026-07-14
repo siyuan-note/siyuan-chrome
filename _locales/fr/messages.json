@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Chemin de sauvegarde"
   },
-  "save_path_placeholder": {
-    "message": "Entrez un mot-clé pour rechercher le chemin d’enregistrement"
+  "notebook_label": {
+    "message": "Carnet"
+  },
+  "notebook_placeholder": {
+    "message": "Sélectionner un carnet"
+  },
+  "save_path_template": {
+    "message": "Modèle de chemin"
+  },
+  "save_path_template_help": {
+    "message": "Exemple : /Captures/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Aperçu de l’emplacement"
+  },
+  "save_path_preview_title": {
+    "message": "Titre de l’article"
   },
   "tags": {
     "message": "Tags"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Télécharger les ressources"
-  },
-  "dirsFirst": {
-    "message": "Dossiers d'abord dans la recherche de chemin"
   },
   "exp": {
     "message": "Afficher les fonctionnalités expérimentales"

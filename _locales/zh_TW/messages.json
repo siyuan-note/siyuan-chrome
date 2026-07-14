@@ -20,8 +20,23 @@
   "save_path": {
     "message": "儲存路徑"
   },
-  "save_path_placeholder": {
-    "message": "輸入關鍵字搜尋保存路徑"
+  "notebook_label": {
+    "message": "筆記本"
+  },
+  "notebook_placeholder": {
+    "message": "請選擇筆記本"
+  },
+  "save_path_template": {
+    "message": "範本路徑"
+  },
+  "save_path_template_help": {
+    "message": "例如：/剪藏/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "儲存位置預覽"
+  },
+  "save_path_preview_title": {
+    "message": "文章標題"
   },
   "tags": {
     "message": "標籤"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "下載資源"
-  },
-  "dirsFirst": {
-    "message": "路徑搜尋時目錄優先顯示"
   },
   "exp": {
     "message": "顯示實驗性特性"

@@ -20,8 +20,23 @@
   "save_path": {
     "message": "保存先"
   },
-  "save_path_placeholder": {
-    "message": "保存先パスを検索するキーワードを入力"
+  "notebook_label": {
+    "message": "ノートブック"
+  },
+  "notebook_placeholder": {
+    "message": "ノートブックを選択"
+  },
+  "save_path_template": {
+    "message": "パステンプレート"
+  },
+  "save_path_template_help": {
+    "message": "例：/クリッピング/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "保存先のプレビュー"
+  },
+  "save_path_preview_title": {
+    "message": "記事タイトル"
   },
   "tags": {
     "message": "タグ"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "リソースをダウンロード"
-  },
-  "dirsFirst": {
-    "message": "パス検索でフォルダを優先表示"
   },
   "exp": {
     "message": "実験的な機能を表示"

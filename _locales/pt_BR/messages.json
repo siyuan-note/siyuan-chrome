@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Caminho de salvamento"
   },
-  "save_path_placeholder": {
-    "message": "Digite uma palavra-chave para pesquisar o caminho de salvamento"
+  "notebook_label": {
+    "message": "Caderno"
+  },
+  "notebook_placeholder": {
+    "message": "Selecione um caderno"
+  },
+  "save_path_template": {
+    "message": "Modelo de caminho"
+  },
+  "save_path_template_help": {
+    "message": "Exemplo: /Recortes/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Prévia do local de salvamento"
+  },
+  "save_path_preview_title": {
+    "message": "Título do artigo"
   },
   "tags": {
     "message": "Tags"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Ativos"
-  },
-  "dirsFirst": {
-    "message": "Mostrar diretórios primeiro na busca de caminho"
   },
   "exp": {
     "message": "Mostrar funcionalidades experimentais"

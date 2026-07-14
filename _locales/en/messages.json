@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Save path"
   },
-  "save_path_placeholder": {
-    "message": "Enter a keyword to search for the save path"
+  "notebook_label": {
+    "message": "Notebook"
+  },
+  "notebook_placeholder": {
+    "message": "Select a notebook"
+  },
+  "save_path_template": {
+    "message": "Path template"
+  },
+  "save_path_template_help": {
+    "message": "Example: /Clippings/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Save location preview"
+  },
+  "save_path_preview_title": {
+    "message": "Article title"
   },
   "tags": {
     "message": "Tags"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Download assets"
-  },
-  "dirsFirst": {
-    "message": "Show directories first in path search"
   },
   "exp": {
     "message": "Show experimental features"

@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Cesta uloženia"
   },
-  "save_path_placeholder": {
-    "message": "Zadajte kľúčové slovo na vyhľadanie cesty uloženia"
+  "notebook_label": {
+    "message": "Zápisník"
+  },
+  "notebook_placeholder": {
+    "message": "Vyberte zápisník"
+  },
+  "save_path_template": {
+    "message": "Šablóna cesty"
+  },
+  "save_path_template_help": {
+    "message": "Príklad: /Výstrižky/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Náhľad umiestnenia"
+  },
+  "save_path_preview_title": {
+    "message": "Názov článku"
   },
   "tags": {
     "message": "Tagy"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Prílohy"
-  },
-  "dirsFirst": {
-    "message": "Pri vyhľadávaní cesty zobraziť najprv priečinky"
   },
   "exp": {
     "message": "Zobraziť experimentálne funkcie"

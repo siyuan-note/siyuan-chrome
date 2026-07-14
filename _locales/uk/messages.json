@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Шлях збереження"
   },
-  "save_path_placeholder": {
-    "message": "Введіть ключове слово для пошуку шляху збереження"
+  "notebook_label": {
+    "message": "Нотатник"
+  },
+  "notebook_placeholder": {
+    "message": "Виберіть нотатник"
+  },
+  "save_path_template": {
+    "message": "Шаблон шляху"
+  },
+  "save_path_template_help": {
+    "message": "Приклад: /Вирізки/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Попередній перегляд місця збереження"
+  },
+  "save_path_preview_title": {
+    "message": "Заголовок статті"
   },
   "tags": {
     "message": "Теги"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Файли"
-  },
-  "dirsFirst": {
-    "message": "Показувати спочатку каталоги при пошуку шляху"
   },
   "exp": {
     "message": "Показати експериментальні функції"

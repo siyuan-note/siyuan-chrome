@@ -808,10 +808,7 @@ const setMathJaxDataFormula = () => {
     });
 };
 
-const siyuanGetClipSettings = () =>
-    new Promise((resolve) => {
-        chrome.storage.sync.get(SIYUAN_STORAGE_DEFAULTS, resolve);
-    });
+const siyuanGetClipSettings = () => siyuanLoadStorageSettings();
 
 /** @returns {Promise<object | null>} 配置与内核均就绪时返回 settings */
 const siyuanEnsureClipReady = async () => {
@@ -838,14 +835,6 @@ const siyuanEnsureClipReady = async () => {
 
     return items;
 };
-
-/** 规范化上传用的 parentHPath（去掉笔记本根路径前缀） */
-function siyuanNormalizeParentHPath(parentHPath) {
-    const path = (parentHPath || "").trim();
-    if (!path) return "";
-    const slashIdx = path.indexOf("/");
-    return slashIdx >= 0 ? path.substring(slashIdx) : path;
-}
 
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href, clipItems) => {
     const items = clipItems || (await siyuanGetClipSettings());
@@ -969,8 +958,7 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href,
         api: items.ip,
         token: items.token,
         notebook: items.notebook,
-        parentDoc: items.parentDoc,
-        parentHPath: siyuanNormalizeParentHPath(items.parentHPath),
+        savePathTemplate: items.savePathTemplate,
         tags: items.tags,
         assets: items.assets,
         tip: items.showTip,

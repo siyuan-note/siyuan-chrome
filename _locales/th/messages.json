@@ -20,8 +20,23 @@
   "save_path": {
     "message": "เส้นทางบันทึก"
   },
-  "save_path_placeholder": {
-    "message": "ป้อนคำสำคัญเพื่อค้นหาเส้นทางบันทึก"
+  "notebook_label": {
+    "message": "สมุดบันทึก"
+  },
+  "notebook_placeholder": {
+    "message": "เลือกสมุดบันทึก"
+  },
+  "save_path_template": {
+    "message": "แม่แบบเส้นทาง"
+  },
+  "save_path_template_help": {
+    "message": "ตัวอย่าง: /คลิป/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "ตัวอย่างตำแหน่งบันทึก"
+  },
+  "save_path_preview_title": {
+    "message": "ชื่อบทความ"
   },
   "tags": {
     "message": "แท็ก"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "ทรัพยากร"
-  },
-  "dirsFirst": {
-    "message": "แสดงไดเรกทอรีก่อนในการค้นหาเส้นทาง"
   },
   "exp": {
     "message": "แสดงคุณสมบัติทดลอง"

@@ -20,8 +20,23 @@
   "save_path": {
     "message": "सहेजने का पथ"
   },
-  "save_path_placeholder": {
-    "message": "सहेजने का पथ खोजने के लिए एक कीवर्ड दर्ज करें"
+  "notebook_label": {
+    "message": "नोटबुक"
+  },
+  "notebook_placeholder": {
+    "message": "नोटबुक चुनें"
+  },
+  "save_path_template": {
+    "message": "पथ टेम्पलेट"
+  },
+  "save_path_template_help": {
+    "message": "उदाहरण: /क्लिपिंग्स/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "सहेजने के स्थान का पूर्वावलोकन"
+  },
+  "save_path_preview_title": {
+    "message": "लेख का शीर्षक"
   },
   "tags": {
     "message": "टैग"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "एसेट्स"
-  },
-  "dirsFirst": {
-    "message": "पथ खोज में पहले निर्देशिकाएं दिखाएं"
   },
   "exp": {
     "message": "प्रायोगिक सुविधाएं दिखाएं"

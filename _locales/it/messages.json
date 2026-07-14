@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Percorso di salvataggio"
   },
-  "save_path_placeholder": {
-    "message": "Inserisci una parola chiave per cercare il percorso di salvataggio"
+  "notebook_label": {
+    "message": "Taccuino"
+  },
+  "notebook_placeholder": {
+    "message": "Seleziona un taccuino"
+  },
+  "save_path_template": {
+    "message": "Modello di percorso"
+  },
+  "save_path_template_help": {
+    "message": "Esempio: /Ritagli/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Anteprima della posizione"
+  },
+  "save_path_preview_title": {
+    "message": "Titolo dell’articolo"
   },
   "tags": {
     "message": "Tag"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Scarica risorse"
-  },
-  "dirsFirst": {
-    "message": "Cartelle prime nella ricerca percorso"
   },
   "exp": {
     "message": "Mostra funzionalità sperimentali"

@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Путь сохранения"
   },
-  "save_path_placeholder": {
-    "message": "Введите ключевое слово для поиска пути сохранения"
+  "notebook_label": {
+    "message": "Блокнот"
+  },
+  "notebook_placeholder": {
+    "message": "Выберите блокнот"
+  },
+  "save_path_template": {
+    "message": "Шаблон пути"
+  },
+  "save_path_template_help": {
+    "message": "Пример: /Вырезки/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Предпросмотр места сохранения"
+  },
+  "save_path_preview_title": {
+    "message": "Заголовок статьи"
   },
   "tags": {
     "message": "Теги"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Скачать ресурсы"
-  },
-  "dirsFirst": {
-    "message": "Папки сначала при поиске пути"
   },
   "exp": {
     "message": "Показать экспериментальные функции"

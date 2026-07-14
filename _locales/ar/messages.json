@@ -20,8 +20,23 @@
   "save_path": {
     "message": "مسار الحفظ"
   },
-  "save_path_placeholder": {
-    "message": "أدخل كلمة مفتاحية للبحث عن مسار الحفظ"
+  "notebook_label": {
+    "message": "دفتر الملاحظات"
+  },
+  "notebook_placeholder": {
+    "message": "اختر دفتر ملاحظات"
+  },
+  "save_path_template": {
+    "message": "قالب المسار"
+  },
+  "save_path_template_help": {
+    "message": "مثال: /القصاصات/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "معاينة موقع الحفظ"
+  },
+  "save_path_preview_title": {
+    "message": "عنوان المقالة"
   },
   "tags": {
     "message": "العلامات"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "تحميل الأصول"
-  },
-  "dirsFirst": {
-    "message": "إظهار المجلدات أولاً في بحث المسار"
   },
   "exp": {
     "message": "عرض الميزات التجريبية"

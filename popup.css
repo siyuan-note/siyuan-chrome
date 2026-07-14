@@ -20,6 +20,9 @@
     --color-toggle-off: #e4e7f5;
     --color-error: #e53935;
     --color-error-border: #f0b4b4;
+    --color-preview-bg: #f3f4ff;
+    --color-preview-border: #cdd2ff;
+    --color-error-bg: #fff5f5;
     --color-scrollbar: #d1d5db;
 
     /* 字体 */
@@ -92,6 +95,9 @@
         --color-toggle-off: #434652;
         --color-error: #f28b82;
         --color-error-border: #8b4444;
+        --color-preview-bg: #292b3d;
+        --color-preview-border: #50568a;
+        --color-error-bg: #3b292b;
         --color-scrollbar: #4a4d57;
 
         /* 阴影与动效 */
@@ -382,6 +388,53 @@ html[lang="uk"] .popup {
 .popup__label {
     display: block;
     margin-bottom: var(--space-1);
+}
+
+.popup__field > .popup__select {
+    width: 100%;
+    max-width: none;
+}
+
+.popup__field-help {
+    margin: var(--space-1) 0 0;
+}
+
+.popup__input--template {
+    font-family: var(--font-mono);
+    direction: ltr;
+    text-align: left;
+}
+
+.popup__path-preview {
+    margin-top: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-primary);
+    background: var(--color-preview-bg);
+    border: 1px solid var(--color-preview-border);
+    border-radius: var(--radius-control);
+}
+
+.popup__path-preview-label,
+.popup__path-preview-value {
+    display: block;
+}
+
+.popup__path-preview-value {
+    margin-top: var(--space-1);
+    color: inherit;
+    direction: ltr;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.popup__path-preview--error {
+    color: var(--color-error);
+    background: var(--color-error-bg);
+    border-color: var(--color-error-border);
+}
+
+.popup__path-preview + .popup__field {
+    margin-top: var(--space-3);
 }
 
 .popup__input-wrap {

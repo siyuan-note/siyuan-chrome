@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Kayıt yolu"
   },
-  "save_path_placeholder": {
-    "message": "Kayıt yolunu aramak için bir anahtar kelime girin"
+  "notebook_label": {
+    "message": "Not defteri"
+  },
+  "notebook_placeholder": {
+    "message": "Bir not defteri seçin"
+  },
+  "save_path_template": {
+    "message": "Yol şablonu"
+  },
+  "save_path_template_help": {
+    "message": "Örnek: /Kırpıntılar/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Kayıt konumu önizlemesi"
+  },
+  "save_path_preview_title": {
+    "message": "Makale başlığı"
   },
   "tags": {
     "message": "Etiketler"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Varlıklar"
-  },
-  "dirsFirst": {
-    "message": "Yol aramasında önce dizinleri göster"
   },
   "exp": {
     "message": "Deneysel özellikleri göster"

@@ -20,8 +20,23 @@
   "save_path": {
     "message": "저장 경로"
   },
-  "save_path_placeholder": {
-    "message": "저장 경로를 검색하려면 키워드를 입력하세요"
+  "notebook_label": {
+    "message": "노트북"
+  },
+  "notebook_placeholder": {
+    "message": "노트북 선택"
+  },
+  "save_path_template": {
+    "message": "경로 템플릿"
+  },
+  "save_path_template_help": {
+    "message": "예: /클리핑/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "저장 위치 미리보기"
+  },
+  "save_path_preview_title": {
+    "message": "문서 제목"
   },
   "tags": {
     "message": "태그"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "리소스 다운로드"
-  },
-  "dirsFirst": {
-    "message": "경로 검색 시 디렉토리 우선 표시"
   },
   "exp": {
     "message": "실험적 기능 표시"

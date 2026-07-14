@@ -20,8 +20,23 @@
   "save_path": {
     "message": "Ścieżka zapisu"
   },
-  "save_path_placeholder": {
-    "message": "Wpisz słowo kluczowe, aby wyszukać ścieżkę zapisu"
+  "notebook_label": {
+    "message": "Notatnik"
+  },
+  "notebook_placeholder": {
+    "message": "Wybierz notatnik"
+  },
+  "save_path_template": {
+    "message": "Szablon ścieżki"
+  },
+  "save_path_template_help": {
+    "message": "Przykład: /Wycinki/{{now | date \"2006/01\"}}"
+  },
+  "save_path_preview": {
+    "message": "Podgląd miejsca zapisu"
+  },
+  "save_path_preview_title": {
+    "message": "Tytuł artykułu"
   },
   "tags": {
     "message": "Tagi"
@@ -31,9 +46,6 @@
   },
   "assets": {
     "message": "Pobierz zasoby"
-  },
-  "dirsFirst": {
-    "message": "Foldery najpierw w wyszukiwaniu ścieżki"
   },
   "exp": {
     "message": "Pokaż funkcje eksperymentalne"
