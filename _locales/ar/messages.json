@@ -20,6 +20,15 @@
   "save_path": {
     "message": "مسار الحفظ"
   },
+  "save_path_placeholder": {
+    "message": "أدخل كلمة مفتاحية للبحث عن مسار الحفظ"
+  },
+  "use_template_path": {
+    "message": "استخدام قالب المسار"
+  },
+  "use_search_path": {
+    "message": "استخدام بحث المسار"
+  },
   "notebook_label": {
     "message": "دفتر الملاحظات"
   },

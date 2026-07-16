@@ -20,6 +20,15 @@
   "save_path": {
     "message": "เส้นทางบันทึก"
   },
+  "save_path_placeholder": {
+    "message": "ป้อนคำสำคัญเพื่อค้นหาเส้นทางบันทึก"
+  },
+  "use_template_path": {
+    "message": "ใช้แม่แบบเส้นทาง"
+  },
+  "use_search_path": {
+    "message": "ใช้การค้นหาเส้นทาง"
+  },
   "notebook_label": {
     "message": "สมุดบันทึก"
   },

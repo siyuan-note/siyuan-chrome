@@ -20,6 +20,15 @@
   "save_path": {
     "message": "保存路径"
   },
+  "save_path_placeholder": {
+    "message": "输入关键字搜索保存路径"
+  },
+  "use_template_path": {
+    "message": "使用模板路径"
+  },
+  "use_search_path": {
+    "message": "使用搜索路径"
+  },
   "notebook_label": {
     "message": "笔记本"
   },

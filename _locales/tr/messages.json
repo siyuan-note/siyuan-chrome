@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Kayıt yolu"
   },
+  "save_path_placeholder": {
+    "message": "Kayıt yolunu aramak için bir anahtar kelime girin"
+  },
+  "use_template_path": {
+    "message": "Yol şablonunu kullan"
+  },
+  "use_search_path": {
+    "message": "Yol aramasını kullan"
+  },
   "notebook_label": {
     "message": "Not defteri"
   },

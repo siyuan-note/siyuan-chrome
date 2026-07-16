@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Шлях збереження"
   },
+  "save_path_placeholder": {
+    "message": "Введіть ключове слово для пошуку шляху збереження"
+  },
+  "use_template_path": {
+    "message": "Використати шаблон шляху"
+  },
+  "use_search_path": {
+    "message": "Використати пошук шляху"
+  },
   "notebook_label": {
     "message": "Нотатник"
   },

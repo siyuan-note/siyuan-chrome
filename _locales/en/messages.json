@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Save path"
   },
+  "save_path_placeholder": {
+    "message": "Enter a keyword to search for the save path"
+  },
+  "use_template_path": {
+    "message": "Use path template"
+  },
+  "use_search_path": {
+    "message": "Use path search"
+  },
   "notebook_label": {
     "message": "Notebook"
   },

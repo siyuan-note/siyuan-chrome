@@ -20,6 +20,15 @@
   "save_path": {
     "message": "儲存路徑"
   },
+  "save_path_placeholder": {
+    "message": "輸入關鍵字搜尋儲存路徑"
+  },
+  "use_template_path": {
+    "message": "使用範本路徑"
+  },
+  "use_search_path": {
+    "message": "使用搜尋路徑"
+  },
   "notebook_label": {
     "message": "筆記本"
   },

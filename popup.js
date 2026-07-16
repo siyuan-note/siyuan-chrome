@@ -128,18 +128,41 @@ function setSendBlockKey(key) {
 
 function syncSendBlockFromLocal() {
     const token = document.getElementById("token")?.value.trim();
-    const notebook = document.getElementById("notebook")?.value;
-    const result = siyuanValidateClipPrereqs({ token, notebook });
+    const mode = document.getElementById("savePathSection")?.dataset.mode || SIYUAN_DEFAULT_SAVE_PATH_MODE;
+    const searchDisplay = document.getElementById("searchPathDisplay");
+    const notebook = mode === "template"
+        ? document.getElementById("templateNotebook")?.value
+        : searchDisplay?.dataset.notebook;
+    const savePathTemplate = mode === "template"
+        ? document.getElementById("savePathTemplate")?.value.trim() || SIYUAN_DEFAULT_SAVE_PATH_TEMPLATE
+        : searchDisplay?.dataset.path;
+    const result = siyuanValidateClipPrereqs({ token, notebook, savePathTemplate });
     if (!result.ok) {
         setSendBlockKey(result.error);
         return false;
     }
+    setSendBlock("");
     return true;
 }
 
+function setSearchPathDisplay(element, label, notebook, path, parentDoc = "") {
+    element.dataset.notebook = notebook || "";
+    element.dataset.path = path || "";
+    element.dataset.parent = parentDoc;
+    if (notebook && path) {
+        element.textContent = label || path;
+        element.classList.remove("popup__dropdown-trigger--placeholder");
+    } else {
+        element.textContent = siyuanGetMessage("save_path_placeholder");
+        element.classList.add("popup__dropdown-trigger--placeholder");
+    }
+}
+
 let notebookListGen = 0;
+let savePathSearchGen = 0;
 let savePathPreviewGen = 0;
 let databaseSearchGen = 0;
+let notebookCache = [];
 
 async function reloadPopup(langCode) {
     await flushSyncInputs();
@@ -210,39 +233,97 @@ function renderPopup(items) {
     root.insertAdjacentHTML("beforeend", `<div class="popup__scroll"></div>`);
     const scroll = root.querySelector(".popup__scroll");
 
-    scroll.insertAdjacentHTML("beforeend", `<section class="popup__section popup__section--before-divide"></section>`);
+    scroll.insertAdjacentHTML("beforeend", `<section class="popup__section popup__section--before-divide" id="savePathSection"></section>`);
     const savePathSection = scroll.lastElementChild;
+    savePathSection.dataset.mode = items.savePathMode || SIYUAN_DEFAULT_SAVE_PATH_MODE;
 
     savePathSection.insertAdjacentHTML(
         "beforeend",
-        `<h2 class="popup__section-title u-text-body u-selectable">${t("save_path")}</h2>`,
+        `<div class="popup__section-heading">
+            <h2 class="popup__section-title u-text-body u-selectable">${t("save_path")}</h2>
+            <button type="button" class="popup__mode-action u-focus-ring" id="savePathModeAction"></button>
+        </div>`,
     );
 
     savePathSection.insertAdjacentHTML(
         "beforeend",
-        fieldHtml("notebook_label", `<select class="popup__select u-surface" id="notebook">
-            <option value="">${t("notebook_placeholder")}</option>
-        </select>`),
+        `<div class="popup__save-path-mode" id="searchPathMode">
+            ${dropdownHtml({
+                dropdownId: "searchPathDropdown",
+                triggerId: "searchPathDisplay",
+                panelId: "searchPathMenu",
+                searchId: "searchPathInput",
+                listId: "searchPathOptions",
+                placeholder: t("save_path_placeholder"),
+            })}
+        </div>
+        <div class="popup__save-path-mode" id="templatePathMode">
+            ${fieldHtml("notebook_label", `<select class="popup__select u-surface" id="templateNotebook">
+                <option value="">${t("notebook_placeholder")}</option>
+            </select>`)}
+            ${fieldHtml("save_path_template", `<input class="popup__input popup__input--template u-surface" id="savePathTemplate"
+                placeholder="/">`)}
+            <p class="popup__field-help u-text-caption u-selectable">${t("save_path_template_help")}</p>
+            <div class="popup__path-preview" id="savePathPreview" hidden>
+                <span class="popup__path-preview-label u-text-caption u-selectable">${t("save_path_preview")}</span>
+                <span class="popup__path-preview-value u-text-caption u-selectable" id="savePathPreviewValue"></span>
+            </div>
+        </div>`,
     );
-    const notebook = savePathSection.querySelector("#notebook");
-    notebook.dataset.selectedId = items.notebook || "";
-    notebook.addEventListener("change", () => {
-        notebook.dataset.selectedId = notebook.value;
-        chrome.storage.sync.set({ notebook: notebook.value });
+
+    const searchPathDisplay = savePathSection.querySelector("#searchPathDisplay");
+    const searchPathInput = savePathSection.querySelector("#searchPathInput");
+    const searchPathOptions = savePathSection.querySelector("#searchPathOptions");
+    const searchPathMenu = savePathSection.querySelector("#searchPathMenu");
+    setSearchPathDisplay(
+        searchPathDisplay,
+        items.searchPath,
+        items.searchNotebook,
+        items.searchPath,
+        items.searchParentDoc,
+    );
+    const toggleSearchPathMenu = async () => {
+        const isOpen = searchPathMenu.classList.contains("popup__dropdown-panel--open");
+        closeAllDropdowns();
+        if (!isOpen) {
+            searchPathMenu.classList.add("popup__dropdown-panel--open");
+            searchPathInput.focus();
+            await updateNotebookList({ quiet: true });
+            void updateSavePathSearch();
+        }
+    };
+    searchPathDisplay.addEventListener("click", () => void toggleSearchPathMenu());
+    searchPathDisplay.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            void toggleSearchPathMenu();
+        }
+    });
+    searchPathInput.addEventListener("input", () => void updateSavePathSearch());
+    searchPathOptions.addEventListener("click", (event) => {
+        const item = event.target.closest(".popup__search-list-item[data-notebook][data-path]");
+        if (!item) return;
+        const selectedNotebook = item.getAttribute("data-notebook");
+        const selectedPath = item.getAttribute("data-path");
+        const selectedParent = item.getAttribute("data-parent");
+        setSearchPathDisplay(searchPathDisplay, item.textContent, selectedNotebook, selectedPath, selectedParent);
+        chrome.storage.sync.set({
+            searchNotebook: selectedNotebook,
+            searchPath: selectedPath,
+            searchParentDoc: selectedParent,
+        });
+        searchPathMenu.classList.remove("popup__dropdown-panel--open");
+        syncSendBlockFromLocal();
+    });
+
+    const templateNotebook = savePathSection.querySelector("#templateNotebook");
+    templateNotebook.dataset.selectedId = items.templateNotebook || "";
+    templateNotebook.addEventListener("change", () => {
+        templateNotebook.dataset.selectedId = templateNotebook.value;
+        chrome.storage.sync.set({ templateNotebook: templateNotebook.value });
         syncSendBlockFromLocal();
         void updateSavePathPreview();
     });
-
-    savePathSection.insertAdjacentHTML(
-        "beforeend",
-        fieldHtml("save_path_template", `<input class="popup__input popup__input--template u-surface" id="savePathTemplate"
-            placeholder="/">`) +
-        `<p class="popup__field-help u-text-caption u-selectable">${t("save_path_template_help")}</p>
-        <div class="popup__path-preview" id="savePathPreview" hidden>
-            <span class="popup__path-preview-label u-text-caption u-selectable">${t("save_path_preview")}</span>
-            <span class="popup__path-preview-value u-text-caption u-selectable" id="savePathPreviewValue"></span>
-        </div>`,
-    );
     const savePathTemplate = savePathSection.querySelector("#savePathTemplate");
     savePathTemplate.value = items.savePathTemplate || SIYUAN_DEFAULT_SAVE_PATH_TEMPLATE;
     const schedulePreview = debounce(() => void updateSavePathPreview(), 300);
@@ -251,6 +332,33 @@ function renderPopup(items) {
         onSaved: () => void updateSavePathPreview(),
     });
     savePathTemplate.addEventListener("input", schedulePreview);
+
+    const savePathModeAction = savePathSection.querySelector("#savePathModeAction");
+    const applySavePathMode = (mode, persist = false) => {
+        const templateMode = mode === "template";
+        savePathSection.dataset.mode = templateMode ? "template" : SIYUAN_DEFAULT_SAVE_PATH_MODE;
+        savePathSection.querySelector("#searchPathMode").hidden = templateMode;
+        savePathSection.querySelector("#templatePathMode").hidden = !templateMode;
+        savePathModeAction.textContent = siyuanGetMessage(templateMode ? "use_search_path" : "use_template_path");
+        if (persist) chrome.storage.sync.set({ savePathMode: savePathSection.dataset.mode });
+        syncSendBlockFromLocal();
+        if (templateMode) {
+            void updateNotebookList({ quiet: true });
+            void updateSavePathPreview();
+        }
+    };
+    savePathModeAction.addEventListener("click", () => {
+        applySavePathMode(savePathSection.dataset.mode === "template" ? "search" : "template", true);
+    });
+    applySavePathMode(savePathSection.dataset.mode);
+    syncInputFlushes.push(() => chrome.storage.sync.set({
+        savePathMode: savePathSection.dataset.mode,
+        searchNotebook: searchPathDisplay.dataset.notebook || "",
+        searchPath: searchPathDisplay.dataset.path || "",
+        searchParentDoc: searchPathDisplay.dataset.parent || "",
+        templateNotebook: templateNotebook.value,
+        savePathTemplate: savePathTemplate.value.trim() || SIYUAN_DEFAULT_SAVE_PATH_TEMPLATE,
+    }));
 
     savePathSection.insertAdjacentHTML(
         "beforeend",
@@ -384,7 +492,8 @@ function renderPopup(items) {
         normalize: siyuanNormalizeBaseInput,
         normalizeOnFlush: siyuanNormalizeBase,
         onSaved: () => {
-            if (syncSendBlockFromLocal()) void updateNotebookList({ quiet: true });
+            syncSendBlockFromLocal();
+            void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
         },
     });
@@ -398,7 +507,8 @@ function renderPopup(items) {
     token.value = items.token || "";
     bindSyncInput(token, "token", {
         onSaved: () => {
-            if (syncSendBlockFromLocal()) void updateNotebookList({ quiet: true });
+            syncSendBlockFromLocal();
+            void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
         },
     });
@@ -517,7 +627,7 @@ void bootstrapPopup();
 const updateNotebookList = async ({ quiet = false } = {}) => {
     const ipElement = document.getElementById("ip");
     const tokenElement = document.getElementById("token");
-    const notebookElement = document.getElementById("notebook");
+    const notebookElement = document.getElementById("templateNotebook");
     if (!ipElement || !tokenElement || !notebookElement) return;
 
     const gen = ++notebookListGen;
@@ -546,16 +656,84 @@ const updateNotebookList = async ({ quiet = false } = {}) => {
         return;
     }
 
+    notebookCache = notebooks.filter((item) => !item.closed);
     const selectedId = notebookElement.dataset.selectedId || notebookElement.value;
     notebookElement.replaceChildren(new Option(siyuanGetMessage("notebook_placeholder"), ""));
-    notebooks.filter((item) => !item.closed).forEach((item) => {
+    notebookCache.forEach((item) => {
         notebookElement.add(new Option(item.name, item.id));
     });
     notebookElement.value = Array.from(notebookElement.options).some((option) => option.value === selectedId)
         ? selectedId
         : "";
     if (syncSendBlockFromLocal()) setSendBlock("");
+    const searchDisplay = document.getElementById("searchPathDisplay");
+    if (searchDisplay?.dataset.notebook && searchDisplay.dataset.path) {
+        if (notebookCache.some((item) => item.id === searchDisplay.dataset.notebook)) {
+            setSearchPathDisplay(
+                searchDisplay,
+                formatSearchPathLabel(searchDisplay.dataset.notebook, searchDisplay.dataset.path),
+                searchDisplay.dataset.notebook,
+                searchDisplay.dataset.path,
+                searchDisplay.dataset.parent,
+            );
+        } else {
+            setSearchPathDisplay(searchDisplay, "", "", "");
+            chrome.storage.sync.set({ searchNotebook: "", searchPath: "", searchParentDoc: "" });
+            syncSendBlockFromLocal();
+        }
+    }
     void updateSavePathPreview();
+};
+
+function formatSearchPathLabel(notebook, path) {
+    const notebookName = notebookCache.find((item) => item.id === notebook)?.name || "";
+    return notebookName ? notebookName + " " + path : path;
+}
+
+const updateSavePathSearch = async () => {
+    const ipElement = document.getElementById("ip");
+    const tokenElement = document.getElementById("token");
+    const searchInput = document.getElementById("searchPathInput");
+    const searchOptions = document.getElementById("searchPathOptions");
+    if (!ipElement || !tokenElement || !searchInput || !searchOptions) return;
+
+    const gen = ++savePathSearchGen;
+    const token = tokenElement.value.trim();
+    if (!token) {
+        searchOptions.innerHTML = "";
+        syncSendBlockFromLocal();
+        return;
+    }
+    const keyword = searchInput.value.trim();
+    const result = await siyuanKernelFetch({
+        ip: ipElement.value,
+        token: tokenElement.value,
+        path: "/api/filetree/searchDocs",
+        body: { k: keyword, flashcard: false },
+    });
+    if (gen !== savePathSearchGen) return;
+    if (!result.ok) {
+        searchOptions.innerHTML = "";
+        setSendBlockKey(result.error);
+        return;
+    }
+    if (result.data?.code !== 0 || !Array.isArray(result.data?.data)) {
+        searchOptions.innerHTML = "";
+        return;
+    }
+
+    let optionsHTML = "";
+    result.data.data.forEach((doc) => {
+        if (!notebookCache.some((item) => item.id === doc.box)) return;
+        const path = siyuanLegacyHPathToTemplate(doc.hPath);
+        const label = formatSearchPathLabel(doc.box, path);
+        const parentDoc = String(doc.path || "")
+            .substring(String(doc.path || "").lastIndexOf("/") + 1)
+            .replace(/\.sy$/, "");
+        optionsHTML += `<li class="popup__search-list-item" data-notebook="${escapeHtml(doc.box)}" data-path="${escapeHtml(path)}" data-parent="${escapeHtml(parentDoc)}">${escapeHtml(label)}</li>`;
+    });
+    searchOptions.innerHTML = optionsHTML ||
+        `<li class="popup__search-list-item popup__search-list-item--hint">${t("save_path_none")}</li>`;
 };
 
 function normalizePreviewPath(parentPath) {
@@ -569,7 +747,7 @@ function normalizePreviewPath(parentPath) {
 const updateSavePathPreview = async () => {
     const ipElement = document.getElementById("ip");
     const tokenElement = document.getElementById("token");
-    const notebookElement = document.getElementById("notebook");
+    const notebookElement = document.getElementById("templateNotebook");
     const templateElement = document.getElementById("savePathTemplate");
     const previewElement = document.getElementById("savePathPreview");
     const previewValueElement = document.getElementById("savePathPreviewValue");

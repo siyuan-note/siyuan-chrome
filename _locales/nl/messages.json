@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Opslagpad"
   },
+  "save_path_placeholder": {
+    "message": "Voer een trefwoord in om het opslagpad te zoeken"
+  },
+  "use_template_path": {
+    "message": "Padsjabloon gebruiken"
+  },
+  "use_search_path": {
+    "message": "Pad zoeken gebruiken"
+  },
   "notebook_label": {
     "message": "Notitieboek"
   },

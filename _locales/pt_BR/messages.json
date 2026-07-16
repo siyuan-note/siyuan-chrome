@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Caminho de salvamento"
   },
+  "save_path_placeholder": {
+    "message": "Digite uma palavra-chave para pesquisar o caminho de salvamento"
+  },
+  "use_template_path": {
+    "message": "Usar modelo de caminho"
+  },
+  "use_search_path": {
+    "message": "Usar pesquisa de caminho"
+  },
   "notebook_label": {
     "message": "Caderno"
   },

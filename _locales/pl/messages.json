@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Ścieżka zapisu"
   },
+  "save_path_placeholder": {
+    "message": "Wpisz słowo kluczowe, aby wyszukać ścieżkę zapisu"
+  },
+  "use_template_path": {
+    "message": "Użyj szablonu ścieżki"
+  },
+  "use_search_path": {
+    "message": "Użyj wyszukiwania ścieżki"
+  },
   "notebook_label": {
     "message": "Notatnik"
   },

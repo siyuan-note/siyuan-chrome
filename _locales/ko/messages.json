@@ -20,6 +20,15 @@
   "save_path": {
     "message": "저장 경로"
   },
+  "save_path_placeholder": {
+    "message": "저장 경로를 검색하려면 키워드를 입력하세요"
+  },
+  "use_template_path": {
+    "message": "경로 템플릿 사용"
+  },
+  "use_search_path": {
+    "message": "경로 검색 사용"
+  },
   "notebook_label": {
     "message": "노트북"
   },

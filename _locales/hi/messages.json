@@ -20,6 +20,15 @@
   "save_path": {
     "message": "सहेजने का पथ"
   },
+  "save_path_placeholder": {
+    "message": "सहेजने का पथ खोजने के लिए एक कीवर्ड दर्ज करें"
+  },
+  "use_template_path": {
+    "message": "पथ टेम्पलेट का उपयोग करें"
+  },
+  "use_search_path": {
+    "message": "पथ खोज का उपयोग करें"
+  },
   "notebook_label": {
     "message": "नोटबुक"
   },

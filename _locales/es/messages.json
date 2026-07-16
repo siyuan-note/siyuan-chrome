@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Ruta de guardado"
   },
+  "save_path_placeholder": {
+    "message": "Ingrese una palabra clave para buscar la ruta de guardado"
+  },
+  "use_template_path": {
+    "message": "Usar plantilla de ruta"
+  },
+  "use_search_path": {
+    "message": "Usar búsqueda de ruta"
+  },
   "notebook_label": {
     "message": "Cuaderno"
   },

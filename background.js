@@ -210,8 +210,8 @@ function buildClipMarkdown(requestData, contentMd, clipTemplate) {
 }
 
 /** 在 background 中检测内核连通性，避免 content script 访问 localhost 触发 LNA 权限弹窗 */
-async function siyuanCheckKernel({ ip, token, notebook }) {
-    const prereq = siyuanValidateClipPrereqs({ token, notebook });
+async function siyuanCheckKernel({ ip, token, notebook, savePathTemplate }) {
+    const prereq = siyuanValidateClipPrereqs({ token, notebook, savePathTemplate });
     if (!prereq.ok) {
         return prereq;
     }
@@ -255,6 +255,13 @@ async function renderClipDocumentPath(requestData, title) {
     return { ok: true, path: normalizeClipDocumentPath(result.data.data, title) };
 }
 
+async function resolveClipDocumentPath(requestData, title) {
+    if (requestData.savePathMode !== "template") {
+        return { ok: true, path: normalizeClipDocumentPath(requestData.savePathTemplate, title) };
+    }
+    return renderClipDocumentPath(requestData, title);
+}
+
 function storageSyncGet(defaults) {
     return new Promise((resolve) => {
         chrome.storage.sync.get(defaults, resolve);
@@ -295,7 +302,7 @@ async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
     let title = requestData.title ? requestData.title : "Untitled";
     title = title.replace(/[\\/]/g, "／");
 
-    const renderedPath = await renderClipDocumentPath(requestData, title);
+    const renderedPath = await resolveClipDocumentPath(requestData, title);
     if (!renderedPath.ok) {
         safeTabsSendMessage(requestData.tabId, renderedPath.error ? {
             func: "tipKey",
@@ -318,6 +325,7 @@ async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
         path: "/api/filetree/createDocWithMd",
         body: {
             notebook: requestData.notebook,
+            parentID: requestData.parentDoc,
             tags: requestData.tags,
             path: renderedPath.path,
             markdown: markdown,

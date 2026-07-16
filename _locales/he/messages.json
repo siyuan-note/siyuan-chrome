@@ -20,6 +20,15 @@
   "save_path": {
     "message": "נתיב שמירה"
   },
+  "save_path_placeholder": {
+    "message": "הזן מילת מפתח לחיפוש נתיב שמירה"
+  },
+  "use_template_path": {
+    "message": "השתמש בתבנית נתיב"
+  },
+  "use_search_path": {
+    "message": "השתמש בחיפוש נתיב"
+  },
   "notebook_label": {
     "message": "מחברת"
   },

@@ -356,6 +356,37 @@ html[lang="uk"] .popup {
     font-weight: var(--font-weight-regular);
 }
 
+.popup__section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+}
+
+.popup__mode-action {
+    flex-shrink: 0;
+    padding: var(--space-1) 0;
+    color: var(--color-primary);
+    font: inherit;
+    font-size: var(--font-size-caption);
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.popup__mode-action:hover {
+    color: var(--color-primary-hover);
+}
+
+.popup__save-path-mode {
+    padding-top: var(--space-1);
+}
+
+.popup__save-path-mode + .popup__field {
+    margin-top: var(--space-3);
+}
+
 .popup__section-caption {
     margin: var(--space-1) 0 var(--space-1);
 }
@@ -431,10 +462,6 @@ html[lang="uk"] .popup {
     color: var(--color-error);
     background: var(--color-error-bg);
     border-color: var(--color-error-border);
-}
-
-.popup__path-preview + .popup__field {
-    margin-top: var(--space-3);
 }
 
 .popup__input-wrap {

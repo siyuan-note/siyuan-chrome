@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Cesta uloženia"
   },
+  "save_path_placeholder": {
+    "message": "Zadajte kľúčové slovo na vyhľadanie cesty uloženia"
+  },
+  "use_template_path": {
+    "message": "Použiť šablónu cesty"
+  },
+  "use_search_path": {
+    "message": "Použiť vyhľadávanie cesty"
+  },
   "notebook_label": {
     "message": "Zápisník"
   },

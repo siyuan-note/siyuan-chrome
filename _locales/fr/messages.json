@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Chemin de sauvegarde"
   },
+  "save_path_placeholder": {
+    "message": "Entrez un mot-clé pour rechercher le chemin d’enregistrement"
+  },
+  "use_template_path": {
+    "message": "Utiliser un modèle de chemin"
+  },
+  "use_search_path": {
+    "message": "Utiliser la recherche de chemin"
+  },
   "notebook_label": {
     "message": "Carnet"
   },

@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Jalur simpan"
   },
+  "save_path_placeholder": {
+    "message": "Masukkan kata kunci untuk mencari jalur simpan"
+  },
+  "use_template_path": {
+    "message": "Gunakan templat jalur"
+  },
+  "use_search_path": {
+    "message": "Gunakan pencarian jalur"
+  },
   "notebook_label": {
     "message": "Buku catatan"
   },

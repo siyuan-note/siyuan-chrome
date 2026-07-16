@@ -808,7 +808,10 @@ const setMathJaxDataFormula = () => {
     });
 };
 
-const siyuanGetClipSettings = () => siyuanLoadStorageSettings();
+const siyuanGetClipSettings = async () => {
+    const items = await siyuanLoadStorageSettings();
+    return { ...items, ...siyuanGetActiveSavePathSettings(items) };
+};
 
 /** @returns {Promise<object | null>} 配置与内核均就绪时返回 settings */
 const siyuanEnsureClipReady = async () => {
@@ -822,6 +825,7 @@ const siyuanEnsureClipReady = async () => {
                 ip: items.ip,
                 token: items.token,
                 notebook: items.notebook,
+                savePathTemplate: items.savePathTemplate,
             },
         });
     } catch (e) {
@@ -957,7 +961,9 @@ const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href,
         dom: tempElement.innerHTML,
         api: items.ip,
         token: items.token,
+        savePathMode: items.savePathMode,
         notebook: items.notebook,
+        parentDoc: items.parentDoc,
         savePathTemplate: items.savePathTemplate,
         tags: items.tags,
         assets: items.assets,

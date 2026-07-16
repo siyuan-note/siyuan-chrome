@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Speicherort"
   },
+  "save_path_placeholder": {
+    "message": "Geben Sie ein Stichwort ein, um den Speicherpfad zu suchen"
+  },
+  "use_template_path": {
+    "message": "Pfadvorlage verwenden"
+  },
+  "use_search_path": {
+    "message": "Pfadsuche verwenden"
+  },
   "notebook_label": {
     "message": "Notizbuch"
   },

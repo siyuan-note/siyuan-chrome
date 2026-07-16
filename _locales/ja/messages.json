@@ -20,6 +20,15 @@
   "save_path": {
     "message": "保存先"
   },
+  "save_path_placeholder": {
+    "message": "保存先パスを検索するキーワードを入力"
+  },
+  "use_template_path": {
+    "message": "パステンプレートを使用"
+  },
+  "use_search_path": {
+    "message": "パス検索を使用"
+  },
   "notebook_label": {
     "message": "ノートブック"
   },

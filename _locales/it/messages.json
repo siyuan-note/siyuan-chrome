@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Percorso di salvataggio"
   },
+  "save_path_placeholder": {
+    "message": "Inserisci una parola chiave per cercare il percorso di salvataggio"
+  },
+  "use_template_path": {
+    "message": "Usa modello di percorso"
+  },
+  "use_search_path": {
+    "message": "Usa ricerca percorso"
+  },
   "notebook_label": {
     "message": "Taccuino"
   },

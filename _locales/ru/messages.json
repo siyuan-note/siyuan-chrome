@@ -20,6 +20,15 @@
   "save_path": {
     "message": "Путь сохранения"
   },
+  "save_path_placeholder": {
+    "message": "Введите ключевое слово для поиска пути сохранения"
+  },
+  "use_template_path": {
+    "message": "Использовать шаблон пути"
+  },
+  "use_search_path": {
+    "message": "Использовать поиск пути"
+  },
   "notebook_label": {
     "message": "Блокнот"
   },
