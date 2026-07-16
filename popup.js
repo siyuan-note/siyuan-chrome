@@ -687,7 +687,7 @@ const updateNotebookList = async ({ quiet = false } = {}) => {
 
 function formatSearchPathLabel(notebook, path) {
     const notebookName = notebookCache.find((item) => item.id === notebook)?.name || "";
-    return notebookName ? notebookName + " " + path : path;
+    return notebookName ? notebookName + path : path;
 }
 
 const updateSavePathSearch = async () => {
