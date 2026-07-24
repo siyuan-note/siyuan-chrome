@@ -496,6 +496,8 @@ function siyuanProcessUnderlineStyle(tempElement) {
     }
 }
 
+const FORMULA_SELECTOR = "[data-formula]";
+
 function simplifyNestedTags(root, tagName) {
     let elements = root.querySelectorAll(tagName);
     let hasNested = true;
@@ -503,7 +505,7 @@ function simplifyNestedTags(root, tagName) {
     while (hasNested) {
         hasNested = false;
         elements.forEach((element) => {
-            if (simplifyElement(element, tagName)) {
+            if (!element.closest(FORMULA_SELECTOR) && simplifyElement(element, tagName)) {
                 hasNested = true;
             }
         });
@@ -512,21 +514,23 @@ function simplifyNestedTags(root, tagName) {
 
     function simplifyElement(element, tagName) {
         let nestedFound = false;
-        if (element.hasChildNodes()) {
-            element.childNodes.forEach((child) => {
-                if (child.nodeType === Node.ELEMENT_NODE) {
-                    if (child.tagName === tagName) {
-                        nestedFound = true;
-                        while (child.firstChild) {
-                            element.insertBefore(child.firstChild, child);
-                        }
-                        child.remove();
-                    } else {
-                        nestedFound = nestedFound || simplifyElement(child, tagName);
-                    }
+
+        Array.from(element.children).forEach((child) => {
+            if (child.matches(FORMULA_SELECTOR)) {
+                return;
+            }
+
+            if (child.tagName === tagName) {
+                nestedFound = true;
+                while (child.firstChild) {
+                    element.insertBefore(child.firstChild, child);
                 }
-            });
-        }
+                child.remove();
+            } else {
+                nestedFound = simplifyElement(child, tagName) || nestedFound;
+            }
+        });
+
         return nestedFound;
     }
 }
