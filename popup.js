@@ -178,6 +178,14 @@ let databaseSearchGen = 0;
 let databaseTemplateGen = 0;
 let notebookCache = [];
 
+function refreshSelectedDatabase() {
+    if (document.getElementById("databaseDisplay")?.dataset.selectedId) {
+        void updateDatabaseSearch({ quiet: true }).then(() => updateDatabaseTemplates({ quiet: true }));
+    } else {
+        void updateDatabaseTemplates({ quiet: true });
+    }
+}
+
 async function reloadPopup(langCode) {
     await flushSyncInputs();
     const scrollTop = document.querySelector(".popup__scroll")?.scrollTop ?? 0;
@@ -191,8 +199,7 @@ async function reloadPopup(langCode) {
     const scroll = document.querySelector(".popup__scroll");
     if (scroll) scroll.scrollTop = scrollTop;
     if (items.token?.trim()) void updateNotebookList({ quiet: true });
-    await updateDatabaseSearch({ quiet: true });
-    void updateDatabaseTemplates({ quiet: true });
+    refreshSelectedDatabase();
 }
 
 function applyPopupLayout() {
@@ -547,7 +554,7 @@ function renderPopup(items) {
             syncSendBlockFromLocal();
             void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
-            void updateDatabaseSearch({ quiet: true }).then(() => updateDatabaseTemplates({ quiet: true }));
+            refreshSelectedDatabase();
         },
     });
 
@@ -563,7 +570,7 @@ function renderPopup(items) {
             syncSendBlockFromLocal();
             void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
-            void updateDatabaseSearch({ quiet: true }).then(() => updateDatabaseTemplates({ quiet: true }));
+            refreshSelectedDatabase();
         },
     });
     tokenToggle.addEventListener("click", () => {
@@ -668,8 +675,7 @@ async function bootstrapPopup() {
             }
         });
         if (items.token?.trim()) void updateNotebookList({ quiet: true });
-        await updateDatabaseSearch({ quiet: true });
-        void updateDatabaseTemplates({ quiet: true });
+        refreshSelectedDatabase();
     } catch (e) {
         console.error(e);
     } finally {
