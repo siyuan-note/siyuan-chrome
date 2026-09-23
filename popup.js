@@ -177,6 +177,33 @@ let savePathPreviewGen = 0;
 let databaseSearchGen = 0;
 let databaseTemplateGen = 0;
 let notebookCache = [];
+const NOTEBOOK_CACHE_STORAGE_KEY = "notebookListCache";
+
+async function notebookCacheIdentity(ip, token) {
+    const bytes = new TextEncoder().encode(`${siyuanNormalizeBase(ip)}\n${token}`);
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+async function loadNotebookCache(ip, token) {
+    if (!token?.trim()) return;
+    try {
+        const stored = await chrome.storage.local.get(NOTEBOOK_CACHE_STORAGE_KEY);
+        const cached = stored[NOTEBOOK_CACHE_STORAGE_KEY];
+        if (cached?.identity !== await notebookCacheIdentity(ip, token) || !Array.isArray(cached.notebooks)) return;
+        notebookCache = cached.notebooks.filter((item) => typeof item.id === "string" && typeof item.name === "string");
+    } catch (error) {
+        console.warn(error);
+    }
+}
+
+function renderNotebookRootOptions() {
+    const input = document.getElementById("searchPathInput");
+    const options = document.getElementById("searchPathOptions");
+    if (!input || !options || input.value.trim() || !notebookCache.length) return;
+    options.innerHTML = notebookCache.map((item) =>
+        `<li class="popup__search-list-item" data-notebook="${escapeHtml(item.id)}" data-path="/" data-parent="">${escapeHtml(item.name + "/")}</li>`).join("");
+}
 
 function refreshSelectedDatabase() {
     if (document.getElementById("databaseDisplay")?.dataset.selectedId) {
@@ -299,19 +326,18 @@ function renderPopup(items) {
     const searchPathMenu = savePathSection.querySelector("#searchPathMenu");
     setSearchPathDisplay(
         searchPathDisplay,
-        items.searchPath,
+        items.searchPathLabel || items.searchPath,
         items.searchNotebook,
         items.searchPath,
         items.searchParentDoc,
     );
-    const toggleSearchPathMenu = async () => {
+    const toggleSearchPathMenu = () => {
         if (document.getElementById("databaseTemplate")?.value) return;
         const isOpen = searchPathMenu.classList.contains("popup__dropdown-panel--open");
         closeAllDropdowns();
         if (!isOpen) {
             searchPathMenu.classList.add("popup__dropdown-panel--open");
             searchPathInput.focus();
-            await updateNotebookList({ quiet: true });
             void updateSavePathSearch();
         }
     };
@@ -334,6 +360,7 @@ function renderPopup(items) {
             searchNotebook: selectedNotebook,
             searchPath: selectedPath,
             searchParentDoc: selectedParent,
+            searchPathLabel: item.textContent,
         });
         searchPathMenu.classList.remove("popup__dropdown-panel--open");
         syncSendBlockFromLocal();
@@ -380,6 +407,7 @@ function renderPopup(items) {
         searchNotebook: searchPathDisplay.dataset.notebook || "",
         searchPath: searchPathDisplay.dataset.path || "",
         searchParentDoc: searchPathDisplay.dataset.parent || "",
+        searchPathLabel: searchPathDisplay.dataset.notebook ? searchPathDisplay.textContent : "",
         templateNotebook: templateNotebook.value,
         savePathTemplate: savePathTemplate.value.trim() || SIYUAN_DEFAULT_SAVE_PATH_TEMPLATE,
     }));
@@ -551,6 +579,7 @@ function renderPopup(items) {
         normalize: siyuanNormalizeBaseInput,
         normalizeOnFlush: siyuanNormalizeBase,
         onSaved: () => {
+            notebookCache = [];
             syncSendBlockFromLocal();
             void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
@@ -567,6 +596,7 @@ function renderPopup(items) {
     token.value = items.token || "";
     bindSyncInput(token, "token", {
         onSaved: () => {
+            notebookCache = [];
             syncSendBlockFromLocal();
             void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
@@ -662,7 +692,7 @@ async function bootstrapPopup() {
         const items = await siyuanLoadStorageSettings();
         items.langCode ||= siyuanGetDefaultLangCode();
         items.clipTemplate ||= SIYUAN_DEFAULT_CLIP_TEMPLATE;
-        await siyuanLoadLanguageFile(items.langCode);
+        await Promise.all([siyuanLoadLanguageFile(items.langCode), loadNotebookCache(items.ip, items.token)]);
         renderPopup(items);
         // 点击其他地方关闭下拉菜单
         document.addEventListener("click", (e) => {
@@ -693,6 +723,7 @@ const updateNotebookList = async ({ quiet = false } = {}) => {
 
     const gen = ++notebookListGen;
     const token = tokenElement.value.trim();
+    const selectedNotebookAtRequest = document.getElementById("searchPathDisplay")?.dataset.notebook || "";
     if (!token) {
         notebookElement.replaceChildren(new Option(siyuanGetMessage("notebook_placeholder"), ""));
         syncSendBlockFromLocal();
@@ -718,6 +749,7 @@ const updateNotebookList = async ({ quiet = false } = {}) => {
     }
 
     notebookCache = notebooks.filter((item) => !item.closed);
+    renderNotebookRootOptions();
     const selectedId = notebookElement.dataset.selectedId || notebookElement.value;
     notebookElement.replaceChildren(new Option(siyuanGetMessage("notebook_placeholder"), ""));
     notebookCache.forEach((item) => {
@@ -728,22 +760,38 @@ const updateNotebookList = async ({ quiet = false } = {}) => {
         : "";
     if (syncSendBlockFromLocal()) setSendBlock("");
     const searchDisplay = document.getElementById("searchPathDisplay");
-    if (searchDisplay?.dataset.notebook && searchDisplay.dataset.path) {
+    if (searchDisplay?.dataset.notebook && searchDisplay.dataset.path && searchDisplay.dataset.notebook === selectedNotebookAtRequest) {
         if (notebookCache.some((item) => item.id === searchDisplay.dataset.notebook)) {
+            const label = formatSearchPathLabel(searchDisplay.dataset.notebook, searchDisplay.dataset.path);
+            const labelChanged = searchDisplay.textContent !== label;
             setSearchPathDisplay(
                 searchDisplay,
-                formatSearchPathLabel(searchDisplay.dataset.notebook, searchDisplay.dataset.path),
+                label,
                 searchDisplay.dataset.notebook,
                 searchDisplay.dataset.path,
                 searchDisplay.dataset.parent,
             );
+            if (labelChanged) chrome.storage.sync.set({ searchPathLabel: label });
         } else {
             setSearchPathDisplay(searchDisplay, "", "", "");
-            chrome.storage.sync.set({ searchNotebook: "", searchPath: "", searchParentDoc: "" });
+            chrome.storage.sync.set({ searchNotebook: "", searchPath: "", searchParentDoc: "", searchPathLabel: "" });
             syncSendBlockFromLocal();
         }
     }
     void updateSavePathPreview();
+    try {
+        const identity = await notebookCacheIdentity(ipElement.value, tokenElement.value);
+        if (gen === notebookListGen) {
+            await chrome.storage.local.set({
+                [NOTEBOOK_CACHE_STORAGE_KEY]: {
+                    identity,
+                    notebooks: notebookCache.map((item) => ({ id: item.id, name: item.name })),
+                },
+            });
+        }
+    } catch (error) {
+        console.warn(error);
+    }
 };
 
 function formatSearchPathLabel(notebook, path) {
@@ -766,6 +814,7 @@ const updateSavePathSearch = async () => {
         return;
     }
     const keyword = searchInput.value.trim();
+    if (!keyword) renderNotebookRootOptions();
     const result = await siyuanKernelFetch({
         ip: ipElement.value,
         token: tokenElement.value,
@@ -785,13 +834,12 @@ const updateSavePathSearch = async () => {
 
     let optionsHTML = "";
     result.data.data.forEach((doc) => {
-        if (!notebookCache.some((item) => item.id === doc.box)) return;
+        if (!doc.box || !doc.hPath) return;
         const path = siyuanLegacyHPathToTemplate(doc.hPath);
-        const label = formatSearchPathLabel(doc.box, path);
         const parentDoc = String(doc.path || "")
             .substring(String(doc.path || "").lastIndexOf("/") + 1)
             .replace(/\.sy$/, "");
-        optionsHTML += `<li class="popup__search-list-item" data-notebook="${escapeHtml(doc.box)}" data-path="${escapeHtml(path)}" data-parent="${escapeHtml(parentDoc)}">${escapeHtml(label)}</li>`;
+        optionsHTML += `<li class="popup__search-list-item" data-notebook="${escapeHtml(doc.box)}" data-path="${escapeHtml(path)}" data-parent="${escapeHtml(parentDoc)}">${escapeHtml(doc.hPath)}</li>`;
     });
     searchOptions.innerHTML = optionsHTML ||
         `<li class="popup__search-list-item popup__search-list-item--hint">${t("save_path_none")}</li>`;
