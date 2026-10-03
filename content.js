@@ -46,6 +46,8 @@ const eventDispatcher = async (request, sender, sendResponse) => {
         const range = selection.getRangeAt(0);
         const tempElement = document.createElement("div");
         tempElement.appendChild(range.cloneContents());
+        const sourceImages = Array.from(document.querySelectorAll("img")).filter(image => range.intersectsNode(image));
+        siyuanNormalizePictureImages(tempElement, document.baseURI, sourceImages);
         siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part", undefined, undefined, clipSettings);
     } else {
         void siyuanShowTipByKey("tip_no_selection", 3000);
@@ -923,6 +925,7 @@ async function siyuanGetCloneNode(tempDoc) {
     fixInvalidNesting(tempDoc);
 
     const clonedDoc = document.cloneNode(true);
+    siyuanNormalizePictureImages(clonedDoc, document.baseURI, Array.from(document.querySelectorAll("img")));
     return clonedDoc;
 }
 
@@ -1071,6 +1074,7 @@ const siyuanEnsureClipReady = async () => {
 };
 
 const siyuanSendUpload = async (tempElement, tabId, srcUrl, type, article, href, clipItems) => {
+    siyuanNormalizePictureImages(tempElement, document.baseURI);
     const items = clipItems || (await siyuanGetClipSettings());
 
     if (type !== "article") {

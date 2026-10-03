@@ -26,6 +26,7 @@
       "js": [
         "lib/siyuan-storage-defaults.js",
         "lib/siyuan-i18n.js",
+        "lib/siyuan-picture-images.js",
         "content.js",
         "lib/Readability.js"
       ]
