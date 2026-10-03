@@ -78,5 +78,5 @@
   "name": "__MSG_extension_name__",
   "options_page": "options.html",
   "description": "__MSG_extension_description__",
-  "version": "1.15.14"
+  "version": "1.15.15"
 }
