@@ -527,7 +527,7 @@ function siyuanSpansAddBr(tempElement) {
 
 // 替换粗体样式为内核可识别<b>标签 https://github.com/siyuan-note/siyuan/issues/13306
 function siyuanProcessBoldStyle(tempElement) {
-    // 获取所有应用了 font-weight: bold 的元素
+    // 遍历元素，根据计算字重识别粗体样式
     const boldElements = tempElement.querySelectorAll("*");
 
     boldElements.forEach((element) => {
@@ -540,9 +540,8 @@ function siyuanProcessBoldStyle(tempElement) {
             return; // 如果元素的父元素是 <b> 或 <strong> 标签，跳过
         }
 
-        // 判断是否具有 font-weight: bold
-        if (style.fontWeight === "bold" || style.fontWeight === "700") {
-            // '700' 是 bold 的常见数值
+        // 将半粗体及更高字重转换为粗体标签
+        if (style.fontWeight === "bold" || Number(style.fontWeight) >= 600) {
             // 将 element 中的各个元素使用 <b> 标签包裹
             const children = element.childNodes;
             for (let i = 0; i < children.length; i++) {
