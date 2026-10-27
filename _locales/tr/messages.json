@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Belge kaydedildi ancak veritabanına eklendiği doğrulanamadı. Yinelenen kırpıntıları önlemek için bu belgeyi kontrol edin ve gerekirse elle ekleyin"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

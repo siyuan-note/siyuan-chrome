@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Document opgeslagen, maar de toevoeging aan de database kon niet worden bevestigd. Controleer dit document en voeg het indien nodig handmatig toe om dubbele knipsels te voorkomen"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

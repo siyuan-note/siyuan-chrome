@@ -13,7 +13,8 @@ const eventDispatcher = async (request, sender, sendResponse) => {
     }
 
     if ("tipKey" === request.func && request.tip) {
-        void siyuanShowTipByKey(request.msg, request.timeout);
+        void siyuanShowTipByKey(request.msg, request.timeout,
+            message => request.documentID ? `${message} [${request.documentID}]` : message);
         return;
     }
 
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
  * 剪藏典型流转：tip_clipping → tip_clip_img → tip_clipping → tip_clip_ok
  *
  * @typedef {'progress' | 'transient'} TipModeValue
- * @typedef {'tip_clipping' | 'tip_clip_img' | 'tip_clip_ok' | 'tip_token_miss' | 'tip_token_invalid' | 'tip_save_path_miss' | 'tip_siyuan_kernel_unavailable' | 'tip_no_selection' | 'tip_readability_failed'} TipKey
+ * @typedef {'tip_clipping' | 'tip_clip_img' | 'tip_clip_ok' | 'tip_clip_database_incomplete' | 'tip_token_miss' | 'tip_token_invalid' | 'tip_save_path_miss' | 'tip_siyuan_kernel_unavailable' | 'tip_no_selection' | 'tip_readability_failed'} TipKey
  */
 
 const TIP_MODE = {
@@ -84,6 +85,7 @@ const TIP_BEHAVIOR = {
     tip_clipping: TIP_MODE.PROGRESS,
     tip_clip_img: TIP_MODE.PROGRESS,
     tip_clip_ok: TIP_MODE.TRANSIENT,
+    tip_clip_database_incomplete: TIP_MODE.TRANSIENT,
     tip_token_miss: TIP_MODE.TRANSIENT,
     tip_token_invalid: TIP_MODE.TRANSIENT,
     tip_save_path_miss: TIP_MODE.TRANSIENT,

@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Dokumen tersimpan, tetapi penambahannya ke basis data tidak dapat dikonfirmasi. Periksa dokumen ini dan tambahkan secara manual jika perlu agar kliping tidak terduplikasi"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

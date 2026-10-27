@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Dokument bol uložený, ale jeho pridanie do databázy sa nepodarilo potvrdiť. Skontrolujte tento dokument a podľa potreby ho pridajte ručne, aby ste predišli duplicitným výstrižkom"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

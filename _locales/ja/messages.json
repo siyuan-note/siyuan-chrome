@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "文書は保存されましたが、データベースへの追加を確認できませんでした。重複してクリップしないよう、この文書を確認し、必要に応じて手動で追加してください"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

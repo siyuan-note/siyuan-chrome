@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Documento salvato, ma non è stato possibile confermarne l’aggiunta al database. Controlla questo documento e aggiungilo manualmente se necessario per evitare acquisizioni duplicate"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

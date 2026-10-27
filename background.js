@@ -401,8 +401,10 @@ async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
         return;
     }
 
+    let databaseAdded = true;
     if (!templateCreated && requestData.selectedDatabaseID) {
         const dbOk = await addClippedDocToDatabase(apiBase, requestData.token, docId, requestData.selectedDatabaseID);
+        databaseAdded = dbOk;
         if (!dbOk) {
             console.warn("Failed to add clipped doc to database:", docId, requestData.selectedDatabaseID);
         }
@@ -410,7 +412,9 @@ async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
 
     safeTabsSendMessage(requestData.tabId, {
         func: "tipKey",
-        msg: "tip_clip_ok",
+        msg: databaseAdded ? "tip_clip_ok" : "tip_clip_database_incomplete",
+        documentID: databaseAdded ? undefined : docId,
+        timeout: databaseAdded ? undefined : 15000,
         tip: requestData.tip,
     });
 
@@ -436,7 +440,10 @@ async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
         });
     }
 
-    safeTabsSendMessage(requestData.tabId, { func: "reload" });
+    // Keep partial-completion feedback visible instead of immediately reloading the page.
+    if (databaseAdded) {
+        safeTabsSendMessage(requestData.tabId, { func: "reload" });
+    }
 }
 
 async function handleUploadCopy(requestData) {

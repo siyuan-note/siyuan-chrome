@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Dokument zapisano, ale nie udało się potwierdzić dodania go do bazy danych. Sprawdź ten dokument i w razie potrzeby dodaj go ręcznie, aby uniknąć duplikatów"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

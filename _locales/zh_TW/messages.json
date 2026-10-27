@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "文件已儲存，但無法確認是否已加入資料庫。請檢查此文件，必要時手動加入資料庫，避免重複剪藏"
+  },
   "extension_name": {
     "message": "思源(SiYuan)"
   },

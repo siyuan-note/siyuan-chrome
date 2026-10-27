@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Dokument gespeichert, das Hinzufügen zur Datenbank konnte jedoch nicht bestätigt werden. Prüfen Sie dieses Dokument und fügen Sie es bei Bedarf manuell hinzu, um doppelte Ausschnitte zu vermeiden"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

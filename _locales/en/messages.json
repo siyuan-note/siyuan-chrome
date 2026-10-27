@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "Document saved, but adding it to the database could not be confirmed. Check this document and add it manually if needed to avoid clipping duplicates"
+  },
   "extension_name": {
     "message": "SiYuan"
   },

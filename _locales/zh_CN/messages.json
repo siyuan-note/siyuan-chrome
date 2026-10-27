@@ -1,4 +1,7 @@
 {
+  "tip_clip_database_incomplete": {
+    "message": "文档已保存，但无法确认是否已加入数据库。请检查此文档，必要时手动加入数据库，避免重复剪藏"
+  },
   "extension_name": {
     "message": "思源(SiYuan)"
   },
