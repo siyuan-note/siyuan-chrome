@@ -1,0 +1,10 @@
+{
+  "name": "siyuan-chrome",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

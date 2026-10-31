@@ -49,6 +49,7 @@ const eventDispatcher = async (request, sender, sendResponse) => {
         tempElement.appendChild(range.cloneContents());
         const sourceImages = Array.from(document.querySelectorAll("img")).filter(image => range.intersectsNode(image));
         siyuanNormalizePictureImages(tempElement, document.baseURI, sourceImages);
+        siyuanCleanZhihu(tempElement, document.URL);
         siyuanSendUpload(tempElement, request.tabId, request.srcUrl, "part", undefined, undefined, clipSettings);
     } else {
         void siyuanShowTipByKey("tip_no_selection", 3000);
@@ -405,23 +406,16 @@ const siyuanRestoreYuqueImages = (root, imageSources) => {
 };
 
 // 网页换行用 span 样式 word-break 的特殊处理 https://github.com/siyuan-note/siyuan/issues/13195
-// 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
+function siyuanIsSpanTextProtected(element) {
+    return ["PRE", "CODE", "MATH", "SCRIPT", "STYLE", "TEXTAREA"].includes(element.tagName.toUpperCase()) ||
+        element.hasAttribute("data-formula") ||
+        /math|latex|katex|mjx|equation|formula/i.test(String(element.className || ""));
+}
+
 function isIgnoredElement(element) {
     // 递归查找父元素直到找到 pre、code、span、math 或 math相关标签
     while (element) {
-        let tagName = element.tagName.toLowerCase();
-        const className = String(element.className || "").toLowerCase();
-        if (
-            tagName === "math" ||
-            className.includes("math") ||
-            className.includes("mathjax") ||
-            className.includes("latex") ||
-            className.includes("katex") ||
-            className.includes("mjx") ||
-            className.includes("mathml") ||
-            className.includes("equation") ||
-            className.includes("formula")
-        ) {
+        if (siyuanIsSpanTextProtected(element)) {
             return true;
         }
 
@@ -430,13 +424,13 @@ function isIgnoredElement(element) {
             break;
         }
 
-        tagName = element.tagName.toLowerCase();
+        const tagName = element.tagName.toLowerCase();
 
         // 如果父元素是 pre、code、span、math 或与数学相关的类名
         if (["pre", "code", "span", "section"].includes(tagName)) {
             return true;
         } else if (["div", "p"].includes(tagName)) {
-            return false; // 找到 div、p 直接返回
+            return siyuanIsSpanTextProtected(element);
         }
     }
     return false; // 没找到时返回 false
@@ -445,43 +439,40 @@ function isIgnoredElement(element) {
 // span元素的换行处理优化：https://github.com/siyuan-note/siyuan/issues/14775
 // 规范：https://developer.mozilla.org/zh-CN/docs/Web/CSS/white-space
 function siyuanProcessTextByWhiteSpace(element) {
-    const text = element.textContent;
-    const whiteSpace = getComputedStyle(element).whiteSpace;
-    const brTag = "<br>";
-
-    switch (whiteSpace) {
-        case "normal":
-        case "nowrap":
-            // 合并所有空白字符为一个空格；换行为 <br>；去除行末空格
-            return text
-                .replace(/[ \t\r\f\v]+/g, " ") // 合并空格和制表符
-                .replace(/[ \t]+\n/g, "\n") // 去除行末空格
-                .replace(/\n+/g, brTag) // 合并换行并转为 <br>
-                .trim();
-        case "pre":
-            // 保留所有空白和换行，换行转为 <br>
-            return text.replace(/\n/g, brTag);
-        case "pre-wrap":
-            // 保留空白字符，换行转为 <br>，不处理行末空格（挂起）
-            return text.replace(/\n+/g, brTag);
-        case "pre-line":
-            // 合并空格，保留换行符，换行转为 <br>，移除行末空格
-            return text
-                .replace(/[ \t\r\f\v]+/g, " ")
-                .replace(/[ \t]+\n/g, "\n")
-                .replace(/\n+/g, brTag)
-                .trim();
-        case "break-spaces":
-            // 保留所有空白字符和换行符，换行为 <br>
-            return text.replace(/\n/g, brTag);
-        default:
-            // 默认处理和 normal 相同
-            return text
-                .replace(/[ \t\r\f\v]+/g, " ")
-                .replace(/[ \t]+\n/g, "\n")
-                .replace(/\n+/g, brTag)
-                .trim();
-    }
+    const doc = element.ownerDocument;
+    const visit = (parent) => {
+        // 代码、公式和非正文节点中的换行由各自的转换流程处理。
+        if (siyuanIsSpanTextProtected(parent)) {
+            return;
+        }
+        Array.from(parent.childNodes).forEach((node) => {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                visit(node);
+                return;
+            }
+            if (node.nodeType !== Node.TEXT_NODE || !node.textContent.includes("\n")) {
+                return;
+            }
+            let text = node.textContent;
+            const whiteSpace = window.getComputedStyle(parent).whiteSpace;
+            if (!["pre", "pre-wrap", "break-spaces"].includes(whiteSpace)) {
+                text = text.replace(/[ \t\r\f\v]+/g, " ").replace(/[ \t]+\n/g, "\n");
+            }
+            if (!["pre", "break-spaces"].includes(whiteSpace)) {
+                text = text.replace(/\n+/g, "\n");
+            }
+            // 按文本节点插入换行，保留行内元素、节点间空格和字面 HTML 文本。
+            const fragment = doc.createDocumentFragment();
+            text.split("\n").forEach((line, index) => {
+                if (index > 0) {
+                    fragment.appendChild(doc.createElement("br"));
+                }
+                fragment.appendChild(doc.createTextNode(line));
+            });
+            parent.replaceChild(fragment, node);
+        });
+    };
+    visit(element);
 }
 
 // 处理会换行的 span 后添加 <br>，让内核能识别到换行
@@ -512,7 +503,7 @@ function siyuanSpansAddBr(tempElement) {
                 return; // 如果父元素是 pre、code 或 span 或者数学公式，跳过该 span
             }
 
-            span.innerHTML = siyuanProcessTextByWhiteSpace(span);
+            siyuanProcessTextByWhiteSpace(span);
 
             // 添加到符合条件的数组中
             matchedSpans.push(span);
@@ -785,6 +776,28 @@ async function siyuanSvgToImg(tempElement) {
         img.style.cssText = window.getComputedStyle(svg).cssText;
         svg.parentNode.replaceChild(img, svg);
     }
+}
+
+// 知乎附加的搜索推荐和直答跳转不属于作者正文，仅清理剪藏副本。
+function siyuanCleanZhihu(root, sourceURL) {
+    let hostname;
+    try {
+        hostname = new URL(sourceURL).hostname;
+    } catch {
+        return;
+    }
+    if (hostname !== "zhihu.com" && !hostname.endsWith(".zhihu.com")) {
+        return;
+    }
+    root.querySelectorAll(".HotSearchCard").forEach((card) => card.remove());
+    root.querySelectorAll("a.RichContent-EntityWord").forEach((link) => {
+        // 直答图标可能已由 SVG 实验选项转换为图片。
+        link.querySelectorAll("svg, img").forEach((icon) => icon.remove());
+        while (link.firstChild) {
+            link.parentNode.insertBefore(link.firstChild, link);
+        }
+        link.remove();
+    });
 }
 
 function adaptMSN(tempDoc) {
@@ -1278,6 +1291,7 @@ const siyuanGetReadability = async (tabId) => {
         // 重构并合并 Readability 前处理 https://github.com/siyuan-note/siyuan/issues/13306
         await siyuanPrepareYuqueCards(document);
         const clonedDoc = await siyuanGetCloneNode(document);
+        siyuanCleanZhihu(clonedDoc, document.URL);
         const yuqueImageSources = siyuanPrepareYuqueImages(document, clonedDoc);
         siyuanNormalizeYuqueCodeBlocks(clonedDoc);
 

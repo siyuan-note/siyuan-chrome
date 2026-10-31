@@ -1,3 +1,4 @@
 # IDE
 .idea/
 .history/
+node_modules/

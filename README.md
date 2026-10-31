@@ -33,3 +33,7 @@ Please customize these shortcuts in your browser's extension settings.
 
 * All data is stored on a device fully controlled by the user
 * No usage data is collected
+
+### Development tests
+
+Run `npm ci` and `npm test` with Node.js 18 or later. The tests cover clipping behavior and use jsdom for DOM regression cases; no running SiYuan kernel is required.
