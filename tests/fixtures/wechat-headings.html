@@ -1,0 +1,30 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>WeChat typography regression</title>
+<h1 id="outside-heading">Outside the article</h1>
+<div id="js_content">
+    <h1 id="primary"><span><span style="font-size: 18px; font-weight: bold">1. Primary heading</span></span></h1>
+    <h1 id="paragraph"><span style="font-size: 15px">This is an ordinary introductory paragraph, despite its heading tag. Its visual size matches the body and the full sentence must remain a paragraph.</span></h1>
+    <p><span style="font-size: 15px">This ordinary body paragraph establishes the body typography. It provides continuous article text for extraction and includes <a href="https://example.com/reference">a reference link</a>.</span></p>
+    <h2 id="secondary"><span style="font-size: 16px; font-weight: 600">1.1 Secondary heading</span></h2>
+    <h2 id="paragraph-with-emphasis"><span style="font-size: 15px">A second ordinary paragraph contains <strong>one emphasized phrase</strong>, which does not make the whole paragraph a heading.</span></h2>
+    <h2 id="paragraph-with-code"><span style="font-size: 15px">An ordinary paragraph includes an inline <code>run()</code> call. Its code stays inline while the surrounding text becomes a paragraph:</span></h2>
+    <p><span style="font-size: 15px">Another ordinary paragraph adds enough body text to exercise the normal Readability extraction threshold. Its inline formatting and content must survive the conversion.</span></p>
+    <p id="styled-primary"><span><span style="font-size: 18px; font-weight: 700">2. Styled primary heading</span></span></p>
+    <p id="styled-secondary"><span style="font-size: 16px"><strong>2.1 Styled secondary heading</strong></span></p>
+    <p id="ordinary-bold"><span style="font-size: 15px; font-weight: bold">A fully emphasized ordinary body paragraph.</span></p>
+    <p id="larger-emphasis"><span style="font-size: 16px; font-weight: bold">A larger emphasized sentence.</span></p>
+    <p id="numbered-prose"><span style="font-size: 18px">3. Numbered ordinary prose without heading emphasis.</span></p>
+    <p id="mixed-size"><span style="font-size: 18px; font-weight: bold">3. Mixed typography </span><span style="font-size: 15px">continues as ordinary prose.</span></p>
+    <p id="wrong-depth"><span style="font-size: 18px; font-weight: bold">3.1 A numbering depth that does not match this style</span></p>
+    <h2 id="plain-heading"><span style="font-size: 15px">A plain semantic heading</span></h2>
+    <h3 id="long-heading">A genuine long heading that has no explicit font size and must retain its semantic level regardless of its text length</h3>
+    <h6 id="deep-heading">A deep semantic heading</h6>
+    <blockquote id="quote"><p><span style="font-size: 18px; font-weight: bold">3. Quoted emphasis stays a quotation</span></p></blockquote>
+    <ul><li><p id="list-emphasis"><span style="font-size: 18px; font-weight: bold">3. List emphasis stays a list item</span></p></li></ul>
+    <pre id="code"><code style="font-size: 18px; font-weight: bold">3. code stays code</code></pre>
+    <p id="formula"><span data-formula="x + 1" style="font-size: 18px; font-weight: bold">3. formula stays inline</span></p>
+    <p><img data-src="https://example.com/first.png" alt="first image"></p>
+    <p><img src="https://example.com/second.png" alt="second image"></p>
+    <p><span style="font-size: 15px">The final paragraph confirms that the article end is retained along with both images, the reference link, and the original text.</span></p>
+</div>
