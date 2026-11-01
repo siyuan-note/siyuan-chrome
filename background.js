@@ -269,6 +269,64 @@ async function resolveClipDocumentPath(requestData, title) {
     return renderClipDocumentPath(requestData, title);
 }
 
+function newClipDocumentID() {
+    const now = new Date();
+    const timestamp = [now.getFullYear(), now.getMonth() + 1, now.getDate(),
+        now.getHours(), now.getMinutes(), now.getSeconds()]
+        .map((value, index) => String(value).padStart(index === 0 ? 4 : 2, "0")).join("");
+    const suffix = Array.from(crypto.getRandomValues(new Uint8Array(7)), value =>
+        "0123456789abcdefghijklmnopqrstuvwxyz"[value % 36]).join("");
+    return timestamp + "-" + suffix;
+}
+
+function normalizeClipDocumentTitle(title) {
+    // Match the kernel's plain-title cleanup, retaining ZWJ for joined emoji.
+    return title.replaceAll("\u00a0", " ")
+        .replace(/[^\p{L}\p{M}\p{N}\p{P}\p{S} \u3000\u200d]/gu, "").trim();
+}
+
+async function createClippedDocument(requestData, title, markdown, withMath) {
+    const options = { ip: requestData.api, token: requestData.token };
+    const content = { tags: requestData.tags, markdown, withMath,
+        clippingHref: requestData.href, listDocTree: requestData.listDocTree };
+    if (requestData.savePathMode !== "template") {
+        // Probe before writing: a failed query or creation must never trigger a legacy retry.
+        const result = await siyuanKernelFetch({ ...options,
+            path: "/api/notebook/getNotebookConf", body: { notebook: requestData.notebook } });
+        if (!result.ok || result.data?.code !== 0) return result;
+        const data = result.data.data;
+        if (data?.box !== requestData.notebook || !data.conf || typeof data.conf !== "object" || Array.isArray(data.conf)) {
+            return { ok: false, error: "tip_siyuan_kernel_unavailable" };
+        }
+        if (Object.prototype.hasOwnProperty.call(data, "documentCapabilities")) {
+            if (data.documentCapabilities?.structuredPaths !== true ||
+                !Array.isArray(data.documentCapabilities.titleFormats) ||
+                !data.documentCapabilities.titleFormats.includes("plain")) {
+                return { ok: false, error: "tip_siyuan_kernel_unavailable" };
+            }
+            // Only an explicitly selected notebook root can be represented by null.
+            if (!requestData.parentDoc && requestData.savePathTemplate !== "/") {
+                return { ok: false, error: "tip_save_path_miss" };
+            }
+            const id = newClipDocumentID();
+            const created = await siyuanKernelFetch({ ...options,
+                path: "/api/filetree/createDocByParent",
+                body: { ...content, notebook: requestData.notebook, parentID: requestData.parentDoc || null,
+                    id, title: { format: "plain", text: normalizeClipDocumentTitle(title) } } });
+            // Normalize only successful results; retain structured failure details unchanged.
+            if (created.ok && created.data?.code === 0) {
+                if (created.data.data?.id !== id) return { ok: false, error: "tip_siyuan_kernel_unavailable" };
+                return { ...created, data: { ...created.data, data: id } };
+            }
+            return created;
+        }
+    }
+    const renderedPath = await resolveClipDocumentPath(requestData, title);
+    if (!renderedPath.ok) return renderedPath;
+    return siyuanKernelFetch({ ...options, path: "/api/filetree/createDocWithMd",
+        body: { ...content, notebook: requestData.notebook, parentID: requestData.parentDoc, path: renderedPath.path } });
+}
+
 function storageSyncGet(defaults) {
     return new Promise((resolve) => {
         chrome.storage.sync.get(defaults, resolve);
@@ -338,61 +396,33 @@ async function handleArticleClip(requestData, apiBase, copyData, fetchFileErr) {
         createResult = await createClippedDocWithDatabaseTemplate(requestData, title, markdown, copyData.withMath);
         templateCreated = true;
     } else {
-        const renderedPath = await resolveClipDocumentPath(requestData, title);
-        if (!renderedPath.ok) {
-            safeTabsSendMessage(requestData.tabId, renderedPath.error ? {
-                func: "tipKey",
-                msg: renderedPath.error,
-                tip: requestData.tip,
-            } : {
-                func: "tip",
-                msg: renderedPath.message,
-                tip: requestData.tip,
-            });
-            return;
-        }
-
-        createResult = await siyuanKernelFetch({
-            ip: requestData.api,
-            token: requestData.token,
-            path: "/api/filetree/createDocWithMd",
-            body: {
-                notebook: requestData.notebook,
-                parentID: requestData.parentDoc,
-                tags: requestData.tags,
-                path: renderedPath.path,
-                markdown: markdown,
-                withMath: copyData.withMath,
-                clippingHref: requestData.href,
-                listDocTree: requestData.listDocTree,
-            },
-        });
+        createResult = await createClippedDocument(requestData, title, markdown, copyData.withMath);
     }
     if (!createResult.ok) {
         safeTabsSendMessage(requestData.tabId, {
-            func: "tipKey",
-            msg: createResult.error,
+            func: createResult.error ? "tipKey" : "tip",
+            msg: createResult.error || createResult.message,
             tip: requestData.tip,
         });
         return;
     }
 
     const createResponse = createResult.data;
-    if (createResponse.code !== 0) {
-        safeTabsSendMessage(requestData.tabId, createResponse.msg ? {
+    if (createResponse?.code !== 0) {
+        safeTabsSendMessage(requestData.tabId, createResponse?.msg ? {
             func: "tip",
             msg: createResponse.msg,
             tip: requestData.tip,
         } : {
             func: "tipKey",
-            msg: createResponse.code === 1 ? "tip_save_path_miss" : "tip_siyuan_kernel_unavailable",
+            msg: createResponse?.code === 1 ? "tip_save_path_miss" : "tip_siyuan_kernel_unavailable",
             tip: requestData.tip,
         });
         return;
     }
 
     const docId = templateCreated ? createResponse.data?.blockID : createResponse.data;
-    if (!docId) {
+    if (typeof docId !== "string" || !docId) {
         safeTabsSendMessage(requestData.tabId, {
             func: "tipKey",
             msg: "tip_siyuan_kernel_unavailable",

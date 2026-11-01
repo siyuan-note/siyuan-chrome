@@ -18,6 +18,8 @@ SiYuan browser extension for Chrome.
 2. On a web page, select the content you want to clip, then choose "Copy to SiYuan" from the context menu
 3. Paste in SiYuan
 
+For whole-page clipping, select a notebook root or search for a parent document in the save location selector. On kernels that support structured document addressing, the extension saves under the selected document ID, including when an ancestor title contains `/` or the selected document has been renamed. If a saved location requires reselection, select it again in the extension. Older kernels retain the legacy save behavior; template paths use their existing rules.
+
 ### ⌨️ Keyboard Shortcuts
 
 The extension supports the following keyboard shortcuts:
