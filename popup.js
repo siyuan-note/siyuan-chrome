@@ -197,12 +197,17 @@ async function loadNotebookCache(ip, token) {
     }
 }
 
-function renderNotebookRootOptions() {
+function renderNotebookRootOptions({ preserveOpen = false } = {}) {
     const input = document.getElementById("searchPathInput");
     const options = document.getElementById("searchPathOptions");
-    if (!input || !options || input.value.trim() || !notebookCache.length) return;
+    if (!input || !options || input.value.trim()) return;
+    const menu = document.getElementById("searchPathMenu");
+    // 已展开的候选项保持位置稳定，笔记本更新在下次打开或清空搜索时显示。
+    if (preserveOpen && menu?.classList.contains("popup__dropdown-panel--open") &&
+        options.querySelector("[data-notebook]")) return;
     options.innerHTML = notebookCache.map((item) =>
-        `<li class="popup__search-list-item" data-notebook="${escapeHtml(item.id)}" data-path="/" data-parent="">${escapeHtml(item.name + "/")}</li>`).join("");
+        `<li class="popup__search-list-item" data-notebook="${escapeHtml(item.id)}" data-path="/" data-parent="">${escapeHtml(item.name + "/")}</li>`).join("") ||
+        `<li class="popup__search-list-item popup__search-list-item--hint">${t("save_path_none")}</li>`;
 }
 
 function refreshSelectedDatabase() {
@@ -580,7 +585,9 @@ function renderPopup(items) {
         normalizeOnFlush: siyuanNormalizeBase,
         onSaved: () => {
             notebookCache = [];
+            searchPathOptions.replaceChildren();
             syncSendBlockFromLocal();
+            void updateSavePathSearch();
             void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
             refreshSelectedDatabase();
@@ -597,7 +604,9 @@ function renderPopup(items) {
     bindSyncInput(token, "token", {
         onSaved: () => {
             notebookCache = [];
+            searchPathOptions.replaceChildren();
             syncSendBlockFromLocal();
+            void updateSavePathSearch();
             void updateNotebookList({ quiet: true });
             void updateSavePathPreview();
             refreshSelectedDatabase();
@@ -749,7 +758,7 @@ const updateNotebookList = async ({ quiet = false } = {}) => {
     }
 
     notebookCache = notebooks.filter((item) => !item.closed);
-    renderNotebookRootOptions();
+    renderNotebookRootOptions({ preserveOpen: true });
     const selectedId = notebookElement.dataset.selectedId || notebookElement.value;
     notebookElement.replaceChildren(new Option(siyuanGetMessage("notebook_placeholder"), ""));
     notebookCache.forEach((item) => {
@@ -814,7 +823,10 @@ const updateSavePathSearch = async () => {
         return;
     }
     const keyword = searchInput.value.trim();
-    if (!keyword) renderNotebookRootOptions();
+    if (!keyword) {
+        renderNotebookRootOptions();
+        return;
+    }
     const result = await siyuanKernelFetch({
         ip: ipElement.value,
         token: tokenElement.value,
